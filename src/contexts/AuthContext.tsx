@@ -1,4 +1,5 @@
 import  { createContext, useCallback, useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import api from "../services/apiClient";
 
 interface User {
@@ -26,6 +27,7 @@ interface AuthContextData {
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }:any) => {
+  const history = useHistory();
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem("@token");
     const user = localStorage.getItem("@user");
@@ -63,6 +65,7 @@ export const AuthProvider = ({ children }:any) => {
     localStorage.removeItem("@user");
 
     setData({} as AuthState);
+    history.push("/login")
   }, []);
 
   // Para atualizra avatar na tela
