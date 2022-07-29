@@ -1,7 +1,7 @@
 import DarkModeSwitcher from "../../components/dark-mode-switcher/Main";
 import dom from "@left4code/tw-starter/dist/js/dom";
 import logoUrl from "../../assets/images/logo.svg";
-import illustrationUrl from "../../assets/images/illustration.svg";
+import illustrationUrl from "../../assets/images/logo_fin.png";
 import {  useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAuth } from "../../contexts/AuthContext";
@@ -14,7 +14,7 @@ type Inputs = {
 function Login() {
 
   useEffect(() => {
-    dom("body").removeClass("main").removeClass("error-page").addClass("login");
+    dom("body").removeClass("main").removeClass("error-page").addClass("login theme-1");
   }, []);     
    const {
      register,
@@ -25,7 +25,6 @@ function Login() {
 
      const {signIn } = useAuth();
      const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-        const { email, password } = data;
         await signIn(data);
      };
       

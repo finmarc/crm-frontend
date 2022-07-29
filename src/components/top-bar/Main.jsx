@@ -94,10 +94,10 @@ function Main(props) {
                     <div className="ml-2 overflow-hidden">
                       <div className="flex items-center">
                         <a href="" className="font-medium truncate mr-5">
-                          {user.name}
+                          {user?.name}
                         </a>
                         <div className="text-xs text-slate-400 ml-auto whitespace-nowrap">
-                          {user.email}
+                          {user?.email}
                         </div>
                       </div>
                       <div className="w-full truncate text-slate-500 mt-0.5">
@@ -125,9 +125,9 @@ function Main(props) {
             <DropdownMenu className="w-56">
               <DropdownContent className="bg-primary/80 before:block before:absolute before:bg-black before:inset-0 before:rounded-md before:z-[-1] text-white">
                 <DropdownHeader tag="div" className="!font-normal">
-                  <div className="font-medium">{user.name}</div>
+                  <div className="font-medium">{user?.name}</div>
                   <div className="text-xs text-white/70 mt-0.5 dark:text-slate-500">
-                    {user.email}
+                    {user?.email}
                   </div>
                 </DropdownHeader>
                 <DropdownDivider className="border-white/[0.08]" />
