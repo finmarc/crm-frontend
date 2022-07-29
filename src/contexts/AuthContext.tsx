@@ -1,13 +1,10 @@
-import React, { createContext, useCallback, useState, useContext } from "react";
+import  { createContext, useCallback, useState, useContext } from "react";
 import api from "../services/apiClient";
 
 interface User {
   id: string;
   name: string;
-  document: string;
-  full_name: string;
   email: string;
-  avatar_url: string;
 }
 
 interface AuthState {
@@ -15,7 +12,7 @@ interface AuthState {
   user: User;
 }
 interface SignInCredesentials {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -26,9 +23,9 @@ interface AuthContextData {
   updateUser(user: User): void;
 }
 
-const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-export const AuthProvider = ({ children }: { children: JSX.Element }) => {
+export const AuthProvider = ({ children }:any) => {
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem("@token");
     const user = localStorage.getItem("@user");
@@ -42,9 +39,11 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     return {} as AuthState;
   });
 
-  const signIn = useCallback(async ({ username, password }: any) => {
-    const response = await api.post("login", {
-      username,
+
+  const signIn = useCallback(async ({ email, password }: any) => {
+    console.log("signIn", email, password);
+    const response = await api.post("/auth/login", {
+      email,
       password,
     });
 
@@ -57,6 +56,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     setData({ token, user });
   }, []);
+  
 
   const signOut = useCallback(() => {
     localStorage.removeItem("@token");

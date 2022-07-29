@@ -1,6 +1,6 @@
 import { Transition } from "react-transition-group";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { helper as $h } from "@/utils";
 import { sideMenu as useSideMenuStore } from "@/stores/side-menu";
 import { useRecoilValue } from "recoil";
@@ -13,7 +13,7 @@ import dom from "@left4code/tw-starter/dist/js/dom";
 import SimpleBar from "simplebar";
 
 function Main(props) {
-  const navigate = useNavigate();
+  const navigate = useHistory();
   const location = useLocation();
   const [formattedMenu, setFormattedMenu] = useState([]);
   const sideMenuStore = useRecoilValue(useSideMenuStore);

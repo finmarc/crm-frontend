@@ -1,39 +1,39 @@
 import React from "react";
 import {
   RouteProps as ReactDomRouteProps,
-  Navigate,
+  Redirect,
   Route as ReactDomRoute,
 } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
-import { useAuth } from "../context/AuthContext";
 
 interface RoutesProps extends ReactDomRouteProps {
   isPrivate?: boolean;
-  component: any;
+  component: React.ComponentType;
 }
 
-const Route = ({
+const Route: React.FC<RoutesProps> = ({
   isPrivate = false,
   component: Component,
   ...rest
-}: RoutesProps) => {
+}) => {
   const { user } = useAuth();
-  console.log("aquidii");
 
   return (
     <ReactDomRoute
       {...rest}
-      element={
-        isPrivate === !!user ? (
+      render={({ location }: any) => {
+        return isPrivate === !!user ? (
           <Component />
-        ) : (              
-          <Navigate
+        ) : (
+          <Redirect
             to={{
-              pathname: isPrivate ? "/" : "/",
+              pathname: isPrivate ? "/login" : "/admin",
+              state: { from: location },
             }}
           />
-        )
-      }
+        );
+      }}
     />
   );
 };

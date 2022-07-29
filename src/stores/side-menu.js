@@ -6,7 +6,7 @@ const sideMenu = atom({
     menu: [
       {
         icon: "Home",
-        pathname: "/",
+        pathname: "/admin",
         title: "Dashboard",
       },
       {

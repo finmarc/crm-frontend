@@ -11,7 +11,7 @@ const linkTo = (menu, navigate, setActiveMobileMenu) => {
     menu.activeDropdown = !menu.activeDropdown;
   } else {
     setActiveMobileMenu(false);
-    navigate(menu.pathname);
+    navigate.push(menu.pathname);
   }
 };
 

@@ -1,6 +1,6 @@
 import { Transition } from "react-transition-group";
 import { useState, useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useHistory } from "react-router-dom";
 import { helper as $h } from "@/utils";
 import { simpleMenu as useSimpleMenuStore } from "@/stores/simple-menu";
 import { useRecoilValue } from "recoil";
@@ -13,7 +13,7 @@ import MainColorSwitcher from "@/components/main-color-switcher/Main";
 import DarkModeSwitcher from "@/components/dark-mode-switcher/Main";
 
 function Main() {
-  const navigate = useNavigate();
+  const navigate = useHistory();
   const location = useLocation();
   const [formattedMenu, setFormattedMenu] = useState([]);
   const simpleMenuStore = useRecoilValue(useSimpleMenuStore);

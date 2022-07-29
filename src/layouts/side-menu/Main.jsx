@@ -1,6 +1,6 @@
 import { Transition } from "react-transition-group";
 import { useState, useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { helper as $h } from "@/utils";
 import { sideMenu as useSideMenuStore } from "@/stores/side-menu";
 import { useRecoilValue } from "recoil";
@@ -13,8 +13,8 @@ import MainColorSwitcher from "@/components/main-color-switcher/Main";
 import DarkModeSwitcher from "@/components/dark-mode-switcher/Main";
 import SideMenuTooltip from "@/components/side-menu-tooltip/Main";
 
-function Main() {
-  const navigate = useNavigate();
+function Main({children}) {
+  const navigate = useHistory();
   const location = useLocation();
   const [formattedMenu, setFormattedMenu] = useState([]);
   const sideMenuStore = useRecoilValue(useSideMenuStore);
@@ -187,7 +187,8 @@ function Main() {
         {/* END: Side Menu */}
         {/* BEGIN: Content */}
         <div className="content">
-          <Outlet />
+          {/* <Outlet /> */}
+          { children}
         </div>
         {/* END: Content */}
       </div>

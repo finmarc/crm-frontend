@@ -48,7 +48,7 @@ const linkTo = (menu, navigate) => {
   if (menu.subMenu) {
     menu.activeDropdown = !menu.activeDropdown;
   } else {
-    navigate(menu.pathname);
+    navigate.push(menu.pathname);
   }
 };
 
