@@ -3,7 +3,6 @@ import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import AppProvider from "./contexts";
 import Router from "./router";
-import { Fragment } from "react";
 
 function App() {
   return (
