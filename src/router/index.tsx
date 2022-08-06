@@ -9,7 +9,9 @@ const Router = () => (
   <>
     <Switch>
       <Route path="/login" component={Login} />
+
       <SideMenu>
+        <Route path="/" exact isPrivate component={Dashboard} />
         <Route path="/admin" isPrivate component={Dashboard} />
         <Route path="/colaboradores" isPrivate component={Colaborador} />
       </SideMenu>

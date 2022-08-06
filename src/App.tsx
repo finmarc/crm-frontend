@@ -4,17 +4,22 @@ import { RecoilRoot } from "recoil";
 import AppProvider from "./contexts";
 
 import Router from "./router";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
-    <RecoilRoot>
-      <BrowserRouter>
-        <AppProvider>
-          <Router />
-        </AppProvider>
-        <ScrollToTop />
-      </BrowserRouter>
-    </RecoilRoot>
+    <>
+      <RecoilRoot>
+        <BrowserRouter>
+          <AppProvider>
+            <Router />
+          </AppProvider>
+          <ScrollToTop />
+        </BrowserRouter>
+      </RecoilRoot>
+
+      <Toaster />
+    </>
   );
 }
 

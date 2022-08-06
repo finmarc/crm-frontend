@@ -1,4 +1,5 @@
-import  { createContext, useCallback, useState, useContext } from "react";
+import { createContext, useCallback, useState, useContext } from "react";
+import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import api from "../services/apiClient";
 
@@ -24,9 +25,11 @@ interface AuthContextData {
   updateUser(user: User): void;
 }
 
-export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+export const AuthContext = createContext<AuthContextData>(
+  {} as AuthContextData
+);
 
-export const AuthProvider = ({ children }:any) => {
+export const AuthProvider = ({ children }: any) => {
   const history = useHistory();
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem("@token");
@@ -41,31 +44,44 @@ export const AuthProvider = ({ children }:any) => {
     return {} as AuthState;
   });
 
-
   const signIn = useCallback(async ({ email, password }: any) => {
-    console.log("signIn", email, password);
-    const response = await api.post("/auth/login", {
-      email,
-      password,
+    const toastId = toast.loading("Autenticando...", {
+      duration: 4000,
+      position: "top-right",
     });
 
-    const { token, user } = response.data;
+    try {
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
-    localStorage.setItem("@token", token);
-    localStorage.setItem("@user", JSON.stringify(user));
+      const { token, user } = response.data;
 
-    // para não precisar ficar passando no header das requisições a api
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    setData({ token, user });
+      if (token && user) {
+        toast.dismiss(toastId);
+      }
+      localStorage.setItem("@token", token);
+      localStorage.setItem("@user", JSON.stringify(user));
+
+      // para não precisar ficar passando no header das requisições a api
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      setData({ token, user });
+    } catch (err: any) {
+      toast.dismiss(toastId);
+      toast.error("Ops! Usuário ou senha inválido", {
+        duration: 4000,
+        position: "top-right",
+      });
+    }
   }, []);
-  
 
   const signOut = useCallback(() => {
     localStorage.removeItem("@token");
     localStorage.removeItem("@user");
 
     setData({} as AuthState);
-    history.push("/login")
+    history.push("/login");
   }, []);
 
   // Para atualizra avatar na tela
