@@ -2,7 +2,7 @@ import DarkModeSwitcher from "../../components/dark-mode-switcher/Main";
 import dom from "@left4code/tw-starter/dist/js/dom";
 import logoUrl from "../../assets/images/logo.svg";
 import illustrationUrl from "../../assets/images/logo_fin.png";
-import {  useEffect } from "react";
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -12,22 +12,22 @@ type Inputs = {
 };
 
 function Login() {
-
   useEffect(() => {
-    dom("body").removeClass("main").removeClass("error-page").addClass("login theme-1");
-  }, []);     
-   const {
-     register,
-     handleSubmit,
-     watch,
-     formState: { errors },
-   } = useForm<Inputs>();
+    dom("body")
+      .removeClass("main")
+      .removeClass("error-page")
+      .addClass("login theme-1");
+  }, []);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
 
-     const {signIn } = useAuth();
-     const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-        await signIn(data);
-     };
-      
+  const { signIn } = useAuth();
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    await signIn(data);
+  };
 
   return (
     <>
@@ -35,16 +35,7 @@ function Login() {
         <DarkModeSwitcher />
         <div className="container sm:px-10">
           <div className="block xl:grid grid-cols-2 gap-4">
-            {/* BEGIN: Login Info */}
             <div className="hidden xl:flex flex-col min-h-screen">
-              <a href="" className="-intro-x flex items-center pt-5">
-                <img
-                  alt="Midone Tailwind HTML Admin Template"
-                  className="w-6"
-                  src={logoUrl}
-                />
-                <span className="text-white text-lg ml-3"> Finmarc </span>
-              </a>
               <div className="my-auto">
                 <img
                   alt="Midone Tailwind HTML Admin Template"
@@ -53,8 +44,6 @@ function Login() {
                 />
               </div>
             </div>
-            {/* END: Login Info */}
-            {/* BEGIN: Login Form */}
             <div className="h-screen xl:h-auto flex py-5 xl:py-0 my-10 xl:my-0">
               <form
                 onSubmit={handleSubmit(onSubmit)}
