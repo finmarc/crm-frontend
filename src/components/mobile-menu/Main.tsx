@@ -1,18 +1,18 @@
 import { Transition } from "react-transition-group";
 import { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
-import { helper as $h } from "@/utils";
-import { sideMenu as useSideMenuStore } from "@/stores/side-menu";
+import { helper as $h } from "../../utils";
+import { sideMenu as useSideMenuStore } from "../../stores/side-menu";
 import { useRecoilValue } from "recoil";
-import { nestedMenu } from "@/layouts/side-menu";
+import { nestedMenu } from "../../layouts/side-menu";
 import { toggleMobileMenu, linkTo, enter, leave } from "./index";
-import { Lucide } from "@/base-components";
+import { Lucide } from "../../base-components";
 import logoUrl from "@/assets/images/logo.svg";
 import classnames from "classnames";
 import dom from "@left4code/tw-starter/dist/js/dom";
 import SimpleBar from "simplebar";
 
-function Main(props) {
+function Main(props: any) {
   const navigate = useHistory();
   const location = useLocation();
   const [formattedMenu, setFormattedMenu] = useState([]);
@@ -27,7 +27,6 @@ function Main(props) {
 
   return (
     <>
-      {/* BEGIN: Mobile Menu */}
       <div
         className={classnames({
           "mobile-menu md:hidden": true,
@@ -50,9 +49,7 @@ function Main(props) {
             <Lucide
               icon="BarChart2"
               className="w-8 h-8 text-white transform -rotate-90"
-              onClick={() => {
-                toggleMobileMenu(activeMobileMenu, setActiveMobileMenu);
-              }}
+              onClick={() => { toggleMobileMenu(activeMobileMenu, setActiveMobileMenu);}}
             />
           </a>
         </div>
@@ -65,14 +62,14 @@ function Main(props) {
             <Lucide
               icon="XCircle"
               className="w-8 h-8 text-white transform -rotate-90"
-              onClick={() => {
+              onClick={ () => {
                 toggleMobileMenu(activeMobileMenu, setActiveMobileMenu);
               }}
             />
           </a>
           <ul className="scrollable__content py-2">
             {/* BEGIN: First Child */}
-            {formattedMenu.map((menu, menuKey) =>
+            {formattedMenu.map((menu: any, menuKey: any) =>
               menu == "devider" ? (
                 <li className="menu__devider my-6" key={menu + menuKey}></li>
               ) : (
@@ -120,7 +117,7 @@ function Main(props) {
                           "menu__sub-open": menu.activeDropdown,
                         })}
                       >
-                        {menu.subMenu.map((subMenu, subMenuKey) => (
+                        {menu.subMenu.map((subMenu: any, subMenuKey: any) => (
                           <li key={subMenuKey}>
                             <a
                               href={subMenu.subMenu ? "#" : subMenu.pathname}
@@ -166,7 +163,7 @@ function Main(props) {
                                   })}
                                 >
                                   {subMenu.subMenu.map(
-                                    (lastSubMenu, lastSubMenuKey) => (
+                                    (lastSubMenu: any, lastSubMenuKey: any) => (
                                       <li key={lastSubMenuKey}>
                                         <a
                                           href={

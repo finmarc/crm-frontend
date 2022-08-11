@@ -2,8 +2,22 @@ import { createElement, createRef, useEffect } from "react";
 import { setValue, init, updateValue } from "./index";
 import PropTypes from "prop-types";
 import { useRef, useMemo } from "react";
+import { ReactNode } from "react";
+import dom from "@left4code/tw-starter/dist/js/dom";
 
-function TomSelect(props) {
+interface SelectProps {
+  className: string,
+  name: string,
+  id: string,
+  options: any,
+  value: any,
+  onOptionAdd: Function,
+  onChange: Function,
+  getRef: Function,
+  children: ReactNode,
+  multiple?: boolean | string
+}
+function TomSelect(props: SelectProps) {
   const initialRender = useRef(true);
   const tomSelectRef = createRef();
 
@@ -21,7 +35,7 @@ function TomSelect(props) {
       options = {
         persist: false,
         create: true,
-        onDelete: function (values) {
+        onDelete: function (values: Array<any>) {
           return confirm(
             values.length > 1
               ? "Are you sure you want to remove these " +

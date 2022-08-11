@@ -34,7 +34,7 @@ const Colaborador = () => {
   }, [fetchData]);
   return (
     <>
-      <Header title="Colaboradores" action="Adicionar" />
+      <Header title="Colaboradores" url="colaborador/new" action="Adicionar" />
       {users.length > 0 && <Table columns={users} />}
     </>
   );

@@ -1,11 +1,15 @@
 import { createElement } from "react";
 import * as lucideIcons from "lucide-react";
 import PropTypes from "prop-types";
-
-function Lucide(props) {
+type PropsData = {
+  icon?: string;
+  className: string;
+};
+function Lucide(props: PropsData) {
   try {
+   
     const { icon, className, ...computedProps } = props;
-    if (lucideIcons[props.icon] !== undefined) {
+    if (props.icon) {
       return createElement(lucideIcons[props.icon], {
         ...computedProps,
         className: `lucide ${props.className}`,
@@ -18,14 +22,14 @@ function Lucide(props) {
   }
 }
 
-Lucide.propTypes = {
-  icon: PropTypes.string,
-  className: PropTypes.string,
-};
+// Lucide.propTypes = {
+//   icon: PropTypes.string,
+//   className: PropTypes.string,
+// };
 
-Lucide.defaultProps = {
-  icon: "",
-  className: "",
-};
+// Lucide.defaultProps = {
+//   icon: "",
+//   className: "",
+// };
 
 export default Lucide;
