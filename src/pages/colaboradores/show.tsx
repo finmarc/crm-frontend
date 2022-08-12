@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { Lucide } from "@/base-components";
 import { faker as $f } from "@/utils";
@@ -15,6 +15,8 @@ interface User {
 
 const ColaboradorDetails = () => {
   const [user, setUser] = useState<User>();
+  const history = useHistory();
+
   let { id } = useParams<any>();
   const fetchData = useCallback(async () => {
     const response = await api.get(`/users/${id}`);
@@ -22,14 +24,21 @@ const ColaboradorDetails = () => {
     setUser(data);
   }, []);
 
-  console.log(user)
-
   useEffect(() => {
     fetchData();
   }, [fetchData]);
   return (
     <>
-      <Header title={`Detalhes do colaborador`} url="colaboradores" action="Voltar" />
+      <div className="intro-y flex flex-col sm:flex-row items-center mt-8">
+        <h2 className="text-lg font-medium mr-auto">Detalhes do colaborador</h2>
+     
+          <div className="w-full sm:w-auto flex mt-4 sm:mt-0">
+            <button className="btn btn-primary shadow-md mr-2" onClick={() => history.goBack()}>
+              Voltar
+            </button>
+          </div>
+   
+      </div>
       <div className="intro-y box px-5 pt-5 mt-5">
         <div className="flex flex-col lg:flex-row border-b border-slate-200/60 dark:border-darkmode-400 pb-5 -mx-5">
           <div className="flex flex-1 px-5 items-center justify-center lg:justify-start">
