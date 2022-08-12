@@ -4,3 +4,5 @@ declare module "*.pdf";
 declare module "*.jpeg";
 declare module "*.jpg";
 declare module "@left4code/tw-starter/dist/js/dom";
+declare module "@/base-components";
+declare module "@/utils";

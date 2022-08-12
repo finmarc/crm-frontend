@@ -19,6 +19,7 @@ const Colaborador = () => {
 
     const newUsers: any = response.data.map((user: User) => {
       return {
+        id: user.id,
         nome: user.name,
         email: user.email,
         telefone: user.phone,
@@ -35,7 +36,7 @@ const Colaborador = () => {
   return (
     <>
       <Header title="Colaboradores" url="colaborador/new" action="Adicionar" />
-      {users.length > 0 && <Table columns={users} />}
+      {users.length > 0 && <Table columns={users} component="colaborador" />}
     </>
   );
 };

@@ -6,11 +6,13 @@ export const THeadRow = ({ records }: TheadProps) => {
   return (
     <thead>
       <tr>
-        {keys.map((key) => (
+        {keys.map((key) => key !== 'id' && (
+
           <th key={key} className="whitespace-nowrap">
             {key.toUpperCase()}
           </th>
         ))}
+        <th></th>
       </tr>
     </thead>
   );

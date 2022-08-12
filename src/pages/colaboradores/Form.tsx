@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { TomSelect } from "../../base-components";
 import { useHistory } from "react-router-dom";
+
 type InputForm = {
   name: string;
   email: string;
@@ -42,7 +43,6 @@ export function Form() {
     perfis();
   }, []);
 
-  console.log(roles);
   const schema = yup
     .object({
       name: yup.string().required().min(2),
