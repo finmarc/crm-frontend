@@ -41,9 +41,8 @@ type FormProps = {
 export function Form(dataForm?: FormProps) {
   const [roles, setRoles] = useState([]);
   const history = useHistory()
-  const [selectMultiple, setSelectMultiple] = useState<InputForm[]>([]);
   let colaborador: any;
-  if( dataForm) {
+  if (dataForm) {
     const { user } = dataForm;
     colaborador = user;
   }
@@ -53,9 +52,6 @@ export function Form(dataForm?: FormProps) {
 
     const { data } = response;
 
-    data.forEach((role: any) => {
-      if (role.name == "Colaborador(a)") setSelectMultiple([role.id]);
-    });
     setRoles(data);
   };
 
@@ -84,21 +80,21 @@ export function Form(dataForm?: FormProps) {
 
   const onSubmit: SubmitHandler<any> = async (data: InputForm) => {
     let response;
-    if( colaborador && colaborador.id){
-       response = await api.patch(`users/${colaborador.id}`, data);
-    }else{
-       response = await api.post("users", data);
+    if (colaborador && colaborador.id) {
+      response = await api.patch(`users/${colaborador.id}`, data);
+    } else {
+      response = await api.post("users", data);
     }
 
     const { status } = response;
 
-    if ( status == 200) {
+    if (status == 200) {
       toast.success("Cadastro atualizado com sucesso!", {
         duration: 4000,
         position: "top-right",
       });
       history.push("/colaboradores")
-    } else if (status == 201 ) {
+    } else if (status == 201) {
       toast.success("Cadastro realizado com sucesso!", {
         duration: 4000,
         position: "top-right",
@@ -140,7 +136,7 @@ export function Form(dataForm?: FormProps) {
                       id="name"
                       type="text"
                       name="name"
-                     
+
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.name,
@@ -216,23 +212,20 @@ export function Form(dataForm?: FormProps) {
                   >
                     Perfil
                   </label>
-                  <TomSelect
-                    value={selectMultiple}
-                    name="role_id"
+                  <select
                     id="role_id"
-                    onChange={setSelectMultiple}
-                    options={{
-                      placeholder: "Selecione um perfil",
-                    }}
-                    className="form-control"
-                    multiple
-                  >
+                    {...register("role_id")}
+                    className="form-select mt-2 sm:mr-2"
+                    >
+                    <option>
+                      Selecione um perfil
+                    </option>
                     {roles.map((role: Roles) => (
                       <option key={role.id} value={role.id}>
                         {role.name}
                       </option>
                     ))}
-                  </TomSelect>
+                  </select>
                 </div>
                 <div className="input-form mt-3">
                   <label

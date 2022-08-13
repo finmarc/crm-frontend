@@ -5,12 +5,21 @@ import { Lucide } from "@/base-components";
 import { faker as $f } from "@/utils";
 import api from "../../services/apiClient";
 
+interface Role {
+  id: string;
+  name: string;
+}
 interface User {
   id: string;
   name: string;
   document: string;
   email: string;
   phone: string;
+  roles: [
+    {
+      role: Role
+    }
+  ];
 }
 
 const ColaboradorDetails = () => {
@@ -21,12 +30,17 @@ const ColaboradorDetails = () => {
   const fetchData = useCallback(async () => {
     const response = await api.get(`/users/${id}`);
     const { data } = response;
-    setUser(data);
+    const newUser = {
+      ...data,
+      role_id: data.roles[0].role.id
+    }
+    setUser(newUser);
   }, []);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+  console.log(user)
   return (
     <>
       <div className="intro-y flex flex-col sm:flex-row items-center mt-8">
@@ -56,7 +70,7 @@ const ColaboradorDetails = () => {
               <div className="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg">
                 {user?.name}
               </div>
-              <div className="text-slate-500">{`Colaborador(a)`}</div>
+              <div className="text-slate-500">{user?.roles[0].role.name}</div>
             </div>
           </div>
           <div className="mt-6 lg:mt-0 flex-1 px-5 border-l border-r border-slate-200/60 dark:border-darkmode-400 border-t lg:border-t-0 pt-5 lg:pt-0">
