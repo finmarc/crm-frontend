@@ -18,15 +18,35 @@ type InputForm = {
   role_id?: string;
 };
 
+interface User {
+  id: string;
+  name: string;
+  document: string;
+  password?: string;
+  email: string;
+  phone: string;
+  role_id?: string;
+}
+
 type Roles = {
   id: string;
   name: string;
 };
 
-export function Form() {
+type FormProps = {
+  user?: User;
+  title?: string;
+}
+
+export function Form(dataForm?: FormProps) {
   const [roles, setRoles] = useState([]);
   const history = useHistory()
   const [selectMultiple, setSelectMultiple] = useState<InputForm[]>([]);
+  let colaborador: any;
+  if( dataForm) {
+    const { user } = dataForm;
+    colaborador = user;
+  }
   const perfis = async () => {
     const response = await api.get("roles");
     if (response.data.lenght < 1) return;
@@ -59,14 +79,26 @@ export function Form() {
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
+    defaultValues: colaborador ?? {}
   });
 
   const onSubmit: SubmitHandler<any> = async (data: InputForm) => {
-    const response = await api.post("users", data);
+    let response;
+    if( colaborador && colaborador.id){
+       response = await api.patch(`users/${colaborador.id}`, data);
+    }else{
+       response = await api.post("users", data);
+    }
 
     const { status } = response;
 
-    if (status == 201) {
+    if ( status == 200) {
+      toast.success("Cadastro atualizado com sucesso!", {
+        duration: 4000,
+        position: "top-right",
+      });
+      history.push("/colaboradores")
+    } else if (status == 201 ) {
       toast.success("Cadastro realizado com sucesso!", {
         duration: 4000,
         position: "top-right",
@@ -90,7 +122,7 @@ export function Form() {
           <div className="intro-y box">
             <div className="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
               <h2 className="font-medium text-base mr-auto">
-                Novo colaborador
+                {!dataForm?.title ? "Novo colaborador" : dataForm?.title}
               </h2>
             </div>
             <div className="p-5">
@@ -108,6 +140,7 @@ export function Form() {
                       id="name"
                       type="text"
                       name="name"
+                     
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.name,
@@ -215,14 +248,14 @@ export function Form() {
                     name="password"
                     className={classnames({
                       "form-control": true,
-                      "border-danger": errors.password,
+                      "border-danger": errors?.password,
                     })}
                     placeholder="secret"
                   />
                 </div>
 
                 <button type="submit" className="btn btn-primary mt-5">
-                  Cadastrar
+                  Salvar
                 </button>
               </form>
             </div>
