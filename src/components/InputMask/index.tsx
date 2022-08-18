@@ -11,7 +11,7 @@ interface InputProps {
     placeholder?: string
 }
 
-export const MaskedInput = ({ control, name, mask, className, typeMask, ...props }: InputProps) => {
+export const MaskedInput = ({ control, name, mask, className, placeholder, typeMask, ...props }: InputProps) => {
     return (
         <Controller
             control={control}
@@ -25,6 +25,7 @@ export const MaskedInput = ({ control, name, mask, className, typeMask, ...props
                     value={value || ""}
                     mask={mask}
                     className={className}
+                    placeholder={placeholder}
                     {...props}
                 />
             )}

@@ -23,31 +23,24 @@ interface User {
   email: string;
   phone: string;
   role_id?: string;
+  role?: any
   ReactSelect?: Select; 
 }
-
-type Roles = {
-  id: string;
-  name: string;
-};
 
 type FormProps = {
   user?: User;
   title?: string;
 }
 
-
-
 export function Form(dataForm?: FormProps) {
   const [roles, setRoles] = useState([]);
   const formRef = createRef<HTMLFormElement>();
   const history = useHistory()
-  let colaborador: any;
+  let user: User | undefined;
   if (dataForm) {
-    const { user } = dataForm;
-    colaborador = user;
+    user = dataForm.user;
   }
-  const perfis = async () => {
+  const getRoles = async () => {
     const response = await api.get("roles");
     if (response.data.lenght < 1) return;
     const { data } = response;
@@ -59,7 +52,7 @@ export function Form(dataForm?: FormProps) {
   };
 
   useEffect(() => {
-    perfis();
+    getRoles();
   }, []);
 
   const schema = yup
@@ -72,14 +65,13 @@ export function Form(dataForm?: FormProps) {
     .required();
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
     control
   } = useForm<User>({
     mode: "onChange",
     resolver: yupResolver(schema),
-    defaultValues: colaborador ?? {}
+    defaultValues: user ?? {}
   });
 
   const onSubmit: SubmitHandler<User> = async (data: User) => {
@@ -91,8 +83,8 @@ export function Form(dataForm?: FormProps) {
     }
 
     delete data?.ReactSelect;
-    if (colaborador && colaborador.id) {
-      response = await api.patch(`users/${colaborador.id}`, data);
+    if (user && user.id) {
+      response = await api.patch(`users/${user.id}`, data);
     } else {
       response = await api.post("users", data);
     }
@@ -122,16 +114,11 @@ export function Form(dataForm?: FormProps) {
   return (
     <>
       <div className="intro-y flex items-center mt-8">
-        <h2 className="text-lg font-medium mr-auto">Usuário</h2>
+        <h2 className="text-lg font-medium mr-auto"> {!dataForm?.title ? "Novo colaborador" : dataForm?.title}</h2>
       </div>
       <div className="mt-5">
         <div className="intro-y col-span-12 lg:col-span-6">
           <div className="intro-y box">
-            <div className="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
-              <h2 className="font-medium text-base mr-auto">
-                {!dataForm?.title ? "Novo colaborador" : dataForm?.title}
-              </h2>
-            </div>
             <div className="p-5">
               <form ref={formRef} className="validate-form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-12 gap-2">
@@ -188,6 +175,7 @@ export function Form(dataForm?: FormProps) {
                       id="document"
                       control={control}
                       mask="999.999.999-99"
+                      placeholder="999.999.999-99"
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.document,
@@ -206,6 +194,7 @@ export function Form(dataForm?: FormProps) {
                       id="phone"
                       control={control}
                       mask="(99) 99999-9999"
+                      placeholder="(99) 99999-9999"
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.phone,
@@ -223,7 +212,7 @@ export function Form(dataForm?: FormProps) {
                   <Select
                     options={roles}
                     control={control}
-                    optionSelected={colaborador ? colaborador.roles : null}
+                    optionSelected={user ? user.role : null}
                     id="role_id"
                     type="role_id"
                     name="role_id"
@@ -231,22 +220,8 @@ export function Form(dataForm?: FormProps) {
                       "form-control": true,
                       "border-danger": errors?.role_id,
                     })}
-                    placeholder="Selecione"
+                    placeholder="Selecione um perfil"
                   />
-                  {/* <select
-                    id="role_id"
-                    {...register("role_id")}
-                    className="form-select mt-2 sm:mr-2"
-                  >
-                    <option>
-                      Selecione um perfil
-                    </option>
-                    {roles.map((role: Roles) => (
-                      <option selected={colaborador && role.id === colaborador.role_id} value={role.id} key={role.id}>
-                        {role.name}
-                      </option>
-                    ))}
-                  </select> */}
                 </div>
                 <div className="input-form mt-3">
                   <label

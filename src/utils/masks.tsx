@@ -26,22 +26,11 @@ export function phone(e: React.FormEvent<HTMLInputElement>) {
   value.replace(/(\d{4})(\d)/, '$1-$2');
   value.replace(/(\d{4})-(\d)(\d{4})/, '$1$2-$3');
   value.replace(/(-\d{4})\d+?$/, '$1');
-  console.log(value);
 
   e.currentTarget.value = value;
 
   return e;
 }
-
-// export function phone(value:) {
-//   return value
-//     .replace(/\D/g, '')
-//     .replace(/(\d{2})(\d)/, '($1) $2')
-//     .replace(/(\d{4})(\d)/, '$1-$2')
-//     .replace(/(\d{4})-(\d)(\d{4})/, '$1$2-$3')
-//     .replace(/(-\d{4})\d+?$/, '$1')
-// }
-
 
 export function cpf(e: React.FormEvent<HTMLInputElement>) {
   e.currentTarget.maxLength = 14;

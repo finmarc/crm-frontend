@@ -14,7 +14,7 @@ interface User {
   document: string;
   email: string;
   phone: string;
-  roles: Role
+  role: Role
 }
 
 const ColaboradorDetails = () => {
@@ -27,7 +27,7 @@ const ColaboradorDetails = () => {
     const { data } = response;
     const newUser = {
       ...data,
-      role_id: data.roles.id
+      role_id: data.role.id
     }
     setUser(newUser);
   }, []);
@@ -35,7 +35,6 @@ const ColaboradorDetails = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-  console.log(user)
   return (
     <>
       <div className="intro-y flex flex-col sm:flex-row items-center mt-8">
@@ -65,7 +64,7 @@ const ColaboradorDetails = () => {
               <div className="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg">
                 {user?.name}
               </div>
-              <div className="text-slate-500">{user?.roles.name}</div>
+              <div className="text-slate-500">{user?.role.name}</div>
             </div>
           </div>
           <div className="mt-6 lg:mt-0 flex-1 px-5 border-l border-r border-slate-200/60 dark:border-darkmode-400 border-t lg:border-t-0 pt-5 lg:pt-0">

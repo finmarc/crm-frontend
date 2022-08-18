@@ -13,7 +13,7 @@ interface User {
   document: string;
   email: string;
   phone: string;
-  roles: Role;
+  role: Role;
 }
 
 const Colaborador = () => {
@@ -29,7 +29,7 @@ const Colaborador = () => {
         email: user.email,
         telefone: user.phone,
         documento: user.document,
-        perfil: user?.roles.name
+        perfil: user?.role.name
       }
     })
 
