@@ -138,6 +138,11 @@ const helpers = {
     }
     return tempColors;
   },
+
+  isBrowser() {
+    return typeof window === "object"
+  },
+
 };
 
 export { helpers as helper };

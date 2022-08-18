@@ -1,31 +1,29 @@
 import { Controller } from "react-hook-form";
+import InputMask from "react-input-mask";
 
- interface InputProps {
-    id?: string;
+interface InputProps {
+    id: string;
+    mask: any;
+    typeMask?: string;
     className: any
-    label?: string;
-    type?: string;
     control: any,
     name: string,
     placeholder?: string
-
 }
 
-export const Input = ({ control,id, name , className, type,...props }: InputProps) => {
-    
+export const MaskedInput = ({ control, name, mask, className, typeMask, ...props }: InputProps) => {
     return (
         <Controller
             control={control}
             name={name}
             render={({ field: { onChange, onBlur, ref, value } }) => (
-                <input
-                    id={id}
-                    name={name}
-                    type={type ?? "text"}
-                    ref={ref}
-                    value={value || ""}
+                <InputMask
+                    type="text"
+                    inputRef={ref}
                     onChange={onChange}
                     onBlur={onBlur}
+                    value={value || ""}
+                    mask={mask}
                     className={className}
                     {...props}
                 />

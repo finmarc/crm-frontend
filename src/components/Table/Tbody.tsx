@@ -5,16 +5,18 @@ import {
   ModalBody,
 } from "@/base-components";
 import { useCallback, useState } from "react";
+import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import api from "../../services/apiClient";
 interface RowProps {
-  records: any[];
+  dataList: any[];
   component: string
   url: string
 }
 
-export const TBodyRow = ({ records, component , url }: RowProps) => {
+export const TBodyRow = ({ dataList, component , url }: RowProps) => {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
+  const [ records, setRecords] = useState(dataList);
   const [id, setId] = useState("");
 
   const keys = Object.keys(records[0]);
@@ -30,9 +32,19 @@ export const TBodyRow = ({ records, component , url }: RowProps) => {
 
   const remove = useCallback(async (id: string) => {
     await api.delete(`${url}/${id}`)
-    history.replace('/colaboradores')
-    setDeleteConfirmationModal(false); return
+    setDeleteConfirmationModal(false); 
+    toast.success("Cadastro excluido com sucesso!", {
+      duration: 4000,
+      position: "top-right",
+    });
+    listUpdate(id);
+    return
   }, []);
+
+  function listUpdate(id: string) {
+    const recordsList = records.filter(record => record.id !== id);
+    setRecords(recordsList);
+  }
   return (
     <>
       <tbody>
@@ -72,7 +84,7 @@ export const TBodyRow = ({ records, component , url }: RowProps) => {
             />
             <div className="text-3xl mt-5">Tem certeza ?</div>
             <div className="text-slate-500 mt-2">
-              Você realmente deseja excluir esses registros?<br />
+              Você realmente deseja excluir esse registro?<br />
               Este processo não pode ser desfeito.
             </div>
           </div>

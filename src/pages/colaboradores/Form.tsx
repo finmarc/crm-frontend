@@ -4,28 +4,26 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import api from "../../services/apiClient";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { createRef, useState } from "react";
 import { useEffect } from "react";
-import { TomSelect } from "../../base-components";
 import { useHistory } from "react-router-dom";
+import { MaskedInput } from "../../components/InputMask";
+import { Input } from "../../components/Input";
+import { Select } from "../../components/Select";
 
-type InputForm = {
-  name: string;
-  email: string;
-  password: string;
-  phone?: string;
-  document?: string;
-  role_id?: string;
-};
-
+interface Select {
+  value: string;
+  label: string;
+}
 interface User {
-  id: string;
+  id?: string;
   name: string;
   document: string;
   password?: string;
   email: string;
   phone: string;
   role_id?: string;
+  ReactSelect?: Select; 
 }
 
 type Roles = {
@@ -38,8 +36,11 @@ type FormProps = {
   title?: string;
 }
 
+
+
 export function Form(dataForm?: FormProps) {
   const [roles, setRoles] = useState([]);
+  const formRef = createRef<HTMLFormElement>();
   const history = useHistory()
   let colaborador: any;
   if (dataForm) {
@@ -49,10 +50,12 @@ export function Form(dataForm?: FormProps) {
   const perfis = async () => {
     const response = await api.get("roles");
     if (response.data.lenght < 1) return;
-
     const { data } = response;
-
-    setRoles(data);
+    const options = data.map((role: any) => ({
+      value: role.id,
+      label: role.name
+    }))
+    setRoles(options);
   };
 
   useEffect(() => {
@@ -64,7 +67,7 @@ export function Form(dataForm?: FormProps) {
       name: yup.string().required().min(2),
       email: yup.string().required().email(),
       document: yup.string().required().min(11),
-      password: yup.string().required().min(6),
+      password: yup.string().min(6),
     })
     .required();
 
@@ -72,14 +75,22 @@ export function Form(dataForm?: FormProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+    control
+  } = useForm<User>({
     mode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: colaborador ?? {}
   });
 
-  const onSubmit: SubmitHandler<any> = async (data: InputForm) => {
+  const onSubmit: SubmitHandler<User> = async (data: User) => {
     let response;
+    
+    data = {
+      ...data,
+      role_id: data?.ReactSelect?.value
+    }
+
+    delete data?.ReactSelect;
     if (colaborador && colaborador.id) {
       response = await api.patch(`users/${colaborador.id}`, data);
     } else {
@@ -122,7 +133,7 @@ export function Form(dataForm?: FormProps) {
               </h2>
             </div>
             <div className="p-5">
-              <form className="validate-form" onSubmit={handleSubmit(onSubmit)}>
+              <form ref={formRef} className="validate-form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-12 gap-2">
                   <div className="input-form col-span-6">
                     <label
@@ -131,12 +142,10 @@ export function Form(dataForm?: FormProps) {
                     >
                       Nome
                     </label>
-                    <input
-                      {...register("name")}
+                    <Input
+                      control={control}
                       id="name"
-                      type="text"
                       name="name"
-
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.name,
@@ -151,8 +160,9 @@ export function Form(dataForm?: FormProps) {
                     >
                       Email
                     </label>
-                    <input
-                      {...register("email")}
+                    <Input  
+                      label="Email"
+                      control={control}
                       id="email"
                       type="email"
                       name="email"
@@ -160,7 +170,7 @@ export function Form(dataForm?: FormProps) {
                         "form-control": true,
                         "border-danger": errors.email,
                       })}
-                      placeholder="example@gmail.com"
+                      placeholder="example@gmail.com" 
                     />
                   </div>
                 </div>
@@ -171,18 +181,17 @@ export function Form(dataForm?: FormProps) {
                       htmlFor="validation-form-1"
                       className="form-label w-full flex flex-col sm:flex-row"
                     >
-                      Documento
+                      CPF
                     </label>
-                    <input
-                      {...register("document")}
-                      id="document"
-                      type="text"
+                    <MaskedInput
                       name="document"
+                      id="document"
+                      control={control}
+                      mask="999.999.999-99"
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.document,
                       })}
-                      placeholder="CPF"
                     />
                   </div>
                   <div className="input-form col-span-6">
@@ -190,18 +199,17 @@ export function Form(dataForm?: FormProps) {
                       htmlFor="validation-form-2"
                       className="form-label w-full flex flex-col sm:flex-row"
                     >
-                      Telefone
+                      Celular
                     </label>
-                    <input
-                      {...register("phone")}
-                      id="phone"
-                      type="text"
+                    <MaskedInput
                       name="phone"
+                      id="phone"
+                      control={control}
+                      mask="(99) 99999-9999"
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.phone,
                       })}
-                      placeholder="(61) 99999-9999"
                     />
                   </div>
                 </div>
@@ -212,20 +220,33 @@ export function Form(dataForm?: FormProps) {
                   >
                     Perfil
                   </label>
-                  <select
+                  <Select
+                    options={roles}
+                    control={control}
+                    optionSelected={colaborador ? colaborador.roles : null}
+                    id="role_id"
+                    type="role_id"
+                    name="role_id"
+                    className={classnames({
+                      "form-control": true,
+                      "border-danger": errors?.role_id,
+                    })}
+                    placeholder="Selecione"
+                  />
+                  {/* <select
                     id="role_id"
                     {...register("role_id")}
                     className="form-select mt-2 sm:mr-2"
-                    >
+                  >
                     <option>
                       Selecione um perfil
                     </option>
                     {roles.map((role: Roles) => (
-                      <option key={role.id} value={role.id}>
+                      <option selected={colaborador && role.id === colaborador.role_id} value={role.id} key={role.id}>
                         {role.name}
                       </option>
                     ))}
-                  </select>
+                  </select> */}
                 </div>
                 <div className="input-form mt-3">
                   <label
@@ -234,8 +255,9 @@ export function Form(dataForm?: FormProps) {
                   >
                     Senha
                   </label>
-                  <input
-                    {...register("password")}
+                  <Input
+                    label="Email"
+                    control={control}
                     id="password"
                     type="password"
                     name="password"

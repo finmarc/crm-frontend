@@ -13,7 +13,7 @@ export const Table = (data: DataProps) => {
       <div className="overflow-x-auto">
         <table className="table">
           <THeadRow records={data.columns} />
-          <TBodyRow component={data.component} records={data.columns} url={data.url} />
+          <TBodyRow component={data.component} dataList={data.columns} url={data.url} />
         </table>
       </div>
     </div>

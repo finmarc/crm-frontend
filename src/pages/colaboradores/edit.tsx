@@ -22,11 +22,12 @@ const ColaboradorEdit = () => {
     const { data } = response;
     const newUser = {
       ...data,
-      role_id: data.roles[0].role.id
+      role_id: data.roles.id
     }
     setUser(newUser);
   }, []);
 
+  console.log(user);
   useEffect(() => {
     fetchData();
   }, [fetchData]);

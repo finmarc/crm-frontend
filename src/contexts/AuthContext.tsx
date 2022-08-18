@@ -1,7 +1,11 @@
-import { createContext, useCallback, useState, useContext } from "react";
+import { AxiosError } from "axios";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
+import { createContext, useCallback, useState, useContext, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import { json } from "stream/consumers";
 import api from "../services/apiClient";
+import { helper } from "../utils";
 
 interface User {
   id: string;
@@ -31,18 +35,40 @@ export const AuthContext = createContext<AuthContextData>(
 
 export const AuthProvider = ({ children }: any) => {
   const history = useHistory();
-  const [data, setData] = useState<AuthState>(() => {
-    const token = localStorage.getItem("@token");
-    const user = localStorage.getItem("@user");
+  const router = useLocation();
+  const [data, setData] = useState<AuthState | any>(() => {
+    const { "@token": token } = parseCookies();
+    const { "@user": user } = parseCookies();
 
     if (token && user) {
       // para não precisar ficar passando no header das requisições a api
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      return { token, user: JSON.parse(user) };
+      return { token, user: JSON.stringify(user) };
     }
 
     return {} as AuthState;
   });
+
+  useEffect(() => {
+    const { "@token": token } = parseCookies();
+
+    if (token) {
+      api
+        .get("/me")
+        .then((response) => {
+          const user = response.data;
+          setData({
+            token,
+            user
+          });
+        })
+        .catch((error: AxiosError) => {
+          if (helper.isBrowser()) {
+            signOut();
+          }
+        });
+    }
+  }, [router.pathname]);
 
   const signIn = useCallback(async ({ email, password }: any) => {
     const toastId = toast.loading("Autenticando...", {
@@ -56,13 +82,27 @@ export const AuthProvider = ({ children }: any) => {
         password,
       });
 
-      const { token, user } = response.data;
+      const { token, user, refreshToken } = response.data;
 
       if (token && user) {
         toast.dismiss(toastId);
       }
-      localStorage.setItem("@token", token);
-      localStorage.setItem("@user", JSON.stringify(user));
+
+      setCookie(undefined, "@token", token, {
+        maxAge: 60 * 60 * 24 * 30, 
+        path: "/",
+      });
+
+
+      setCookie(undefined, "@user", user, {
+        maxAge: 60 * 60 * 24 * 30, 
+        path: "/",
+      });
+
+      setCookie(undefined, "@refreshToken", refreshToken, {
+        maxAge: 60 * 60 * 24 * 30, 
+        path: "/",
+      });
 
       // para não precisar ficar passando no header das requisições a api
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -77,8 +117,9 @@ export const AuthProvider = ({ children }: any) => {
   }, []);
 
   const signOut = useCallback(() => {
-    localStorage.removeItem("@token");
-    localStorage.removeItem("@user");
+    destroyCookie(null, "@token");
+    destroyCookie(null, "@user");
+    destroyCookie(null, "@refreshToken");
 
     setData({} as AuthState);
     history.push("/login");

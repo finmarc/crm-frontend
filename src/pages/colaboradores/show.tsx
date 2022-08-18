@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { Header } from "../../components/Header";
 import { Lucide } from "@/base-components";
 import { faker as $f } from "@/utils";
 import api from "../../services/apiClient";
@@ -15,11 +14,7 @@ interface User {
   document: string;
   email: string;
   phone: string;
-  roles: [
-    {
-      role: Role
-    }
-  ];
+  roles: Role
 }
 
 const ColaboradorDetails = () => {
@@ -32,7 +27,7 @@ const ColaboradorDetails = () => {
     const { data } = response;
     const newUser = {
       ...data,
-      role_id: data.roles[0].role.id
+      role_id: data.roles.id
     }
     setUser(newUser);
   }, []);
@@ -70,7 +65,7 @@ const ColaboradorDetails = () => {
               <div className="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg">
                 {user?.name}
               </div>
-              <div className="text-slate-500">{user?.roles[0].role.name}</div>
+              <div className="text-slate-500">{user?.roles.name}</div>
             </div>
           </div>
           <div className="mt-6 lg:mt-0 flex-1 px-5 border-l border-r border-slate-200/60 dark:border-darkmode-400 border-t lg:border-t-0 pt-5 lg:pt-0">
