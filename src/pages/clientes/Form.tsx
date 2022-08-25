@@ -6,6 +6,7 @@ import api from "../../services/apiClient";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import { Clients } from "./interface/clients";
+import { MaskedInput } from "../../components/InputMask";
 
 type FormProps = {
   client?: Clients;
@@ -34,6 +35,7 @@ export function Form(dataForm?: FormProps) {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
@@ -132,18 +134,19 @@ export function Form(dataForm?: FormProps) {
                       htmlFor="validation-form-1"
                       className="form-label w-full flex flex-col sm:flex-row"
                     >
-                      CPF/CNPJ
+                      CPF
                     </label>
-                    <input
-                      {...register("document")}
-                      id="document"
-                      type="text"
+
+                    <MaskedInput
                       name="document"
+                      id="document"
+                      control={control}
+                      mask="999.999.999-99"
+                      placeholder="999.999.999-99"
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.document,
                       })}
-                      placeholder="CPF/CNPJ"
                     />
                   </div>
                   <div className="input-form col-span-6">
@@ -153,16 +156,17 @@ export function Form(dataForm?: FormProps) {
                     >
                       RG
                     </label>
-                    <input
-                      {...register("rg")}
-                      id="rg"
-                      type="text"
+
+                    <MaskedInput
                       name="rg"
+                      id="rg"
+                      control={control}
+                      mask="9.999-999"
+                      placeholder="9.999-999"
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.rg,
                       })}
-                      placeholder="9.999-999"
                     />
                   </div>
                 </div>
@@ -192,18 +196,19 @@ export function Form(dataForm?: FormProps) {
                       htmlFor="validation-form-2"
                       className="form-label w-full flex flex-col sm:flex-row"
                     >
-                      Telefone
+                      Celular
                     </label>
-                    <input
-                      {...register("fone")}
-                      id="fone"
-                      type="text"
+
+                    <MaskedInput
                       name="fone"
+                      id="fone"
+                      control={control}
+                      mask="(99) 99999-9999"
+                      placeholder="(99) 99999-9999"
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.fone,
                       })}
-                      placeholder="(61) 99999-9999"
                     />
                   </div>
                 </div>

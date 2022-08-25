@@ -12,7 +12,7 @@ interface Partners {
   name: string;
   document: string;
   email: string;
-  phone: string;
+  fone: string;
   birth_date: Date,
   rg?:string,
   sexo?:string,
@@ -33,7 +33,7 @@ const Parceiro = () => {
         id: partner.id,
         nome:  partner.name,
         email:  partner.email,
-        telefone:  partner.phone,
+        telefone:  partner.fone,
         documento:  partner.document,
         
         

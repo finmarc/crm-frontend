@@ -12,7 +12,7 @@ interface Clients {
   name: string;
   document: string;
   email: string;
-  phone: string;
+  fone: string;
   birth_date: Date,
   rg?:string,
   sexo?:string,
@@ -33,7 +33,7 @@ const Cliente = () => {
         id: client.id,
         nome:  client.name,
         email:  client.email,
-        telefone:  client.phone,
+        telefone:  client.fone,
         documento:  client.document,
         
         
