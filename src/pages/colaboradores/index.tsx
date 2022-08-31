@@ -19,9 +19,14 @@ interface User {
 const Colaborador = () => {
   const [users, setUsers] = useState<User[]>([]);
 
+  const theadTitles = [
+   "id", "Nome", "Email", "Telefone", "CPF", "Perfil"
+  ]
+
   const fetchData = useCallback(async () => {
     const response = await api.get("/users");
 
+    
     const newUsers: any = response.data.map((user: User) => {
       return {
         id: user.id,
@@ -42,7 +47,7 @@ const Colaborador = () => {
   return (
     <>
       <Header title="Colaboradores" url="colaborador/new" action="Adicionar" />
-      {users.length > 0 && <Table columns={users} component="colaborador" url="users" />}
+      <Table titles={theadTitles} columns={users} component="colaborador" url="users" />
     </>
   );
 };

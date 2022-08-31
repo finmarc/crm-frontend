@@ -3,10 +3,6 @@ import { Header } from "../../components/Header";
 import { Table } from "../../components/Table";
 import api from "../../services/apiClient";
 
-interface Role {
-  id: string;
-  name: string;
-}
 interface Clients {
   id: string;
   name: string;
@@ -42,14 +38,16 @@ const Cliente = () => {
 
     setClients(newClient);
   }, []);
-
+  const theadTitles = [
+    "id", "Nome", "Email", "Telefone", "CPF"
+  ]
   useEffect(() => {
     fetchData();
   }, [fetchData]);
   return (
     <>
       <Header title="Clientes" url="cliente/new" action="Adicionar" />
-      {clients.length > 0 && <Table columns={clients} component="cliente" url="clients" />}
+      {clients.length > 0 && <Table titles={theadTitles} columns={clients} component="cliente" url="clients" />}
     </>
   );
 };

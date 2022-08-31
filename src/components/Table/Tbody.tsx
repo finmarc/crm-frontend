@@ -4,22 +4,28 @@ import {
   Modal,
   ModalBody,
 } from "@/base-components";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import api from "../../services/apiClient";
 interface RowProps {
-  dataList: any[];
+  dataList: any;
   component: string
   url: string
 }
 
 export const TBodyRow = ({ dataList, component , url }: RowProps) => {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
-  const [ records, setRecords] = useState(dataList);
+  const [ records, setRecords] = useState<any[]>([]);
   const [id, setId] = useState("");
 
-  const keys = Object.keys(records[0]);
+  useEffect(() => {
+    if(dataList.length > 0) {
+      setRecords(dataList)
+    }
+  },[dataList])
+
+  const keys = records && records?.length > 0 ? Object.keys(records[0]) : [];
   const history = useHistory();
 
   const show = useCallback((id: string) => {
@@ -42,33 +48,33 @@ export const TBodyRow = ({ dataList, component , url }: RowProps) => {
   }, []);
 
   function listUpdate(id: string) {
-    const recordsList = records.filter(record => record.id !== id);
+    const recordsList = records?.filter(record => record.id !== id);
     setRecords(recordsList);
   }
+
   return (
     <>
-      <tbody>
-        {records.map((column, index) => (
-          <tr key={index}>
-            {keys.map((key) => key !== 'id' && (
-              <td key={key} className="whitespace-nowrap">
-                {column[key]}
+        <tbody>
+        {records?.length > 0 && (
+
+          records.map((column, index) => (
+            <tr key={index}>{keys.map((key) => key !== 'id' && (
+              <td key={key} className="whitespace-nowrap">{column[key]}</td>
+              ))}
+              <td className="whitespace-nowrap ">
+                <button className="btn btn-primary mr-1 mb-2" onClick={() => show(column['id'])}>
+                  <Lucide icon="Eye" className="w-5 h-5" />
+                </button>
+                <button className="btn btn-warning mr-1 mb-2" onClick={() => edit(column['id'])}>
+                  <Lucide icon="Edit" className="w-5 h-5" />
+                </button>
+                <button className="btn btn-danger mr-1 mb-2" onClick={() => { setId(column['id']), setDeleteConfirmationModal(true) }}>
+                  <Lucide icon="Trash" className="w-5 h-5" />
+                </button>
               </td>
-            ))}
-            <td className="whitespace-nowrap ">
-              <button className="btn btn-primary mr-1 mb-2" onClick={() => show(column['id'])}>
-                <Lucide icon="Eye" className="w-5 h-5" />
-              </button>
-              <button className="btn btn-warning mr-1 mb-2" onClick={() => edit(column['id'])}>
-                <Lucide icon="Edit" className="w-5 h-5" />
-              </button>
-              <button className="btn btn-danger mr-1 mb-2" onClick={() => {setId(column['id']), setDeleteConfirmationModal(true)}}>
-                <Lucide icon="Trash" className="w-5 h-5" />
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
+            </tr>
+          )))}
+        </tbody>
       {/* BEGIN: Delete Confirmation Modal */}
       <Modal
         show={deleteConfirmationModal}

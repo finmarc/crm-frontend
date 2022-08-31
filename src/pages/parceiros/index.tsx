@@ -28,6 +28,7 @@ const Parceiro = () => {
   const fetchData = useCallback(async () => {
     const response = await api.get("/partners");
 
+    
     const newPartners: any = response.data.map((partner: Partners) => {
       return {
         id: partner.id,
@@ -42,14 +43,16 @@ const Parceiro = () => {
 
     setPartners(newPartners);
   }, []);
-
+  const theadTitles = [
+    "id", "Nome", "Email", "Telefone", "CPF"
+  ]
   useEffect(() => {
     fetchData();
   }, [fetchData]);
   return (
     <>
       <Header title="Parceiros" url="parceiro/new" action="Adicionar" />
-      {partners.length > 0 && <Table columns={partners} component="parceiro" url="partners" />}
+      {partners.length > 0 && <Table titles={theadTitles} columns={partners} component="parceiro" url="partners" />}
     </>
   );
 };
