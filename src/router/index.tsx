@@ -15,6 +15,9 @@ import Route from "./Route";
 import { Form } from "../pages/colaboradores/Form";
 import { Form as ParceiroForm } from "../pages/parceiros/Form";
 import { Form as ClienteForm } from "../pages/clientes/Form"
+import { CreateBudget } from "../pages/budgets/create"
+import { Budget } from "../pages/budgets";
+import EditBudget from "../pages/budgets/edit";
 
 
 
@@ -38,6 +41,10 @@ const Router = () => (
         <Route path="/parceiro/new" isPrivate component={ParceiroForm} />
         <Route path="/parceiro/show/:id" isPrivate component={PartnersDetails} />
         <Route path="/parceiro/edit/:id" isPrivate component={PartnerEdit} />
+        <Route path="/orcamento/:id/editar" exact isPrivate component={EditBudget} />
+        <Route path="/orcamentos" isPrivate component={Budget} />
+        <Route path="/orcamento/novo" exact isPrivate component={CreateBudget} />
+
       </SideMenu>
     </Switch>
   </>

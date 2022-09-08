@@ -29,11 +29,11 @@ export const TBodyRow = ({ dataList, component , url }: RowProps) => {
   const history = useHistory();
 
   const show = useCallback((id: string) => {
-    history.push(`${component}/show/${id}`)
+    history.push(`${component}/${id}/visualizar`)
   },[]);
 
   const edit = useCallback((id: string) => {
-    history.push(`${component}/edit/${id}`)
+    history.push(`${component}/${id}`)
   }, []);
 
   const remove = useCallback(async (id: string) => {

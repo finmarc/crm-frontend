@@ -15,7 +15,6 @@ interface Clients {
   address?:string,
   description?:string,
   seller_id?:string,
-  
 }
 
 const Cliente = () => {
