@@ -21,7 +21,7 @@ interface Budget {
 type FormProps = {
   budget?: Budget;
   title?: string;
-}
+};
 
 export function CreateBudget(dataForm?: FormProps) {
   const [clients, setClients] = useState<Client[]>([]);
@@ -30,7 +30,7 @@ export function CreateBudget(dataForm?: FormProps) {
   const [status, setStatus] = useState<Status[]>([]);
   const [types, setTypes] = useState<Types[]>([]);
 
-  const history = useHistory()
+  const history = useHistory();
 
   const fetchData = useCallback(async () => {
     const responseClients = await api.get("/clients");
@@ -44,7 +44,6 @@ export function CreateBudget(dataForm?: FormProps) {
     setPartners(responsePartners?.data);
     setStatus(responseStatus?.data);
     setTypes(responseTypes?.data);
-
   }, []);
 
   useEffect(() => {
@@ -53,7 +52,7 @@ export function CreateBudget(dataForm?: FormProps) {
 
   const schema = yup
     .object({
-      client_id: yup.string().required()
+      client_id: yup.string().required(),
     })
     .required();
 
@@ -61,24 +60,24 @@ export function CreateBudget(dataForm?: FormProps) {
     handleSubmit,
     formState: { errors },
     register,
-    control
+    control,
   } = useForm<Budget>({
     mode: "onChange",
     resolver: yupResolver(schema),
-    defaultValues: {}
+    defaultValues: {},
   });
 
   const onSubmit: SubmitHandler<Budget> = async (data: Budget) => {
     let response;
     response = await api.post("budgets", data);
-    
+
     const { status } = response;
     if (status == 201) {
       toast.success("Cadastro realizado com sucesso!", {
         duration: 4000,
         position: "top-right",
       });
-      history.push("/orcamentos")
+      history.push("/orcamentos");
     } else {
       toast.error("Ops! Algo deu errado", {
         duration: 4000,
@@ -90,7 +89,10 @@ export function CreateBudget(dataForm?: FormProps) {
   return (
     <>
       <div className="intro-y flex items-center mt-8">
-        <h2 className="text-lg font-medium mr-auto"> {!dataForm?.title ? "Novo orçamento" : dataForm?.title}</h2>
+        <h2 className="text-lg font-medium mr-auto">
+          {" "}
+          {!dataForm?.title ? "Novo orçamento" : dataForm?.title}
+        </h2>
       </div>
       <div className="mt-5">
         <div className="intro-y col-span-12 lg:col-span-6">
@@ -110,11 +112,13 @@ export function CreateBudget(dataForm?: FormProps) {
                       "border-danger": errors?.client_id,
                     })}
                     id="type_id"
-                    {...register("type_id",)}
+                    {...register("type_id")}
                   >
-                    <option >Selecione um tipo</option>
-                    {types.map(type => (
-                      <option key={type.id} value={type.id}>{type.name}</option>
+                    <option>Selecione um tipo</option>
+                    {types.map((type) => (
+                      <option key={type.id} value={type.id}>
+                        {type.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -131,11 +135,13 @@ export function CreateBudget(dataForm?: FormProps) {
                       "border-danger": errors?.client_id,
                     })}
                     id="client_id"
-                    {...register("client_id",)}
+                    {...register("client_id")}
                   >
-                    <option >Selecione um cliente</option>
-                    {clients.map(client => (
-                      <option key={client.id} value={client.id}>{client.name}</option>
+                    <option>Selecione um cliente</option>
+                    {clients.map((client) => (
+                      <option key={client.id} value={client.id}>
+                        {client.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -153,11 +159,13 @@ export function CreateBudget(dataForm?: FormProps) {
                       "border-danger": errors?.product_id,
                     })}
                     id="product_id"
-                    {...register("product_id",)}
+                    {...register("product_id")}
                   >
-                    <option >Selecione um produto</option>
-                    {products.map(product => (
-                      <option key={product.id} value={product.id}>{product.name}</option>
+                    <option>Selecione um produto</option>
+                    {products.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -175,15 +183,16 @@ export function CreateBudget(dataForm?: FormProps) {
                       "border-danger": errors?.partner_id,
                     })}
                     id="partner_id"
-                    {...register("partner_id",)}
+                    {...register("partner_id")}
                   >
-                    <option >Selecione um parceiro</option>
-                    {partners.map(partner => (
-                      <option key={partner.id} value={partner.id}>{partner.name}</option>
+                    <option>Selecione um parceiro</option>
+                    {partners.map((partner) => (
+                      <option key={partner.id} value={partner.id}>
+                        {partner.name}
+                      </option>
                     ))}
                   </select>
                 </div>
-
 
                 <div className="input-form mt-3">
                   <label
@@ -192,20 +201,61 @@ export function CreateBudget(dataForm?: FormProps) {
                   >
                     Situação
                   </label>
-              
+
                   <select
                     className={classnames({
                       "form-select": true,
                       "border-danger": errors?.status_id,
                     })}
                     id="status_id"
-                    {...register("status_id",)}
+                    {...register("status_id")}
                   >
-                    <option >Selecione um status</option>
-                    {status && status.map(situacao => (
-                      <option key={situacao.id} value={situacao.id}>{situacao.name}</option>
-                    ))}
+                    <option>Selecione um status</option>
+                    {status &&
+                      status.map((situacao) => (
+                        <option key={situacao.id} value={situacao.id}>
+                          {situacao.name}
+                        </option>
+                      ))}
                   </select>
+                </div>
+
+                <div className="input-form mt-3">
+                  <label
+                    htmlFor="validation-form-3"
+                    className="form-label w-full flex flex-col sm:flex-row"
+                  >
+                    Situação
+                  </label>
+
+                  <select
+                    className={classnames({
+                      "form-select": true,
+                      "border-danger": errors?.status_id,
+                    })}
+                    id="status_id"
+                    {...register("status_id")}
+                  >
+                    <option>Selecione um status</option>
+                    {status &&
+                      status.map((situacao) => (
+                        <option key={situacao.id} value={situacao.id}>
+                          {situacao.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+
+                <div  className="input-form mt-3" >
+                  <label htmlFor="regular-form-1" className="form-label">
+                   Observações
+                  </label>
+                  <input
+                    id="regular-form-1"
+                    type="text"
+                    className="form-control"
+                        placeholder="Observações"
+                  />
                 </div>
 
                 <button type="submit" className="btn btn-primary mt-5">

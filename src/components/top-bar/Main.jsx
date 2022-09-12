@@ -10,7 +10,7 @@ import {
   DropdownHeader,
   DropdownDivider,
 } from "@/base-components";
-import logoUrl from "@/assets/images/logo.svg";
+import logoUrl from "@/assets/images/arrow-negative.png";
 import { faker as $f } from "@/utils";
 import * as $_ from "lodash";
 import classnames from "classnames";
@@ -41,8 +41,8 @@ function Main(props) {
             className="logo -intro-x hidden md:flex xl:w-[180px] block"
           >
             <img
-              alt="Enigma Tailwind HTML Admin Template"
-              className="logo__image w-6"
+              alt="ícone finmarc"
+              className="logo__image w-10 "
               src={logoUrl}
             />
             <span className="logo__text text-white text-lg ml-3"> Finmarc </span>
