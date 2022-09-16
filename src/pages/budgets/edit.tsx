@@ -22,6 +22,7 @@ import classnames from "classnames";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import UploadButtonComponent from "../../components/UploadButtonComponent";
+import CardUpload from "../../components/CardUpload";
 const EditBudget = () => {
   // const dropzoneMultipleRef = useRef();
 
@@ -90,6 +91,18 @@ const EditBudget = () => {
 
     setBudget(data);
   }, []);
+
+  const cardTitles = [
+    "Contrato Social e última Alteração Contratual consolidada",
+    "CNH ou RG e CPF",
+    "Comprovante de residência",
+    "IRPF e recibo de entrega",
+    "Faturamento dos últimos 12 meses",
+    "Referências (Email, contato e 2 referências)",
+    `Certidão de nascimento ou casamento (Se casado, anexar os documentos do cônjuge) ${`;`} Pacto antenupcial – se aplicável`,
+    "ECF e recibo de entrega (Obs: para empresas de lucro presumido.)",
+    "Cartão CNPJ",
+  ];
 
   useEffect(() => {
     fetchData();
@@ -286,90 +299,20 @@ const EditBudget = () => {
                   <TabPanel className="leading-relaxed">
                     <div className="intro-y col-span-12 lg:col-span-6">
                       <div className="flex justify-center items-center w-full">
-                        {/*  Start Cards */}
+                        <div className="container grid lg:grid-cols-3 gap-2 ">
+                          {/*  Start Cards */}
+{/* 
+                           {cardTitles.forEach(title => (
+                          <CardUpload description={title.} />
+                          ))} */}
 
-                       <div className="container">
-                       <div className="container mx-auto p-6">
-                          <div className="flex items-stretch -mx-4">
-                            <div className="flex-1 p-4 ">
-                              <div className="block  bg-gray-50 rounded-lg border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 overflow-hidden border-2 h-full ">
-                                <div className="p-4 ">
-                                  <p className="text-md text-justify">
-                                    Some Description
-                                  </p>
-                                  <UploadButtonComponent/>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>   <div className="container mx-auto p-6">
-                          <div className="flex items-stretch -mx-4">
-                            <div className="flex-1 p-4 ">
-                              <div className="block  bg-gray-50 rounded-lg border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 overflow-hidden border-2 h-full ">
-                                <div className="p-4 ">
-                                  <p className="text-md text-justify">
-                                    Some Description
-                                  </p>
-                                 <UploadButtonComponent/>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          {cardTitles.map((title, index) =>{
+                            return <CardUpload id={index} description={title} titleIndex={index} />
+                          } 
+                          )}
+
+                        
                         </div>
-                        <div className="container mx-auto p-6">
-                          <div className="flex items-stretch -mx-4">
-                            <div className="flex-1 p-4 ">
-                              <div className="block  bg-gray-50 rounded-lg border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 overflow-hidden border-2 h-full ">
-                                <div className="p-4 ">
-                                  <p className="text-md text-justify">
-                                    Some Description
-                                  </p>
-                                  <UploadButtonComponent/>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div><div className="container mx-auto p-6">
-                          <div className="flex items-stretch -mx-4">
-                            <div className="flex-1 p-4 ">
-                              <div className="block  bg-gray-50 rounded-lg border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 overflow-hidden border-2 h-full ">
-                                <div className="p-4 ">
-                                  <p className="text-md text-justify">
-                                    Some Description
-                                  </p>
-                                  <UploadButtonComponent/>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div><div className="container mx-auto p-6">
-                          <div className="flex items-stretch -mx-4">
-                            <div className="flex-1 p-4 ">
-                              <div className="block  bg-gray-50 rounded-lg border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 overflow-hidden border-2 h-full ">
-                                <div className="p-4 ">
-                                  <p className="text-md text-justify">
-                                    Some Description
-                                  </p>
-                                 <UploadButtonComponent/>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div><div className="container mx-auto p-6">
-                          <div className="flex items-stretch -mx-4">
-                            <div className="flex-1 p-4 ">
-                              <div className="block  bg-gray-50 rounded-lg border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 overflow-hidden border-2 h-full ">
-                                <div className="p-4 ">
-                                  <p className="text-md text-justify">
-                                    Some Description
-                                  </p>
-                                 <UploadButtonComponent/>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                       </div>
 
                         {/* Ends Cards */}
                       </div>
