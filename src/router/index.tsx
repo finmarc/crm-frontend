@@ -30,21 +30,20 @@ const Router = () => (
         <Route path="/" exact isPrivate component={Dashboard} />
         <Route path="/admin" isPrivate component={Dashboard} />
         <Route path="/colaboradores" isPrivate component={Colaborador} />
-        <Route path="/colaborador/new" isPrivate component={Form} />
-        <Route path="/colaborador/show/:id" isPrivate component={ColaboradorDetails} />
-        <Route path="/colaborador/edit/:id" isPrivate component={ColaboradorEdit} />
+        <Route path="/colaborador" exact isPrivate component={Form} />
+        <Route path="/colaborador/:id/visualizar" exact isPrivate component={ColaboradorDetails} />
+        <Route path="/colaborador/:id" exact isPrivate component={ColaboradorEdit} />
         <Route path="/clientes" isPrivate component={Cliente} />
-        <Route path="/cliente/new"isPrivate component={ClienteForm} />
-        <Route path="/cliente/show/:id" isPrivate component={ClientDetails} />
-        <Route path="/cliente/edit/:id" isPrivate component={ClientEdit} />
+        <Route path="/cliente" exact isPrivate component={ClienteForm} />
+        <Route path="/cliente/:id/visualizar" exact isPrivate component={ClientDetails} />
+        <Route path="/cliente/:id" exact isPrivate component={ClientEdit} />
         <Route path="/parceiros" isPrivate component={Parceiro} />
-        <Route path="/parceiro/new" isPrivate component={ParceiroForm} />
-        <Route path="/parceiro/show/:id" isPrivate component={PartnersDetails} />
-        <Route path="/parceiro/edit/:id" isPrivate component={PartnerEdit} />
-        <Route path="/orcamento/:id/editar" exact isPrivate component={EditBudget} />
-        <Route path="/orcamentos" isPrivate component={Budget} />
-        <Route path="/orcamento/novo" exact isPrivate component={CreateBudget} />
-
+        <Route path="/parceiro" exact isPrivate component={ParceiroForm} />
+        <Route path="/parceiro/:id/visualizar" exact isPrivate component={PartnersDetails} />
+        <Route path="/parceiro/:id" exact isPrivate component={PartnerEdit} />
+        <Route path="/orcamentos" exact isPrivate component={Budget} />
+        <Route path="/orcamento/:id" exact isPrivate component={EditBudget} />
+        <Route path="/orcamento"  exact isPrivate component={CreateBudget} />
       </SideMenu>
     </Switch>
   </>

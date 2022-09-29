@@ -18,4 +18,15 @@ export default interface Budget {
   partner: Partner;
   product: Product;
   status: Status;
+  observation: string
+}
+
+export  interface BudgetEdit {
+  id: string;
+  type_id: string;
+  client_id: string;
+  partner_id: string;
+  product_id: string;
+  status_id: string;
+  observation: string;
 }

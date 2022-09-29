@@ -1,37 +1,45 @@
-import * as yup from "yup";
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, createRef, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import api from "../../services/apiClient";
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@/base-components";
+import { Form } from "@unform/web";
+import { SubmitHandler, FormHandles } from "@unform/core";
+import classnames from "classnames";
+import CardUpload from "../../components/CardUpload";
+import toast from "react-hot-toast";
+import SelectCustom from "../../components/Inputs/Select";
+import InputText from "../../components/Inputs/InputText";
+
 import {
-  TabGroup,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  // Dropzone
-} from "@/base-components";
-import { SubmitHandler, useForm } from "react-hook-form";
-import Budget, {
   Client,
   Partner,
   Product,
   Status,
   Types,
 } from "./interfaces/budget";
-import classnames from "classnames";
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import UploadButtonComponent from "../../components/UploadButtonComponent";
-import CardUpload from "../../components/CardUpload";
+export interface BudgetEdit {
+  id?: string;
+  type_id: string;
+  client_id: string;
+  partner_id: string;
+  product_id: string;
+  status_id: string;
+  observation?: string;
+}
+
 const EditBudget = () => {
-  // const dropzoneMultipleRef = useRef();
+  const formRef = useRef<FormHandles>(null);
 
   const [clients, setClients] = useState<Client[]>([]);
   const [partners, setPartners] = useState<Partner[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [status, setStatus] = useState<Status[]>([]);
   const [types, setTypes] = useState<Types[]>([]);
-  const [budget, setBudget] = useState<any>();
+  const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
+
+  const { id } = useParams<any>();
+  const history = useHistory();
 
   const initialDataSelect = useCallback(async () => {
     const responseClients = await api.get("/clients");
@@ -47,50 +55,42 @@ const EditBudget = () => {
     setTypes(responseTypes?.data);
   }, []);
 
-  const history = useHistory();
-
-  const schema = yup
-    .object({
-      client_id: yup.string().required(),
-    })
-    .required();
-
-  const {
-    handleSubmit,
-    formState: { errors },
-    register,
-    control,
-  } = useForm<any>({
-    mode: "onChange",
-    resolver: yupResolver(schema),
-    defaultValues: {},
-  });
-
-  const onSubmit: SubmitHandler<Budget> = async (data: Budget) => {
-    // let response;
-    // response = await api.post("budgets", data);
-    // const { status } = response;
-    // if (status == 201) {
-    //   toast.success("Cadastro realizado com sucesso!", {
-    //     duration: 4000,
-    //     position: "top-right",
-    //   });
-    //   history.push("/orcamentos")
-    // } else {
-    //   toast.error("Ops! Algo deu errado", {
-    //     duration: 4000,
-    //     position: "top-right",
-    //   });
-    // }
-  };
-
-  let { id } = useParams<any>();
-  const fetchData = useCallback(async () => {
-    const response = await api.get(`/budgets/${id}`);
-    const { data } = response;
-
-    setBudget(data);
+  useEffect(() => {
+    initialDataSelect();
   }, []);
+
+  useEffect(() => {
+    api.get(`/budgets/${id}`).then((response) => {
+      const { data } = response;
+
+      setInitialDataBudget({
+        type_id: data?.type.id,
+        client_id: data?.client.id,
+        product_id: data?.product.id,
+        status_id: data?.status.id,
+        partner_id: data?.partner.id,
+        observation: data?.observation,
+      });
+    });
+  }, [id]);
+
+  const handleSubmit: SubmitHandler<BudgetEdit> = async (data) => {
+    let response;
+    response = await api.patch(`budgets/${id}`, data);
+    const { status } = response;
+    if (status == 200) {
+      toast.success("Atualizado  com sucesso!", {
+        duration: 4000,
+        position: "top-right",
+      });
+      history.push("/orcamentos");
+    } else {
+      toast.error("Ops! Algo deu errado", {
+        duration: 4000,
+        position: "top-right",
+      });
+    }
+  };
 
   const cardTitles = [
     "Contrato Social e última Alteração Contratual consolidada",
@@ -103,18 +103,6 @@ const EditBudget = () => {
     "ECF e recibo de entrega (Obs: para empresas de lucro presumido.)",
     "Cartão CNPJ",
   ];
-
-  useEffect(() => {
-    fetchData();
-    initialDataSelect();
-    // const elDropzoneMultipleRef:any = dropzoneMultipleRef.current;
-    // elDropzoneMultipleRef.dropzone.on("success", () => {
-    //   alert("Added file.");
-    // });
-    // elDropzoneMultipleRef.dropzone.on("error", () => {
-    //   alert("No more files please!");
-    // });
-  }, []);
 
   return (
     <>
@@ -141,158 +129,105 @@ const EditBudget = () => {
                   <TabPanel className="leading-relaxed">
                     <div className="intro-y box">
                       <div className="p-5">
-                        <form
-                          className="validate-form"
-                          onSubmit={handleSubmit(onSubmit)}
-                        >
-                          <div className="input-form">
-                            <label
-                              htmlFor="validation-form-3"
-                              className="form-label w-full flex flex-col sm:flex-row"
-                            >
-                              Tipo
-                            </label>
-                            <select
-                              className={classnames({
-                                "form-select": true,
-                                "border-danger": errors?.client_id,
-                              })}
-                              id="type_id"
-                              {...register("type_id")}
-                            >
-                              <option>Selecione um tipo</option>
-                              {types.map((type) => (
-                                <option
-                                  selected={budget.type.id === type.id}
-                                  key={type.id}
-                                  value={type.id}
-                                >
-                                  {type.name}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                          <div className="input-form mt-3">
-                            <label
-                              htmlFor="validation-form-3"
-                              className="form-label w-full flex flex-col sm:flex-row"
-                            >
-                              Cliente
-                            </label>
-                            <select
-                              className={classnames({
-                                "form-select": true,
-                                "border-danger": errors?.client_id,
-                              })}
-                              id="client_id"
-                              {...register("client_id")}
-                            >
-                              <option>Selecione um cliente</option>
-                              {clients.map((client) => (
-                                <option
-                                  selected={budget.client.id === client.id}
-                                  key={client.id}
-                                  value={client.id}
-                                >
-                                  {client.name}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-
-                          <div className="input-form mt-3">
-                            <label
-                              htmlFor="validation-form-3"
-                              className="form-label w-full flex flex-col sm:flex-row"
-                            >
-                              Produto/Serviço
-                            </label>
-                            <select
-                              className={classnames({
-                                "form-select": true,
-                                "border-danger": errors?.product_id,
-                              })}
-                              id="product_id"
-                              {...register("product_id")}
-                            >
-                              <option>Selecione um produto</option>
-                              {products.map((product) => (
-                                <option
-                                  selected={budget.product.id === product.id}
-                                  key={product.id}
-                                  value={product.id}
-                                >
-                                  {product.name}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-
-                          <div className="input-form mt-3">
-                            <label
-                              htmlFor="validation-form-3"
-                              className="form-label w-full flex flex-col sm:flex-row"
-                            >
-                              Parceiro
-                            </label>
-                            <select
-                              className={classnames({
-                                "form-select": true,
-                                "border-danger": errors?.partner_id,
-                              })}
-                              id="partner_id"
-                              {...register("partner_id")}
-                            >
-                              <option>Selecione um parceiro</option>
-                              {partners.map((partner) => (
-                                <option
-                                  key={partner.id}
-                                  selected={budget.partner.id === partner.id}
-                                  value={partner.id}
-                                >
-                                  {partner.name}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-
-                          <div className="input-form mt-3">
-                            <label
-                              htmlFor="validation-form-3"
-                              className="form-label w-full flex flex-col sm:flex-row"
-                            >
-                              Situação
-                            </label>
-
-                            <select
-                              className={classnames({
-                                "form-select": true,
-                                "border-danger": errors?.status_id,
-                              })}
-                              id="status_id"
-                              {...register("status_id")}
-                            >
-                              <option>Selecione um status</option>
-                              {status &&
-                                status.map((situacao) => (
-                                  <option
-                                    key={situacao.id}
-                                    selected={budget.status.id === situacao.id}
-                                    value={situacao.id}
-                                  >
-                                    {situacao.name}
-                                  </option>
-                                ))}
-                            </select>
-                          </div>
-
-                          <button
-                            type="submit"
-                            className="btn btn-primary mt-5"
+                        {initialDataBudget && (
+                          <Form
+                            ref={formRef}
+                            initialData={initialDataBudget}
+                            onSubmit={handleSubmit}
                           >
-                            Salvar
-                          </button>
-                        </form>
+                            <div className="input-form">
+                              <label
+                                htmlFor="validation-form-3"
+                                className="form-label w-full flex flex-col sm:flex-row"
+                              >
+                                Tipo
+                              </label>
+                              <SelectCustom
+                                className={classnames({
+                                  "form-control": true,
+                                })}
+                                name="type_id"
+                                options={types}
+                              />
+                            </div>
+                            <div className="input-form mt-3">
+                              <label
+                                htmlFor="validation-form-3"
+                                className="form-label w-full flex flex-col sm:flex-row"
+                              >
+                                Cliente
+                              </label>
+                              <SelectCustom
+                                className={classnames({
+                                  "form-control": true,
+                                })}
+                                name="client_id"
+                                options={clients}
+                              />
+                            </div>
+
+                            <div className="input-form mt-3">
+                              <label
+                                htmlFor="validation-form-3"
+                                className="form-label w-full flex flex-col sm:flex-row"
+                              >
+                                Produto
+                              </label>
+                              <SelectCustom
+                                className={classnames({
+                                  "form-control": true,
+                                })}
+                                name="product_id"
+                                options={products}
+                              />
+                            </div>
+                            <div className="input-form mt-3">
+                              <label
+                                htmlFor="validation-form-3"
+                                className="form-label w-full flex flex-col sm:flex-row"
+                              >
+                                Parceiro
+                              </label>
+                              <SelectCustom
+                                className={classnames({
+                                  "form-control": true,
+                                })}
+                                name="partner_id"
+                                options={partners}
+                              />
+                            </div>
+                            <div className="input-form mt-3">
+                              <label
+                                htmlFor="validation-form-3"
+                                className="form-label w-full flex flex-col sm:flex-row"
+                              >
+                                Situação
+                              </label>
+                              <SelectCustom
+                                className={classnames({
+                                  "form-control": true,
+                                })}
+                                name="status_id"
+                                options={status}
+                              />
+                            </div>
+                            <div className="input-form mt-3">
+                              <InputText
+                                
+                                name="observation"
+                                label="Observações"
+                                placeholder="Observações"
+                                classname="form-control"
+                              />
+                            </div>
+                            <button
+                              type="submit"
+                              className="btn btn-primary mt-5"
+                            >
+                              Salvar
+                            </button>
+                          </Form>
+                        )}
                       </div>
                     </div>
                   </TabPanel>
@@ -300,21 +235,17 @@ const EditBudget = () => {
                     <div className="intro-y col-span-12 lg:col-span-6">
                       <div className="flex justify-center items-center w-full">
                         <div className="container grid lg:grid-cols-3 gap-2 ">
-                          {/*  Start Cards */}
-{/* 
-                           {cardTitles.forEach(title => (
-                          <CardUpload description={title.} />
-                          ))} */}
-
-                          {cardTitles.map((title, index) =>{
-                            return <CardUpload id={index} description={title} titleIndex={index} />
-                          } 
-                          )}
-
-                        
+                          {cardTitles.map((title, index) => {
+                            return (
+                              <CardUpload
+                                key={index}
+                                id={index}
+                                description={title}
+                                titleIndex={index}
+                              />
+                            );
+                          })}
                         </div>
-
-                        {/* Ends Cards */}
                       </div>
                     </div>
                   </TabPanel>

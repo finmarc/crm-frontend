@@ -16,6 +16,7 @@ interface Budget {
   partner_id?: string;
   status_id?: string;
   type_id?: string;
+  observation?: string;
 }
 
 type FormProps = {
@@ -194,7 +195,7 @@ export function CreateBudget(dataForm?: FormProps) {
                   </select>
                 </div>
 
-                <div className="input-form mt-3">
+                {/* <div className="input-form mt-3">
                   <label
                     htmlFor="validation-form-3"
                     className="form-label w-full flex flex-col sm:flex-row"
@@ -218,7 +219,7 @@ export function CreateBudget(dataForm?: FormProps) {
                         </option>
                       ))}
                   </select>
-                </div>
+                </div> */}
 
                 <div className="input-form mt-3">
                   <label
@@ -251,9 +252,13 @@ export function CreateBudget(dataForm?: FormProps) {
                    Observações
                   </label>
                   <input
-                    id="regular-form-1"
+                    id="observation"
                     type="text"
-                    className="form-control"
+                    {...register('observation')}
+                    className={classnames({
+                      "form-control": true,
+                      "border-danger": errors.observation,
+                    })}
                         placeholder="Observações"
                   />
                 </div>

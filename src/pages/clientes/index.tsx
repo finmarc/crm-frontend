@@ -29,9 +29,7 @@ const Cliente = () => {
         nome:  client.name,
         email:  client.email,
         telefone:  client.fone,
-        documento:  client.document,
-        
-        
+        documento:  client.document, 
       }
     })
 
