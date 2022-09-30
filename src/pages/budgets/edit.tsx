@@ -17,14 +17,18 @@ import {
   Status,
   Types,
 } from "./interfaces/budget";
+import TextArea from "../../components/Inputs/TextArea";
+import InputMaskMoney from "../../components/Inputs/InputMaskMoney";
 
 export interface BudgetEdit {
   id?: string;
-  type_id: string;
+  type_id?: string;
   client_id: string;
-  partner_id: string;
+  partner_id?: string;
   product_id: string;
-  status_id: string;
+  status_id?: string;
+  amount_loan: number;
+  description?: string;
   observation?: string;
 }
 
@@ -70,12 +74,17 @@ const EditBudget = () => {
         status_id: data?.status.id,
         partner_id: data?.partner.id,
         observation: data?.observation,
+        description: data?.description,
+        amount_loan:  data?.amount_loan
       });
     });
   }, [id]);
 
+  
   const handleSubmit: SubmitHandler<BudgetEdit> = async (data) => {
     let response;
+
+
     response = await api.patch(`budgets/${id}`, data);
     const { status } = response;
     if (status == 200) {
@@ -136,84 +145,75 @@ const EditBudget = () => {
                             onSubmit={handleSubmit}
                           >
                             <div className="input-form">
-                              <label
-                                htmlFor="validation-form-3"
-                                className="form-label w-full flex flex-col sm:flex-row"
-                              >
-                                Tipo
-                              </label>
                               <SelectCustom
                                 className={classnames({
                                   "form-control": true,
                                 })}
+                                label="Tipo de serviço"
                                 name="type_id"
                                 options={types}
                               />
                             </div>
                             <div className="input-form mt-3">
-                              <label
-                                htmlFor="validation-form-3"
-                                className="form-label w-full flex flex-col sm:flex-row"
-                              >
-                                Cliente
-                              </label>
                               <SelectCustom
                                 className={classnames({
                                   "form-control": true,
                                 })}
+                                label="Cliente"
                                 name="client_id"
                                 options={clients}
                               />
                             </div>
 
                             <div className="input-form mt-3">
-                              <label
-                                htmlFor="validation-form-3"
-                                className="form-label w-full flex flex-col sm:flex-row"
-                              >
-                                Produto
-                              </label>
                               <SelectCustom
                                 className={classnames({
                                   "form-control": true,
                                 })}
+                                label="Produto/Serviço"
                                 name="product_id"
                                 options={products}
                               />
                             </div>
                             <div className="input-form mt-3">
-                              <label
-                                htmlFor="validation-form-3"
-                                className="form-label w-full flex flex-col sm:flex-row"
-                              >
-                                Parceiro
-                              </label>
                               <SelectCustom
                                 className={classnames({
                                   "form-control": true,
                                 })}
+                                label="Parceiro"
                                 name="partner_id"
                                 options={partners}
                               />
                             </div>
                             <div className="input-form mt-3">
-                              <label
-                                htmlFor="validation-form-3"
-                                className="form-label w-full flex flex-col sm:flex-row"
-                              >
-                                Situação
-                              </label>
                               <SelectCustom
                                 className={classnames({
                                   "form-control": true,
                                 })}
+                                label="Situação"
                                 name="status_id"
                                 options={status}
                               />
                             </div>
                             <div className="input-form mt-3">
+                              <InputMaskMoney
+                                mask="currency"
+                                name="amount_loan"
+                                label="Valor do empréstimo"
+                                placeholder="0,00"
+                                classname="form-control"
+                              />
+                            </div>
+                            <div className="input-form mt-3">
                               <InputText
-                                
+                                name="description"
+                                label="Descrição"
+                                placeholder="Decrição"
+                                classname="form-control"
+                              />
+                            </div>
+                            <div className="input-form mt-3">
+                              <TextArea
                                 name="observation"
                                 label="Observações"
                                 placeholder="Observações"

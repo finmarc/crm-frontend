@@ -46,7 +46,7 @@ const Colaborador = () => {
   }, [fetchData]);
   return (
     <>
-      <Header title="Colaboradores" url="colaborador/new" action="Adicionar" />
+      <Header title="Colaboradores" url="colaborador" action="Adicionar" />
       <Table titles={theadTitles} columns={users} component="colaborador" url="users" />
     </>
   );

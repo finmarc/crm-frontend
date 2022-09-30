@@ -7,10 +7,10 @@ interface Props {
     classname: any;
     placeholder?:string;
 }
-const InputText: React.FC<Props> = ({ name, label,placeholder, classname,...rest }) => {
+const TextArea: React.FC<Props> = ({ name, label,placeholder, classname,...rest }) => {
     const inputRef = useRef(null);
 
-    const { fieldName, defaultValue = "", registerField, error } = useField(name);
+    const { fieldName, defaultValue="", registerField, error } = useField(name);
 
     useEffect(() => {
         registerField({
@@ -21,11 +21,10 @@ const InputText: React.FC<Props> = ({ name, label,placeholder, classname,...rest
     }, [fieldName, registerField]);
     return (
         <>
-            {label && <label htmlFor={fieldName} className="form-label w-full flex flex-col sm:flex-row">{label}</label>}
+            {label && <label htmlFor={fieldName} className="form-label">{label}</label>}
 
-            <input
-                className="form-control"
-                type="text"
+            <textarea
+                className={classname}
                 placeholder={placeholder}
                 ref={inputRef}
                 id={fieldName}
@@ -38,4 +37,4 @@ const InputText: React.FC<Props> = ({ name, label,placeholder, classname,...rest
     );
 }
 
-export default InputText;
+export default TextArea;

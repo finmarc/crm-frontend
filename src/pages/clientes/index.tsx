@@ -43,7 +43,7 @@ const Cliente = () => {
   }, [fetchData]);
   return (
     <>
-      <Header title="Clientes" url="cliente/new" action="Adicionar" />
+      <Header title="Clientes" url="cliente" action="Adicionar" />
       {clients.length > 0 && <Table titles={theadTitles} columns={clients} component="cliente" url="clients" />}
     </>
   );

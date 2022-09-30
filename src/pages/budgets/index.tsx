@@ -20,7 +20,7 @@ export const Budget = () => {
   ]
 
   const show = useCallback((id: string) => {
-    history.push(`budgets/${id}/visualizar`)
+    history.push(`orcamento/${id}`)
   }, []);
 
   const edit = useCallback((id: string) => {
@@ -66,7 +66,7 @@ export const Budget = () => {
 
   return (
     <>
-      <Header title="Orcamentos" url="orcamento" action="Adicionar" />
+      <Header title="Orçamentos" url="orcamento" action="Adicionar" />
       <div className="intro-y box p-5 mt-5">
         <div className="overflow-x-auto">
           <table className="table">

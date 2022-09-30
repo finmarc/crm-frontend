@@ -4,13 +4,14 @@ import { useField } from "@unform/core";
 interface SelectProps {
     name: string;
     className: any;
+    label?: string;
     options: any[]
 }
 
 type Props = JSX.IntrinsicElements["select"] & SelectProps;
 
 
-const Select: React.FC<Props> = ({ name, options, ...rest }) => {
+const Select: React.FC<Props> = ({ name, options, label, ...rest }) => {
     const selectRef = useRef<HTMLSelectElement>(null);
     const { fieldName, defaultValue, registerField, error } = useField(name);
     const [valueSelect, setValueSelect] = useState();
@@ -37,6 +38,9 @@ const Select: React.FC<Props> = ({ name, options, ...rest }) => {
 
 
     return (
+        <>
+            {label && <label htmlFor={fieldName} className="form-label w-full flex flex-col sm:flex-row">{label}</label>}
+
         <select
             id={fieldName}
             ref={selectRef}
@@ -50,6 +54,7 @@ const Select: React.FC<Props> = ({ name, options, ...rest }) => {
                 </option>
             ))}
         </select>
+        </>
     );
 };
 
