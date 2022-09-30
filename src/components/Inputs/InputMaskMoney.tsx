@@ -7,9 +7,10 @@ interface Props {
     label?: string;
     mask: "cep" | "currency" | "cpf";
     classname: any;
+    disabled?: boolean;
     placeholder?: string;
 }
-const InputMask: React.FC<Props> = ({ name, label, placeholder, classname, mask, ...rest }) => {
+const InputMaskMoney: React.FC<Props> = ({ name, label, placeholder, classname, disabled,mask, ...rest }) => {
     const inputRef = useRef(null);
     const { fieldName, defaultValue = "", registerField, error } = useField(name);
 
@@ -45,6 +46,7 @@ const InputMask: React.FC<Props> = ({ name, label, placeholder, classname, mask,
             <input
                 className={`form-control ${error && 'border-danger'}`}
                 type="text"
+                disabled={disabled}
                 placeholder={placeholder}
                 ref={inputRef}
                 id={fieldName}
@@ -57,4 +59,4 @@ const InputMask: React.FC<Props> = ({ name, label, placeholder, classname, mask,
     );
 }
 
-export default InputMask;
+export default InputMaskMoney;

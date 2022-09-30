@@ -5,6 +5,7 @@ import { Lucide } from "@/base-components";
 import { faker as $f } from "@/utils";
 import api from "../../services/apiClient";
 import { Partners } from "./interface/partners";
+import ButtonGoBack from "../../components/Button/backto";
 
 interface Role {
   id: string;
@@ -32,13 +33,7 @@ const PartnersDetails = () => {
     <>
       <div className="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 className="text-lg font-medium mr-auto">Detalhes do parceiro</h2>
-     
-          <div className="w-full sm:w-auto flex mt-4 sm:mt-0">
-            <button className="btn btn-primary shadow-md mr-2" onClick={() => history.goBack()}>
-              Voltar
-            </button>
-          </div>
-   
+        <ButtonGoBack route="/parceiros" />
       </div>
       <div className="intro-y box px-5 pt-5 mt-5">
         <div className="flex flex-col lg:flex-row border-b border-slate-200/60 dark:border-darkmode-400 pb-5 -mx-5">

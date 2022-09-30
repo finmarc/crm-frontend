@@ -3,10 +3,6 @@ import { Header } from "../../components/Header";
 import { Table } from "../../components/Table";
 import api from "../../services/apiClient";
 
-interface Role {
-  id: string;
-  name: string;
-}
 interface Partners {
   id: string;
   name: string;
@@ -19,7 +15,6 @@ interface Partners {
   address?:string,
   description?:string,
   seller_id?:string,
-  
 }
 
 const Parceiro = () => {
@@ -51,7 +46,7 @@ const Parceiro = () => {
   }, [fetchData]);
   return (
     <>
-      <Header title="Parceiros" url="parceiro/new" action="Adicionar" />
+      <Header title="Parceiros" url="parceiro" action="Adicionar" />
       {partners.length > 0 && <Table titles={theadTitles} columns={partners} component="parceiro" url="partners" />}
     </>
   );

@@ -1,11 +1,8 @@
-import { UserX } from "lucide";
 import { useCallback, useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import api from "../../services/apiClient";
 import { Form } from "./Form";
 import { Partners } from "./interface/partners";
-
-
 
 const PartnerEdit = () => {
   const [partner, setPartner] = useState<Partners>();
@@ -14,7 +11,7 @@ const PartnerEdit = () => {
   const fetchData = useCallback(async () => {
     const response = await api.get(`/partners/${id}`);
     const { data } = response;
-   
+
     setPartner(data);
   }, []);
 

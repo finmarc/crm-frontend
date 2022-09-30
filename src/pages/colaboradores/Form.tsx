@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import { MaskedInput } from "../../components/InputMask";
 import { Input } from "../../components/Input";
 import { Select } from "../../components/Select";
+import ButtonGoBack from "../../components/Button/backto";
 
 interface Select {
   value: string;
@@ -115,6 +116,7 @@ export function Form(dataForm?: FormProps) {
     <>
       <div className="intro-y flex items-center mt-8">
         <h2 className="text-lg font-medium mr-auto"> {!dataForm?.title ? "Novo colaborador" : dataForm?.title}</h2>
+        <ButtonGoBack route="/colaboradores" />
       </div>
       <div className="mt-5">
         <div className="intro-y col-span-12 lg:col-span-6">

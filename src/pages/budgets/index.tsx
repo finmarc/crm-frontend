@@ -20,7 +20,7 @@ export const Budget = () => {
   ]
 
   const show = useCallback((id: string) => {
-    history.push(`orcamento/${id}`)
+    history.push(`orcamento/${id}/visualizar`)
   }, []);
 
   const edit = useCallback((id: string) => {

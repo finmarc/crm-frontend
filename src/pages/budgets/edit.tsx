@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState, createRef, useRef } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useCallback, useEffect, useState, useRef } from "react";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import api from "../../services/apiClient";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@/base-components";
 import { Form } from "@unform/web";
@@ -19,6 +19,7 @@ import {
 } from "./interfaces/budget";
 import TextArea from "../../components/Inputs/TextArea";
 import InputMaskMoney from "../../components/Inputs/InputMaskMoney";
+import ButtonGoBack from "../../components/Button/backto";
 
 export interface BudgetEdit {
   id?: string;
@@ -43,7 +44,11 @@ const EditBudget = () => {
   const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
 
   const { id } = useParams<any>();
+  const location = useLocation();
   const history = useHistory();
+
+  const isDisabled = location.pathname.includes("visualizar");
+
 
   const initialDataSelect = useCallback(async () => {
     const responseClients = await api.get("/clients");
@@ -82,10 +87,7 @@ const EditBudget = () => {
 
   
   const handleSubmit: SubmitHandler<BudgetEdit> = async (data) => {
-    let response;
-
-
-    response = await api.patch(`budgets/${id}`, data);
+    const response = await api.patch(`budgets/${id}`, data);
     const { status } = response;
     if (status == 200) {
       toast.success("Atualizado  com sucesso!", {
@@ -116,7 +118,8 @@ const EditBudget = () => {
   return (
     <>
       <div className="intro-y flex items-center mt-8">
-        <h2 className="text-lg font-medium mr-auto"> Editar orçamento </h2>
+        <h2 className="text-lg font-medium mr-auto"> {isDisabled ? "Visualizar" : "Editar"} orçamento</h2>
+        <ButtonGoBack route={"/orcamentos"}/>
       </div>
       <div className="mt-5">
         <div className="intro-y col-span-12 lg:col-span-6">
@@ -143,9 +146,11 @@ const EditBudget = () => {
                             ref={formRef}
                             initialData={initialDataBudget}
                             onSubmit={handleSubmit}
+                            
                           >
                             <div className="input-form">
                               <SelectCustom
+                                disabled={isDisabled}
                                 className={classnames({
                                   "form-control": true,
                                 })}
@@ -156,6 +161,7 @@ const EditBudget = () => {
                             </div>
                             <div className="input-form mt-3">
                               <SelectCustom
+                                disabled={isDisabled}
                                 className={classnames({
                                   "form-control": true,
                                 })}
@@ -167,6 +173,7 @@ const EditBudget = () => {
 
                             <div className="input-form mt-3">
                               <SelectCustom
+                                disabled={isDisabled}
                                 className={classnames({
                                   "form-control": true,
                                 })}
@@ -177,6 +184,7 @@ const EditBudget = () => {
                             </div>
                             <div className="input-form mt-3">
                               <SelectCustom
+                                disabled={isDisabled}
                                 className={classnames({
                                   "form-control": true,
                                 })}
@@ -187,6 +195,7 @@ const EditBudget = () => {
                             </div>
                             <div className="input-form mt-3">
                               <SelectCustom
+                                disabled={isDisabled}
                                 className={classnames({
                                   "form-control": true,
                                 })}
@@ -197,6 +206,7 @@ const EditBudget = () => {
                             </div>
                             <div className="input-form mt-3">
                               <InputMaskMoney
+                                disabled={isDisabled}
                                 mask="currency"
                                 name="amount_loan"
                                 label="Valor do empréstimo"
@@ -207,6 +217,7 @@ const EditBudget = () => {
                             <div className="input-form mt-3">
                               <InputText
                                 name="description"
+                                disabled={isDisabled}
                                 label="Descrição"
                                 placeholder="Decrição"
                                 classname="form-control"
@@ -214,18 +225,19 @@ const EditBudget = () => {
                             </div>
                             <div className="input-form mt-3">
                               <TextArea
+                                disabled={isDisabled}
                                 name="observation"
                                 label="Observações"
                                 placeholder="Observações"
                                 classname="form-control"
                               />
                             </div>
-                            <button
+                            {!isDisabled && (<button
                               type="submit"
                               className="btn btn-primary mt-5"
                             >
                               Salvar
-                            </button>
+                            </button>)}
                           </Form>
                         )}
                       </div>

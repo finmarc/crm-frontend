@@ -19,7 +19,7 @@ const Select: React.FC<Props> = ({ name, options, label, ...rest }) => {
     const handleChange = (ev: any) => {
         setValueSelect(ev.target.value);
     }
-    if (!valueSelect) {
+    if (!valueSelect && defaultValue) {
         setValueSelect(defaultValue);
     }
 
@@ -48,6 +48,7 @@ const Select: React.FC<Props> = ({ name, options, label, ...rest }) => {
             onChange={handleChange}
             {...rest}
         >
+            <option value="">Selecione um opção</option>
             {options.map((option) => (
                 <option key={option.id} value={option.id} >
                     {option.name}

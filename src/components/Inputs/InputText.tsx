@@ -5,9 +5,10 @@ interface Props {
     name: string;
     label?:string;
     classname: any;
+    disabled?: boolean;
     placeholder?:string;
 }
-const InputText: React.FC<Props> = ({ name, label,placeholder, classname,...rest }) => {
+const InputText: React.FC<Props> = ({ name, label, placeholder, classname, disabled,...rest }) => {
     const inputRef = useRef(null);
 
     const { fieldName, defaultValue = "", registerField, error } = useField(name);
@@ -26,6 +27,7 @@ const InputText: React.FC<Props> = ({ name, label,placeholder, classname,...rest
             <input
                 className="form-control"
                 type="text"
+                disabled={disabled}
                 placeholder={placeholder}
                 ref={inputRef}
                 id={fieldName}

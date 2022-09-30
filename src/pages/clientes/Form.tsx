@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import { Clients } from "./interface/clients";
 import { MaskedInput } from "../../components/InputMask";
+import ButtonGoBack from "../../components/Button/backto";
 
 type FormProps = {
   client?: Clients;
@@ -76,6 +77,7 @@ export function Form(dataForm?: FormProps) {
     <>
       <div className="intro-y flex items-center mt-8">
         <h2 className="text-lg font-medium mr-auto">Cliente</h2>
+        <ButtonGoBack route="/clientes" />
       </div>
       <div className="mt-5">
         <div className="intro-y col-span-12 lg:col-span-6">
@@ -251,10 +253,13 @@ export function Form(dataForm?: FormProps) {
                     />
                   </div>
                 </div>
+                <div className="flex space-x-4">
 
                 <button type="submit" className="btn btn-primary mt-5">
                   Salvar
                 </button>
+        
+                </div>
               </form>
             </div>
           </div>

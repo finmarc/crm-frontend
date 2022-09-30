@@ -43,6 +43,7 @@ const Router = () => (
         <Route path="/parceiro/:id" exact isPrivate component={PartnerEdit} />
         <Route path="/orcamentos" exact isPrivate component={Budget} />
         <Route path="/orcamento/:id" exact isPrivate component={EditBudget} />
+        <Route path="/orcamento/:id/visualizar" exact isPrivate component={EditBudget} />
         <Route path="/orcamento"  exact isPrivate component={CreateBudget} />
       </SideMenu>
     </Switch>

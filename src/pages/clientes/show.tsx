@@ -5,6 +5,7 @@ import { Lucide } from "@/base-components";
 import { faker as $f } from "@/utils";
 import api from "../../services/apiClient";
 import { Clients } from "./interface/clients";
+import ButtonGoBack from "../../components/Button/backto";
 
 
 interface Role {
@@ -21,25 +22,19 @@ const ClientDetails = () => {
   const fetchData = useCallback(async () => {
     const response = await api.get(`/clients/${id}`);
     const { data } = response;
-   
+
     setClient(data);
   }, []);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
- 
+
   return (
     <>
       <div className="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 className="text-lg font-medium mr-auto">Detalhes do cliente</h2>
-     
-          <div className="w-full sm:w-auto flex mt-4 sm:mt-0">
-            <button className="btn btn-primary shadow-md mr-2" onClick={() => history.goBack()}>
-              Voltar
-            </button>
-          </div>
-   
+        <ButtonGoBack route="/clientes" />
       </div>
       <div className="intro-y box px-5 pt-5 mt-5">
         <div className="flex flex-col lg:flex-row border-b border-slate-200/60 dark:border-darkmode-400 pb-5 -mx-5">
@@ -71,11 +66,11 @@ const ClientDetails = () => {
                 {client?.email}
               </div>
               <div className="truncate sm:whitespace-normal flex items-center mt-3">
-                <Lucide icon="Phone" className="w-4 h-4 mr-2" /> 
+                <Lucide icon="Phone" className="w-4 h-4 mr-2" />
                 {client?.fone}
               </div>
               <div className="truncate sm:whitespace-normal flex items-center mt-3">
-                <Lucide icon="File" className="w-4 h-4 mr-2" /> 
+                <Lucide icon="File" className="w-4 h-4 mr-2" />
                 {client?.document}
               </div>
             </div>

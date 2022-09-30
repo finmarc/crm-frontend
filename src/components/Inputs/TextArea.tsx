@@ -5,9 +5,10 @@ interface Props {
     name: string;
     label?:string;
     classname: any;
+    disabled?: boolean;
     placeholder?:string;
 }
-const TextArea: React.FC<Props> = ({ name, label,placeholder, classname,...rest }) => {
+const TextArea: React.FC<Props> = ({ name, label, placeholder, classname, disabled,...rest }) => {
     const inputRef = useRef(null);
 
     const { fieldName, defaultValue="", registerField, error } = useField(name);
@@ -25,6 +26,7 @@ const TextArea: React.FC<Props> = ({ name, label,placeholder, classname,...rest 
 
             <textarea
                 className={classname}
+                disabled={disabled}
                 placeholder={placeholder}
                 ref={inputRef}
                 id={fieldName}
