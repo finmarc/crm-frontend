@@ -1,25 +1,12 @@
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import api from "../../services/apiClient";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@/base-components";
-import { Form } from "@unform/web";
 import { SubmitHandler, FormHandles } from "@unform/core";
-import classnames from "classnames";
 import CardUpload from "../../components/CardUpload";
 import toast from "react-hot-toast";
-import SelectCustom from "../../components/Inputs/Select";
-import InputText from "../../components/Inputs/InputText";
-
-import {
-  Client,
-  Partner,
-  Product,
-  Status,
-  Types,
-} from "./interfaces/budget";
-import TextArea from "../../components/Inputs/TextArea";
-import InputMaskMoney from "../../components/Inputs/InputMaskMoney";
 import ButtonGoBack from "../../components/Button/backto";
+import Form from "./Form";
 
 export interface BudgetEdit {
   id?: string;
@@ -34,13 +21,7 @@ export interface BudgetEdit {
 }
 
 const EditBudget = () => {
-  const formRef = useRef<FormHandles>(null);
 
-  const [clients, setClients] = useState<Client[]>([]);
-  const [partners, setPartners] = useState<Partner[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [status, setStatus] = useState<Status[]>([]);
-  const [types, setTypes] = useState<Types[]>([]);
   const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
 
   const { id } = useParams<any>();
@@ -49,29 +30,9 @@ const EditBudget = () => {
 
   const isDisabled = location.pathname.includes("visualizar");
 
-
-  const initialDataSelect = useCallback(async () => {
-    const responseClients = await api.get("/clients");
-    const responseProducts = await api.get("/products");
-    const responsePartners = await api.get("/partners");
-    const responseStatus = await api.get("/budget/status");
-    const responseTypes = await api.get("/budget/types");
-
-    setClients(responseClients?.data);
-    setProducts(responseProducts?.data);
-    setPartners(responsePartners?.data);
-    setStatus(responseStatus?.data);
-    setTypes(responseTypes?.data);
-  }, []);
-
-  useEffect(() => {
-    initialDataSelect();
-  }, []);
-
   useEffect(() => {
     api.get(`/budgets/${id}`).then((response) => {
       const { data } = response;
-
       setInitialDataBudget({
         type_id: data?.type.id,
         client_id: data?.client.id,
@@ -142,103 +103,7 @@ const EditBudget = () => {
                     <div className="intro-y box">
                       <div className="p-5">
                         {initialDataBudget && (
-                          <Form
-                            ref={formRef}
-                            initialData={initialDataBudget}
-                            onSubmit={handleSubmit}
-                            
-                          >
-                            <div className="input-form">
-                              <SelectCustom
-                                disabled={isDisabled}
-                                className={classnames({
-                                  "form-control": true,
-                                })}
-                                label="Tipo de serviço"
-                                name="type_id"
-                                options={types}
-                              />
-                            </div>
-                            <div className="input-form mt-3">
-                              <SelectCustom
-                                disabled={isDisabled}
-                                className={classnames({
-                                  "form-control": true,
-                                })}
-                                label="Cliente"
-                                name="client_id"
-                                options={clients}
-                              />
-                            </div>
-
-                            <div className="input-form mt-3">
-                              <SelectCustom
-                                disabled={isDisabled}
-                                className={classnames({
-                                  "form-control": true,
-                                })}
-                                label="Produto/Serviço"
-                                name="product_id"
-                                options={products}
-                              />
-                            </div>
-                            <div className="input-form mt-3">
-                              <SelectCustom
-                                disabled={isDisabled}
-                                className={classnames({
-                                  "form-control": true,
-                                })}
-                                label="Parceiro"
-                                name="partner_id"
-                                options={partners}
-                              />
-                            </div>
-                            <div className="input-form mt-3">
-                              <SelectCustom
-                                disabled={isDisabled}
-                                className={classnames({
-                                  "form-control": true,
-                                })}
-                                label="Situação"
-                                name="status_id"
-                                options={status}
-                              />
-                            </div>
-                            <div className="input-form mt-3">
-                              <InputMaskMoney
-                                disabled={isDisabled}
-                                mask="currency"
-                                name="amount_loan"
-                                label="Valor do empréstimo"
-                                placeholder="0,00"
-                                classname="form-control"
-                              />
-                            </div>
-                            <div className="input-form mt-3">
-                              <InputText
-                                name="description"
-                                disabled={isDisabled}
-                                label="Descrição"
-                                placeholder="Decrição"
-                                classname="form-control"
-                              />
-                            </div>
-                            <div className="input-form mt-3">
-                              <TextArea
-                                disabled={isDisabled}
-                                name="observation"
-                                label="Observações"
-                                placeholder="Observações"
-                                classname="form-control"
-                              />
-                            </div>
-                            {!isDisabled && (<button
-                              type="submit"
-                              className="btn btn-primary mt-5"
-                            >
-                              Salvar
-                            </button>)}
-                          </Form>
+                          <Form isDisabled={isDisabled} initialData={initialDataBudget} handleSubmit={handleSubmit} />
                         )}
                       </div>
                     </div>

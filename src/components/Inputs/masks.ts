@@ -30,11 +30,11 @@ export function cpf(e: React.FormEvent<HTMLInputElement>) {
   return e;
 }
 
-
-  export function  formatCurrencyBR(money: any) {
-     return new Intl.NumberFormat("pt-BR", {
-       style: "currency",
-       currency: "BRL",
-     }).format(money)
-       .replace(/[R$]/g, "");
-  }
+export function formatCurrencyBR(money: any) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  })
+    .format(money)
+    .replace(/[R$]/g, "");
+}
