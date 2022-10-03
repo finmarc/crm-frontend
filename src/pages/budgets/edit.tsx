@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import api from "../../services/apiClient";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@/base-components";
-import { SubmitHandler, FormHandles } from "@unform/core";
+import { SubmitHandler } from "@unform/core";
 import CardUpload from "../../components/CardUpload";
 import toast from "react-hot-toast";
 import ButtonGoBack from "../../components/Button/backto";
@@ -22,8 +22,9 @@ export interface BudgetEdit {
 
 const EditBudget = () => {
 
-  const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
-
+const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
+const [ filename, setFilename] = useState("")
+const [ cardInput, setCardInput] = useState<number>()
   const { id } = useParams<any>();
   const location = useLocation();
   const history = useHistory();
@@ -63,6 +64,33 @@ const EditBudget = () => {
       });
     }
   };
+
+  const handleSubmitFiles = (file: FileList,index:any) => {
+
+    console.log("Submit" + index);
+    const fileUpload = file[0];
+    setFilename(fileUpload.name);
+    setCardInput(index);
+
+    const formData = new FormData();
+    formData.append("type", '1');
+    formData.append("file", fileUpload);
+
+    api
+      .post("budgets/documents", formData)
+      .then((res) => {
+        toast.success("Upload realizado com sucesso!", {
+          duration: 4000,
+          position: "top-right",
+        });
+      })
+      .catch((err) => {
+        toast.error("Ops! Algo deu errado ao fazer upload", {
+          duration: 4000,
+          position: "top-right",
+        });
+      });
+  }
 
   const cardTitles = [
     "Contrato Social e última Alteração Contratual consolidada",
@@ -116,7 +144,10 @@ const EditBudget = () => {
                             return (
                               <CardUpload
                                 key={index}
+                                onChange={(e: any) => handleSubmitFiles(e.currentTarget.files, index)}
+                                cardInput={cardInput}
                                 id={index}
+                                filename={filename}
                                 description={title}
                                 titleIndex={index}
                               />

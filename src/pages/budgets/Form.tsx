@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { Form as Unform } from "@unform/web";
-import { SubmitHandler, FormHandles } from "@unform/core";
+import { FormHandles } from "@unform/core";
 import classnames from "classnames";
 import SelectCustom from "../../components/Inputs/Select";
 import InputText from "../../components/Inputs/InputText";
