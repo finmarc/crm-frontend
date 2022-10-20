@@ -7,6 +7,7 @@ import CardUpload from "../../components/CardUpload";
 import toast from "react-hot-toast";
 import ButtonGoBack from "../../components/Button/backto";
 import Form from "./Form";
+import FormObservacao from "./FormObs";
 
 export interface BudgetEdit {
   id?: string;
@@ -22,9 +23,9 @@ export interface BudgetEdit {
 
 const EditBudget = () => {
 
-const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
-const [ filename, setFilename] = useState("")
-const [ cardInput, setCardInput] = useState<number>()
+  const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
+  const [filename, setFilename] = useState("")
+  const [cardInput, setCardInput] = useState<number>()
   const { id } = useParams<any>();
   const location = useLocation();
   const history = useHistory();
@@ -42,12 +43,12 @@ const [ cardInput, setCardInput] = useState<number>()
         partner_id: data?.partner.id,
         observation: data?.observation,
         description: data?.description,
-        amount_loan:  data?.amount_loan
+        amount_loan: data?.amount_loan
       });
     });
   }, [id]);
 
-  
+
   const handleSubmit: SubmitHandler<BudgetEdit> = async (data) => {
     const response = await api.patch(`budgets/${id}`, data);
     const { status } = response;
@@ -65,7 +66,7 @@ const [ cardInput, setCardInput] = useState<number>()
     }
   };
 
-  const handleSubmitFiles = (file: FileList,index:any) => {
+  const handleSubmitFiles = (file: FileList, index: any) => {
 
     console.log("Submit" + index);
     const fileUpload = file[0];
@@ -108,7 +109,7 @@ const [ cardInput, setCardInput] = useState<number>()
     <>
       <div className="intro-y flex items-center mt-8">
         <h2 className="text-lg font-medium mr-auto"> {isDisabled ? "Visualizar" : "Editar"} orçamento</h2>
-        <ButtonGoBack route={"/orcamentos"}/>
+        <ButtonGoBack route={"/orcamentos"} />
       </div>
       <div className="mt-5">
         <div className="intro-y col-span-12 lg:col-span-6">
@@ -117,14 +118,20 @@ const [ cardInput, setCardInput] = useState<number>()
               <TabGroup>
                 <TabList className="nav-boxed-tabs">
                   <Tab className="w-full py-2" tag="button">
-                    Geral
+                    Dados gerais
                   </Tab>
                   <Tab className="w-full py-2" tag="button">
-                    Documentos
+                    Funcionários
                   </Tab>
                   <Tab className="w-full py-2" tag="button">
+                    Observação
+                  </Tab>
+                  <Tab className="w-full py-2" tag="button">
+                    Upload de Documentos
+                  </Tab>
+                  {/* <Tab className="w-full py-2" tag="button">
                     Historico
-                  </Tab>
+                  </Tab> */}
                 </TabList>
                 <TabPanels className="mt-5">
                   <TabPanel className="leading-relaxed">
@@ -133,6 +140,20 @@ const [ cardInput, setCardInput] = useState<number>()
                         {initialDataBudget && (
                           <Form isDisabled={isDisabled} initialData={initialDataBudget} handleSubmit={handleSubmit} />
                         )}
+                      </div>
+                    </div>
+                  </TabPanel>
+                  <TabPanel className="leading-relaxed">
+                    <div className="intro-y box">
+                      <div className="p-5">
+                        <FormObservacao isDisabled={isDisabled} initialData={initialDataBudget?.observation} />
+                      </div>
+                    </div>
+                  </TabPanel>
+                  <TabPanel className="leading-relaxed">
+                    <div className="intro-y box">
+                      <div className="p-5">
+                        <FormObservacao isDisabled={isDisabled} initialData={initialDataBudget?.observation}  />
                       </div>
                     </div>
                   </TabPanel>
@@ -157,7 +178,7 @@ const [ cardInput, setCardInput] = useState<number>()
                       </div>
                     </div>
                   </TabPanel>
-                  <TabPanel className="leading-relaxed">
+                  {/* <TabPanel className="leading-relaxed">
                     <div className="intro-y box">
                       <div className="p-5">
                         <ol className="relative border-l border-gray-200 dark:border-gray-700">
@@ -205,7 +226,7 @@ const [ cardInput, setCardInput] = useState<number>()
                         </ol>
                       </div>
                     </div>
-                  </TabPanel>
+                  </TabPanel> */}
                 </TabPanels>
               </TabGroup>
             </div>

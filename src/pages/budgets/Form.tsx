@@ -4,7 +4,6 @@ import { FormHandles } from "@unform/core";
 import classnames from "classnames";
 import SelectCustom from "../../components/Inputs/Select";
 import InputText from "../../components/Inputs/InputText";
-import TextArea from "../../components/Inputs/TextArea";
 import InputMaskMoney from "../../components/Inputs/InputMaskMoney";
 import { Client, Partner, Product, Status, Types } from "./interfaces/budget";
 import api from "../../services/apiClient";
@@ -119,15 +118,6 @@ const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit}) => {
                         disabled={isDisabled}
                         label="Descrição"
                         placeholder="Decrição"
-                        classname="form-control"
-                    />
-                </div>
-                <div className="input-form mt-3">
-                    <TextArea
-                        disabled={isDisabled}
-                        name="observation"
-                        label="Observações"
-                        placeholder="Observações"
                         classname="form-control"
                     />
                 </div>
