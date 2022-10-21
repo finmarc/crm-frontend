@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import ButtonGoBack from "../../components/Button/backto";
 import Form from "./Form";
 import FormObservacao from "./FormObs";
+import FormFuncionario from "./Funcionarios";
 
 export interface BudgetEdit {
   id?: string;
@@ -146,7 +147,7 @@ const EditBudget = () => {
                   <TabPanel className="leading-relaxed">
                     <div className="intro-y box">
                       <div className="p-5">
-                        <FormObservacao isDisabled={isDisabled} initialData={initialDataBudget?.observation} />
+                        <FormFuncionario isDisabled={isDisabled} initialData={initialDataBudget?.observation} />
                       </div>
                     </div>
                   </TabPanel>

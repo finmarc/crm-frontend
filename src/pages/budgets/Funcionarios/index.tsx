@@ -1,20 +1,29 @@
-import React, { useEffect, useRef, useState } from "react"
-import { Form as Unform } from "@unform/web";
+import React, { useCallback, useEffect, useRef, useState } from "react"
+import { Form  } from "@unform/web";
 import { FormHandles } from "@unform/core";
-import api from "../../services/apiClient";
-import { ClassicEditor } from "@/base-components";
+import api from "../../../services/apiClient";
+import SelectCustom from "../../../components/Inputs/Select";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import classNames from "classnames";
 type Props = {
     initialData?: string
     isDisabled?: boolean,
 }
-const FormObservacao: React.FC<Props> = ({ initialData, isDisabled }) => {
-    const formRef = useRef<FormHandles>(null);
-    const { id } = useParams<any>();
+const FormFuncionario: React.FC<Props> = ({ initialData, isDisabled }) => {
+    const [funcionarios, setFuncionarios] = useState<any[]>([]);
     const [observationValue, setObservationValue] = useState("")
 
-    useEffect(()=>{
+    const formRef = useRef<FormHandles>(null);
+    const { id } = useParams<any>();
+
+    const initialDataSelect = useCallback(async () => {
+        const responseUsers = await api.get("/users");
+        setFuncionarios(responseUsers?.data);
+
+    }, []);
+    useEffect(() => {
+        initialDataSelect()
         setObservationValue(observationValue)
     }, [observationValue])
 
@@ -37,28 +46,30 @@ const FormObservacao: React.FC<Props> = ({ initialData, isDisabled }) => {
     };
     return (
         <>
-            <Unform
+            <Form
                 ref={formRef}
                 onSubmit={handleSubmit}
             >
                 <div className="input-form mt-3">
-                    <ClassicEditor
+                    <SelectCustom
                         disabled={isDisabled}
-                        name="observation"
-                        value={initialData || observationValue}
-                        onChange={setObservationValue}
-                        placeholder="Observações"
+                        className={classNames({
+                            "form-control": true,
+                        })}
+                        label="Funcionário"
+                        name="user_id"
+                        options={funcionarios}
                     />
                 </div>
                 {!isDisabled && (<button
                     type="submit"
                     className="btn btn-primary mt-5"
                 >
-                    Salvar observação
+                    Salvar funcionário
                 </button>)}
-            </Unform>
+            </Form>
         </>
     );
 }
 
-export default FormObservacao
+export default FormFuncionario
