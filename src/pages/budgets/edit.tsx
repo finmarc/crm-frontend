@@ -68,8 +68,6 @@ const EditBudget = () => {
   };
 
   const handleSubmitFiles = (file: FileList, index: any) => {
-
-    console.log("Submit" + index);
     const fileUpload = file[0];
     setFilename(fileUpload.name);
     setCardInput(index);
@@ -128,7 +126,7 @@ const EditBudget = () => {
                     Observação
                   </Tab>
                   <Tab className="w-full py-2" tag="button">
-                    Upload de Documentos
+                    Documentos
                   </Tab>
                   {/* <Tab className="w-full py-2" tag="button">
                     Historico
@@ -147,7 +145,7 @@ const EditBudget = () => {
                   <TabPanel className="leading-relaxed">
                     <div className="intro-y box">
                       <div className="p-5">
-                        <FormFuncionario isDisabled={isDisabled} initialData={initialDataBudget?.observation} />
+                        <FormFuncionario  />
                       </div>
                     </div>
                   </TabPanel>
