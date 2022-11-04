@@ -52,7 +52,7 @@ function FormFuncionario(){
         initialDataSelect()
         setObservationValue(observationValue);
         setFuncionarios(funcionarios);
-    }, [observationValue, funcionarios])
+    }, [observationValue])
 
     async function handleFuncionarioAdd() {
         const response = await api.get(`users/${userId}`);

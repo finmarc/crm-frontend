@@ -3,11 +3,26 @@ export type Generic = {
   name: string;
 };
 
+export interface TypeDocument {
+  id: number;
+  name: string;
+}
+
+export interface Document {
+  id: string;
+  filename: string;
+  path: string;
+  type_document: TypeDocument;
+}
+
 export interface Client extends Generic {}
 export interface Partner extends Generic {}
 export interface Product extends Generic {}
 export interface Status extends Generic {}
 export interface Types extends Generic {}
+export interface Documents {
+  document: Document;
+}
 
 export default interface Budget {
   id: string;
@@ -18,10 +33,11 @@ export default interface Budget {
   partner: Partner;
   product: Product;
   status: Status;
-  observation: string
+  documents: Documents[];
+  observation: string;
 }
 
-export  interface BudgetEdit {
+export interface BudgetEdit {
   id: string;
   type_id: string;
   client_id: string;

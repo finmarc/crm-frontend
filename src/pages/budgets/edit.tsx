@@ -9,6 +9,8 @@ import ButtonGoBack from "../../components/Button/backto";
 import Form from "./Form";
 import FormObservacao from "./FormObs";
 import FormFuncionario from "./Funcionarios";
+import { Documents } from "./interfaces/budget";
+import { useCallback } from "preact/hooks";
 
 export interface BudgetEdit {
   id?: string;
@@ -23,19 +25,31 @@ export interface BudgetEdit {
 }
 
 const EditBudget = () => {
-
-  const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
-  const [filename, setFilename] = useState("")
-  const [cardInput, setCardInput] = useState<number>()
   const { id } = useParams<any>();
   const location = useLocation();
   const history = useHistory();
 
+  const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
+  const [documents, setDocuments] = useState<Documents[]>([]);
+  const [documentTypes, setDocumentTypes] = useState<any[]>([]);
+  const [filename, setFilename] = useState("")
+  const [cardInput, setCardInput] = useState<number>()
   const isDisabled = location.pathname.includes("visualizar");
 
+  function typesDocuments() {
+     api
+      .get("/budgets/documents/types")
+      .then(reponse => {
+        setDocumentTypes(reponse.data)
+     });
+    
+  }
+
   useEffect(() => {
-    api.get(`/budgets/${id}`).then((response) => {
+    api.get(`/budgets/${id}`)
+    .then((response) => {
       const { data } = response;
+      setDocuments(data?.documents);
       setInitialDataBudget({
         type_id: data?.type.id,
         client_id: data?.client.id,
@@ -46,9 +60,11 @@ const EditBudget = () => {
         description: data?.description,
         amount_loan: data?.amount_loan
       });
-    });
-  }, [id]);
 
+    });
+
+    typesDocuments()
+  }, []);
 
   const handleSubmit: SubmitHandler<BudgetEdit> = async (data) => {
     const response = await api.patch(`budgets/${id}`, data);
@@ -73,13 +89,31 @@ const EditBudget = () => {
     setCardInput(index);
 
     const formData = new FormData();
-    formData.append("type", '1');
+    formData.append("type", index);
+    formData.append("budget_id", id);
     formData.append("file", fileUpload);
 
     api
       .post("budgets/documents", formData)
       .then((res) => {
         toast.success("Upload realizado com sucesso!", {
+          duration: 4000,
+          position: "top-right",
+        });
+      })
+      .catch((err) => {
+        toast.error("Ops! Algo deu errado ao fazer upload", {
+          duration: 4000,
+          position: "top-right",
+        });
+      });
+  }
+
+  const handleRemoveDocument = (id: string) => {
+    api
+      .delete(`budgets/documents/${id}`)
+      .then((res) => {
+        toast.success("Documento com sucesso!", {
           duration: 4000,
           position: "top-right",
         });
@@ -128,9 +162,6 @@ const EditBudget = () => {
                   <Tab className="w-full py-2" tag="button">
                     Documentos
                   </Tab>
-                  {/* <Tab className="w-full py-2" tag="button">
-                    Historico
-                  </Tab> */}
                 </TabList>
                 <TabPanels className="mt-5">
                   <TabPanel className="leading-relaxed">
@@ -160,16 +191,18 @@ const EditBudget = () => {
                     <div className="intro-y col-span-12 lg:col-span-6">
                       <div className="flex justify-center items-center w-full">
                         <div className="container grid lg:grid-cols-3 gap-2 ">
-                          {cardTitles.map((title, index) => {
+                          {documentTypes.length > 0 && documentTypes.map((type) => {
                             return (
                               <CardUpload
-                                key={index}
-                                onChange={(e: any) => handleSubmitFiles(e.currentTarget.files, index)}
+                                key={type.id}
+                                documents={documents}
+                                onChange={(e: any) => handleSubmitFiles(e.currentTarget.files, type.id)}
+                                onRemove={handleRemoveDocument}
                                 cardInput={cardInput}
-                                id={index}
+                                id={type.id}
                                 filename={filename}
-                                description={title}
-                                titleIndex={index}
+                                description={type.name}
+                                titleIndex={type.name}
                               />
                             );
                           })}
@@ -177,55 +210,7 @@ const EditBudget = () => {
                       </div>
                     </div>
                   </TabPanel>
-                  {/* <TabPanel className="leading-relaxed">
-                    <div className="intro-y box">
-                      <div className="p-5">
-                        <ol className="relative border-l border-gray-200 dark:border-gray-700">
-                          <li className="mb-10 ml-4">
-                            <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700" />
-                            <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-                              03/08/2022 12:00 - Luciano Dias
-                            </time>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                              Em análise
-                            </h3>
-                            <p className="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
-                              Get access to over 20+ pages including a dashboard
-                              layout, charts, kanban board, calendar, and
-                              pre-order E-commerce &amp; Marketing pages.
-                            </p>
-                          </li>
-                          <li className="mb-10 ml-4">
-                            <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700" />
-                            <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-                              03/08/2022 15:00 - Luciano Dias
-                            </time>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                              Pendente de documentação
-                            </h3>
-                            <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                              All of the pages and components are first designed
-                              in Figma and we keep a parity between the two
-                              versions even as we update the project.
-                            </p>
-                          </li>
-                          <li className="ml-4">
-                            <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700" />
-                            <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-                              04/08/2022 09:00 - Luciano Dias
-                            </time>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                              Enviado para análise com banco
-                            </h3>
-                            <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                              Get started with dozens of web components and
-                              interactive elements built on top of Tailwind CSS.
-                            </p>
-                          </li>
-                        </ol>
-                      </div>
-                    </div>
-                  </TabPanel> */}
+                  
                 </TabPanels>
               </TabGroup>
             </div>
