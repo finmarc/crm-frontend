@@ -36,7 +36,7 @@ export const TBodyRow = ({ dataList, component , url }: RowProps) => {
     history.push(`${component}/${id}`)
   }, []);
 
-  const remove = useCallback(async (id: string) => {
+  const remove = async (id: string) => {
     await api.delete(`${url}/${id}`)
     setDeleteConfirmationModal(false); 
     toast.success("Cadastro excluido com sucesso!", {
@@ -44,11 +44,11 @@ export const TBodyRow = ({ dataList, component , url }: RowProps) => {
       position: "top-right",
     });
     listUpdate(id);
-    return
-  }, []);
+  };
 
   function listUpdate(id: string) {
     const recordsList = records?.filter(record => record.id !== id);
+
     setRecords(recordsList);
   }
 
