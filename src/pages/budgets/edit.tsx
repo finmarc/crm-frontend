@@ -51,11 +51,11 @@ const EditBudget = () => {
       const { data } = response;
       setDocuments(data?.documents);
       setInitialDataBudget({
-        type_id: data?.type.id,
-        client_id: data?.client.id,
-        product_id: data?.product.id,
-        status_id: data?.status.id,
-        partner_id: data?.partner.id,
+        type_id: data?.type?.id,
+        client_id: data?.client?.id,
+        product_id: data?.product?.id,
+        status_id: data?.status?.id,
+        partner_id: data?.partner?.id,
         observation: data?.observation,
         description: data?.description,
         amount_loan: data?.amount_loan

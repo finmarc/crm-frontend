@@ -56,7 +56,7 @@ export const Budget = () => {
       codigo: budget.code,
       cliente: budget.client.name,
       produto: budget.product.name,
-      parceiro: budget.partner.name,
+      parceiro: budget.partner?.name,
       situacao: budget.status.name,
       tipo: budget.type.name
     }))

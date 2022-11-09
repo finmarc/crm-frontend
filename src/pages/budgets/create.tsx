@@ -23,7 +23,6 @@ type FormProps = {
 
 export function CreateBudget(dataForm?: FormProps) {
   const history = useHistory();
-
   const schema = yup
     .object({
       client_id: yup.string().required(),
