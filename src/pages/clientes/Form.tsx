@@ -52,7 +52,6 @@ export function Form(dataForm?: FormProps) {
     }
 
     const { status } = response;
-    console.log(status);
     if (status == 200) {
       toast.success("Cadastro atualizado com sucesso!", {
         duration: 4000,

@@ -17,9 +17,7 @@ const ClientEdit = () => {
     const { data } = response;
     let date = new Date('2019-12-12');
     const dateFormat = new Intl.DateTimeFormat('pt-BR', {timeZone: 'UTC'}).format(date);
-    // data.birth_date = dateFormat
-    console.log(data)
-    
+    // data.birth_date = dateFormat    
     setClient(data);
   }, []);
 

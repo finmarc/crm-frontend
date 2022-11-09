@@ -167,7 +167,7 @@ const EditBudget = () => {
                   <TabPanel className="leading-relaxed">
                     <div className="intro-y box">
                       <div className="p-5">
-                        {initialDataBudget && (
+                        {initialDataBudget?.type_id && (
                           <Form isDisabled={isDisabled} initialData={initialDataBudget} handleSubmit={handleSubmit} />
                         )}
                       </div>

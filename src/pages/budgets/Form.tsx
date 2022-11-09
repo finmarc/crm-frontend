@@ -41,7 +41,7 @@ const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit}) => {
 
     return (
         <>
-            <Unform
+            {initialData && (<Unform
                 ref={formRef}
                 initialData={initialData}
                 onSubmit={handleSubmit}
@@ -127,7 +127,7 @@ const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit}) => {
                 >
                     Salvar
                 </button>)}
-            </Unform>
+            </Unform>)} 
         </>
     );
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Form } from "@unform/web";
 import { FormHandles } from "@unform/core";
 import api from "../../../services/apiClient";
@@ -7,81 +7,76 @@ import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import classNames from "classnames";
 
-import {
-    Lucide,
-    Modal,
-    ModalBody,
-} from "@/base-components";
+import { Lucide, Modal, ModalBody } from "@/base-components";
 
-function FormFuncionario(){
-    
+function FormFuncionario() {
     const formRef = useRef<FormHandles>(null);
     const { id: budgetId } = useParams<any>();
     const [users, setUsers] = useState<any[]>([]);
     const [userId, setUserId] = useState<any>();
     const [funcionarios, setFuncionarios] = useState<any[]>([]);
-    const [observationValue, setObservationValue] = useState("")
-    const [idBudget, setBudgetId] = useState("")
+    const [observationValue, setObservationValue] = useState("");
+    const [idFuncionario, setIdFuncionario] = useState("");
     const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
 
     const initialDataSelect = useCallback(async () => {
         const responseUsers = await api.get("/users");
-        const responseEmployees = await api.get(`/budget/employees/${budgetId}`);
-        setFuncionarios(responseEmployees?.data)
         setUsers(responseUsers?.data);
     }, []);
 
+    useEffect(() => {
+        initialDataSelect();
+        setObservationValue(observationValue);
+        api.get(`/budget/employees/${budgetId}`)
+            .then((response) => {
+                setFuncionarios(response.data);
+            });
+    }, [observationValue]);
 
-    const remove = useCallback(async (id: string) => {
-        await api.delete(`/budget/employees/${id}`)
-        setDeleteConfirmationModal(false);
+    const remove = async (id: string) => {
+        await api.delete(`/budget/employees/${id}`);
         toast.success("Funcionário excluido com sucesso!", {
             duration: 4000,
             position: "top-right",
         });
-        atualizaListaFuncionario(id);
-    }, []);
-
-    function atualizaListaFuncionario(id: string) {
-        const recordsList = funcionarios?.filter(funcionario => funcionario.id !== id);
-        setFuncionarios(recordsList);
-    }
-
-
-    useEffect(() => {
-        initialDataSelect()
-        setObservationValue(observationValue);
-        setFuncionarios(funcionarios);
-    }, [observationValue])
-
+        const result = funcionarios.filter(funcionario => (funcionario.id !== id));
+        setFuncionarios(result);
+        setDeleteConfirmationModal(false);
+    };
     async function handleFuncionarioAdd() {
         const response = await api.get(`users/${userId}`);
+        const { name, id, role } = response.data;
 
-        const { name, id, role } = response.data
+        const userAlreadyExists = funcionarios.find(funcionario => (funcionario?.user.id === id));
+      
+        if(userAlreadyExists){
+            toast.error("Usuário já está vinculado ao orçamento!", {
+                duration: 4000,
+                position: "top-right",
+            });
+            return;
+        }
+
+        const responseEmployeers = await api.post(`budget/employees`, {
+            budget_id: budgetId,
+            user_id: userId,
+        });
 
         const data = {
-            id,
+            id: responseEmployeers.data.id,
             user: {
                 id,
                 name,
-                role
-            }
-        }
-        
+                role,
+            },
+        };
 
-        setFuncionarios(prevItem => [...prevItem, data])
 
-        await api.post(`budget/employees`, {
-            budget_id: budgetId,
-            user_id: userId
-        });
+        setFuncionarios((prevItem) => [...prevItem, data]);
     }
     return (
         <>
-            <Form
-                ref={formRef}
-                onSubmit={()=>{}}
-            >
+            <Form ref={formRef} onSubmit={() => { }}>
                 <div className="flex items-stretch	">
                     <div className="flex-auto w-64 mr-3">
                         <SelectCustom
@@ -90,18 +85,19 @@ function FormFuncionario(){
                             })}
                             label="Funcionário"
                             name="user_id"
-                            onChange={e => setUserId(e.target.value)}
+                            onChange={(e) => setUserId(e.target.value)}
                             options={users}
                         />
                     </div>
-                    {<a
-                        className="btn btn-primary h-10 mt-7"
-                        onClick={handleFuncionarioAdd}
-                    >
-                        Adicionar
-                    </a>}
+                    {
+                        <a
+                            className="btn btn-primary h-10 mt-7"
+                            onClick={handleFuncionarioAdd}
+                        >
+                            Adicionar
+                        </a>
+                    }
                 </div>
-
             </Form>
 
             <div className="mt-4">
@@ -112,51 +108,56 @@ function FormFuncionario(){
                     </div>
                 )}
 
-                {
-                    funcionarios.length > 0 && (
-                        <table className="min-w-full divide-y divide-gray-300">
-                            <thead className="bg-gray-50">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                    >
-                                        Nome
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                    >
-                                        Perfil
-                                    </th>
-                                    <th scope="col" className=" whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-6">
-                                        <span className="sr-only">Ações</span>
-                                    </th>
+                {funcionarios.length > 0 && (
+                    <table className="min-w-full divide-y divide-gray-300">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th
+                                    scope="col"
+                                    className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                >
+                                    Nome
+                                </th>
+                                <th
+                                    scope="col"
+                                    className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                >
+                                    Perfil
+                                </th>
+                                <th
+                                    scope="col"
+                                    className=" whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-6"
+                                >
+                                    <span className="sr-only">Ações</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 bg-white">
+                            {funcionarios.map((funcionario) => (
+                                <tr key={funcionario?.user?.id}>
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
+                                        {funcionario?.user?.name}
+                                    </td>{" "}
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
+                                        {funcionario?.user?.role.name}
+                                    </td>
+                                    <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                        <a
+                                            onClick={() => {
+                                                setDeleteConfirmationModal(true),
+                                                    setIdFuncionario(funcionario?.id);
+                                            }}
+                                            className="text-indigo-600 hover:text-indigo-900"
+                                        >
+                                            <Lucide icon="Trash" className="w-5 h-5 text-red-700" />
+                                            <span className="sr-only">{funcionario?.user?.id}</span>
+                                        </a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200 bg-white">
-                                {funcionarios.map((funcionario) => (
-                                    <tr key={funcionario?.user?.id}>
-
-                                        <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
-                                            {funcionario.user.name}
-                                        </td> <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
-                                            {funcionario.user.role.name}
-                                        </td>
-
-                                        <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                            <a onClick={() => { setBudgetId(funcionario.id),setDeleteConfirmationModal(true) }}  className="text-indigo-600 hover:text-indigo-900">
-                                                <Lucide icon="Trash" className="w-5 h-5 text-red-700" /><span className="sr-only">, {funcionario.user.id}</span>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                ))}
-
-
-                            </tbody>
-                        </table>
-                    )
-                }
+                            ))}
+                        </tbody>
+                    </table>
+                )}
 
                 <Modal
                     show={deleteConfirmationModal}
@@ -172,7 +173,8 @@ function FormFuncionario(){
                             />
                             <div className="text-3xl mt-5">Tem certeza ?</div>
                             <div className="text-slate-500 mt-2">
-                                Você realmente deseja excluir esse registro?<br />
+                                Você realmente deseja excluir esse registro?
+                                <br />
                                 Este processo não pode ser desfeito.
                             </div>
                         </div>
@@ -186,7 +188,11 @@ function FormFuncionario(){
                             >
                                 Cancel
                             </button>
-                            <button type="button" className="btn btn-danger w-24" onClick={() => remove(idBudget)}>
+                            <button
+                                type="button"
+                                className="btn btn-danger w-24"
+                                onClick={() => remove(idFuncionario)}
+                            >
                                 Delete
                             </button>
                         </div>
@@ -197,4 +203,4 @@ function FormFuncionario(){
     );
 }
 
-export default FormFuncionario
+export default FormFuncionario;

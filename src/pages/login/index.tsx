@@ -25,8 +25,6 @@ function Login() {
 
   const { signIn } = useAuth();
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    console.log(data);
-
     await signIn(data);
   };
 
