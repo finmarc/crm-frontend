@@ -4,6 +4,7 @@ import {
   Modal,
   ModalBody,
 } from "@/base-components";
+import { AxiosAdapter, AxiosError } from "axios";
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
@@ -14,36 +15,54 @@ interface RowProps {
   url: string
 }
 
-export const TBodyRow = ({ dataList, component , url }: RowProps) => {
+export const TBodyRow = ({ dataList, component, url }: RowProps) => {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
-  const [ records, setRecords] = useState<any[]>([]);
+  const [records, setRecords] = useState<any[]>([]);
   const [id, setId] = useState("");
 
   useEffect(() => {
-    if(dataList.length > 0) {
+    if (dataList.length > 0) {
       setRecords(dataList)
     }
-  },[dataList])
+  }, [dataList])
 
   const keys = records && records?.length > 0 ? Object.keys(records[0]) : [];
   const history = useHistory();
 
   const show = useCallback((id: string) => {
     history.push(`${component}/${id}/visualizar`)
-  },[]);
+  }, []);
 
   const edit = useCallback((id: string) => {
     history.push(`${component}/${id}`)
   }, []);
 
   const remove = async (id: string) => {
-    await api.delete(`${url}/${id}`)
-    setDeleteConfirmationModal(false); 
-    toast.success("Cadastro excluido com sucesso!", {
-      duration: 4000,
-      position: "top-right",
-    });
-    listUpdate(id);
+
+    try {
+      await api.delete(`${url}/${id}`)
+      setDeleteConfirmationModal(false);
+      toast.success("Cadastro excluido com sucesso!", {
+        duration: 4000,
+        position: "top-right",
+      });
+      listUpdate(id);
+    } catch (error: any) {
+      setDeleteConfirmationModal(false)
+      if (error.hasOwnProperty('response')){
+        toast.error(error.response.data.message, {
+          duration: 4000,
+          position: "top-center",
+        });
+        return;
+      }
+  
+      toast.error("Sistema não conseguiu processar esta ação. Procure o administrador do sistema", {
+        duration: 4000,
+        position: "top-center",
+      });
+    }
+
   };
 
   function listUpdate(id: string) {
@@ -54,13 +73,13 @@ export const TBodyRow = ({ dataList, component , url }: RowProps) => {
 
   return (
     <>
-        <tbody>
+      <tbody>
         {records?.length > 0 && (
 
           records.map((column, index) => (
             <tr key={index}>{keys.map((key) => key !== 'id' && (
               <td key={key} className="whitespace-nowrap">{column[key]}</td>
-              ))}
+            ))}
               <td className="whitespace-nowrap ">
                 <button className="btn btn-primary mr-1 mb-2" onClick={() => show(column['id'])}>
                   <Lucide icon="Eye" className="w-5 h-5" />
@@ -74,7 +93,7 @@ export const TBodyRow = ({ dataList, component , url }: RowProps) => {
               </td>
             </tr>
           )))}
-        </tbody>
+      </tbody>
       {/* BEGIN: Delete Confirmation Modal */}
       <Modal
         show={deleteConfirmationModal}
@@ -104,13 +123,14 @@ export const TBodyRow = ({ dataList, component , url }: RowProps) => {
             >
               Cancel
             </button>
-            <button type="button" className="btn btn-danger w-24" onClick={() => remove(id) }>
+            <button type="button" className="btn btn-danger w-24" onClick={() => remove(id)}>
               Delete
             </button>
           </div>
         </ModalBody>
       </Modal>
       {/* END: Delete Confirmation Modal */}
+
     </>
   );
 };
