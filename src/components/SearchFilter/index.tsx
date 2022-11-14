@@ -1,9 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TomSelect from "tom-select";
 import { Litepicker } from "@/base-components";
+import { Client, Partner, Product, Status, Types } from "../../pages/budgets/interfaces/budget";
+import api from "../../services/apiClient";
+import { Form } from "@unform/web";
+import { FormHandles } from "@unform/core";
+import classNames from "classnames";
+import SelectCustom from "../../components/Inputs/Select";
 
 export default function SearchFilter() {
+  const formRef = useRef<FormHandles>(null);
   const [date, setDate] = useState("");
+  const [clients, setClients] = useState<Client[]>([]);
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [status, setStatus] = useState<Status[]>([]);
+  const [types, setTypes] = useState<Types[]>([]);
+
+  const initialDataSelect = async () => {
+    const responseClients = await api.get("/clients");
+    const responseProducts = await api.get("/products");
+    const responsePartners = await api.get("/partners");
+    const responseStatus = await api.get("/budget/status");
+    const responseTypes = await api.get("/budget/types");
+
+    setClients(responseClients?.data);
+    setProducts(responseProducts?.data);
+    setPartners(responsePartners?.data);
+    setStatus(responseStatus?.data);
+    setTypes(responseTypes?.data);
+  };
+
+  useEffect(() => {
+    initialDataSelect()
+  })
+
   return (
     <div className="mt-5 ">
       <div className="intro-y col-span-12 lg:col-span-6">
@@ -14,7 +45,12 @@ export default function SearchFilter() {
             </h2>
           </div>
           <div className="p-5  ">
-            <div className="grid grid-cols-4 gap-2 md:col-span-6">
+            <Form
+              ref={formRef}
+              initialData={() => { }}
+              onSubmit={() => { }}
+              className="grid grid-cols-4 gap-2 md:col-span-6"
+            >
               <div className=" col-span-1">
                 <label className="form-label w-full flex flex-col sm:flex-row">
                   Data Inicial
@@ -61,26 +97,24 @@ export default function SearchFilter() {
                 />
               </div>
               <div className="input-form col-span-1">
-                <label className="form-label w-full flex flex-col sm:flex-row">
-                  Cliente
-                </label>
-                <select id="cliente" className="form-select  sm:mr-2">
-                  <option>Selecione</option>
-                </select>
+                <SelectCustom
+                  className={classNames({
+                    "form-control": true,
+                  })}
+                  label="Cliente"
+                  name="client_id"
+                  options={clients}
+                />
               </div>
               <div className="input-form col-span-1">
-                <label
-                  htmlFor="validation-form-2"
-                  className="form-label w-full flex flex-col sm:flex-row"
-                >
-                  Situação
-                </label>
-                <select id="situacao" className="form-select  sm:mr-2">
-                  <option>Selecione</option>
-                  <option value="Aprovado">Aprovado</option>
-                  <option value="Análise">Em análise</option>
-                  <option value="Recusado">Recusado</option>
-                </select>
+                <SelectCustom
+                  className={classNames({
+                    "form-control": true,
+                  })}
+                  label="Situação"
+                  name="status_id"
+                  options={status}
+                />
               </div>
               <div className="input-form col-span-1">
                 <label className="form-label w-full flex flex-col sm:flex-row">
@@ -129,12 +163,11 @@ export default function SearchFilter() {
                   <option value="não">Não</option>
                 </select>
               </div>
-            </div>
-
-            <div className="flex space-x-4">
-              <button className="btn btn-primary mt-5">Pesquisar</button>
-              <button className="btn btn-primary mt-5">Limpar</button>
-            </div>
+              <div className="flex space-x-4">
+                <button className="btn btn-primary mt-5">Pesquisar</button>
+                <button className="btn btn-primary mt-5">Limpar</button>
+              </div>
+            </Form>
           </div>
         </div>
       </div>

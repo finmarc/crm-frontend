@@ -40,6 +40,7 @@ const Cliente = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
   return (
     <>
       <SearchFilter />
@@ -52,6 +53,8 @@ const Cliente = () => {
           url="clients"
         />
       )}
+
+
     </>
   );
 };

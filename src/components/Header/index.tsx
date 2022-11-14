@@ -14,7 +14,7 @@ export const Header = (props: HeaderProps) => {
   }
 
   return (
-    <div className="intro-y flex flex-col sm:flex-row items-center mt-8">
+    <div className="intro-y flex flex-col sm:flex-row items-center mt-5">
       <h2 className="text-lg font-medium mr-auto">{props.title}</h2>
       {props.action && (
         <div className="w-full sm:w-auto flex mt-4 sm:mt-0">
