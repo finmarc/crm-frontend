@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { Header } from "../../components/Header";
 import api from "../../services/apiClient";
 import DataTable from "../../components/Datatable";
 
@@ -40,7 +39,6 @@ const Cliente = () => {
     setClients(newClient);
   }, []);
   const columns = [
-
     {
       field: "nome",
       headerName: "Nome",
@@ -64,17 +62,13 @@ const Cliente = () => {
       headerName: "Documento",
       width: 150,
     },
-  
   ]
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   return (
-    <>
-      <Header title="Clientes" url="cliente" action="Adicionar" />
       <DataTable rows={clients} columns={columns} component="cliente" url="clients"  />
-    </>
   );
 };
 

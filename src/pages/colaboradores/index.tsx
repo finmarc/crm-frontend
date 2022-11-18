@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Header } from "../../components/Header";
-import { Table } from "../../components/Table";
+import DataTable from "../../components/Datatable";
 import api from "../../services/apiClient";
 
 interface Role {
@@ -23,9 +22,39 @@ const Colaborador = () => {
    "id", "Nome", "Email", "Telefone", "CPF", "Perfil"
   ]
 
+  const columns = [
+    {
+      field: "nome",
+      headerName: "Nome",
+      width: 220,
+
+    },
+    {
+      field: "email",
+      headerName: "E-mail",
+      width: 180,
+
+    },
+    {
+      field: "telefone",
+      headerName: "Telefone",
+      width: 150,
+
+    },
+    {
+      field: "documento",
+      headerName: "Documento",
+      width: 150,
+    },
+    {
+      field: "perfil",
+      headerName: "Perfil",
+      width: 150,
+    },
+  ]
+
   const fetchData = useCallback(async () => {
     const response = await api.get("/users");
-
     
     const newUsers: any = response.data.map((user: User) => {
       return {
@@ -45,10 +74,7 @@ const Colaborador = () => {
     fetchData();
   }, [fetchData]);
   return (
-    <>
-      <Header title="Colaboradores" url="colaborador" action="Adicionar" />
-      <Table titles={theadTitles} columns={users} component="colaborador" url="users" />
-    </>
+    <DataTable rows={users} columns={columns} component="colaborador" url="users" />
   );
 };
 

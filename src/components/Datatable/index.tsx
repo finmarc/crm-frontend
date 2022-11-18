@@ -9,6 +9,7 @@ import {
   ModalBody,
 } from "@/base-components"; 
 import api from "../../services/apiClient";
+import { Header } from "../Header";
 
 type Props = {
   columns: any[];
@@ -96,6 +97,7 @@ const DataTable = ({ columns, rows, component, url }: Props) => {
   columns.push(actions)
   return (
     <>
+      <Header title={component.toUpperCase()} url={url} action="Adicionar" />
       <Box style={{ height: "auto", overflow: "auto" }} className="table mt-6">
         <DataGrid
           autoHeight
