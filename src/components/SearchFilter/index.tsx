@@ -1,14 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import TomSelect from "tom-select";
+import { useEffect, useRef, useState } from "react";
 import { Litepicker } from "@/base-components";
 import { Client, Partner, Product, Status, Types } from "../../pages/budgets/interfaces/budget";
 import api from "../../services/apiClient";
 import { Form } from "@unform/web";
-import { FormHandles } from "@unform/core";
+import { FormHandles, SubmitHandler } from "@unform/core";
 import classNames from "classnames";
 import SelectCustom from "../../components/Inputs/Select";
+import toast from "react-hot-toast";
+import QueryString from "qs";
 
-export default function SearchFilter() {
+type Props = {
+  items?: any[],
+  setBudgets?: any,
+  setFilter?: any
+}
+export default function SearchFilter({ items , setBudgets, setFilter} : Props) {
   const formRef = useRef<FormHandles>(null);
   const [date, setDate] = useState("");
   const [clients, setClients] = useState<Client[]>([]);
@@ -16,6 +22,7 @@ export default function SearchFilter() {
   const [products, setProducts] = useState<Product[]>([]);
   const [status, setStatus] = useState<Status[]>([]);
   const [types, setTypes] = useState<Types[]>([]);
+  const [oldItems, setOldItems] = useState<any[]>()
 
   const initialDataSelect = async () => {
     const responseClients = await api.get("/clients");
@@ -29,6 +36,36 @@ export default function SearchFilter() {
     setPartners(responsePartners?.data);
     setStatus(responseStatus?.data);
     setTypes(responseTypes?.data);
+  };
+
+  useEffect(() => {
+   setOldItems(items) 
+  }, [items])
+  const handleSubmit: SubmitHandler = async (data) => {
+
+const query = QueryString.stringify(data);
+    try {
+      const response = await api.get(`budgets/filters?${query}`);
+     
+      const { status, data } = response;
+      if (status == 200) {
+        const responseData = data.map((budget: any) => ({
+          id: budget.id,
+          codigo: budget.code,
+          cliente: budget.client.name,
+          produto: budget.product.name,
+          parceiro: budget.partner?.name,
+          situacao: budget.status.name,
+          tipo: budget.type.name,
+        }))
+        setBudgets(responseData);
+      }
+    } catch (err) {
+      toast.error("Ops! Algo deu errado", {
+        duration: 4000,
+        position: "top-right",
+      });
+    };
   };
 
   useEffect(() => {
@@ -48,7 +85,7 @@ export default function SearchFilter() {
             <Form
               ref={formRef}
               initialData={() => { }}
-              onSubmit={() => { }}
+              onSubmit={handleSubmit}
               className="grid grid-cols-4 gap-2 md:col-span-6"
             >
               <div className=" col-span-1">
@@ -117,12 +154,14 @@ export default function SearchFilter() {
                 />
               </div>
               <div className="input-form col-span-1">
-                <label className="form-label w-full flex flex-col sm:flex-row">
-                  Funcionário
-                </label>
-                <select id="funcionario" className="form-select  sm:mr-2">
-                  <option>Selecione</option>
-                </select>
+                <SelectCustom
+                  className={classNames({
+                    "form-control": true,
+                  })}
+                  label="Funcionários"
+                  name="user_id"
+                  options={partners}
+                />
               </div>
               <div className="input-form col-span-1">
                 <label className="form-label w-full flex flex-col sm:flex-row">
@@ -146,12 +185,14 @@ export default function SearchFilter() {
                 </select>
               </div>
               <div className="input-form col-span-1">
-                <label className="form-label w-full flex flex-col sm:flex-row">
-                  Parceiro
-                </label>
-                <select id="parceiro" className="form-select  sm:mr-2">
-                  <option>Selecione</option>
-                </select>
+                <SelectCustom
+                  className={classNames({
+                    "form-control": true,
+                  })}
+                  label="Parceiros"
+                  name="partner_id"
+                  options={partners}
+                />
               </div>
               <div className="input-form w-full col-span-4 ">
                 <label className="form-label w-full flex flex-col sm:flex-row">
@@ -164,7 +205,7 @@ export default function SearchFilter() {
                 </select>
               </div>
               <div className="flex space-x-4">
-                <button className="btn btn-primary mt-5">Pesquisar</button>
+                <button type="submit" className="btn btn-primary mt-5">Pesquisar</button>
                 <button className="btn btn-primary mt-5">Limpar</button>
               </div>
             </Form>

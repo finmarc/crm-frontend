@@ -8,3 +8,4 @@ declare module "@/react-input-mask";
 declare module "@/base-components";
 declare module "@/utils";
 declare module "@left4code/tw-starter/dist/js/modal";
+declare module "react-data-table-component-extensions";

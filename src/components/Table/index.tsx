@@ -12,7 +12,6 @@ type DataProps = {
 export const Table = (data: DataProps) => {
   const [offset, setOffset] = useState(0);
   const [page, setPage] = useState(1);
-  const MAX_ITEMS = 9;
 
   const paginate = (items = data.columns, perPage = 10) => {
     const offset = perPage * (page - 1);
@@ -26,12 +25,14 @@ export const Table = (data: DataProps) => {
       totalPages: totalPages,
       items: paginatedItems,
       perPage
+
     };
   };
 
   useEffect(() => {
     setOffset(paginate().items.length);
-  },[offset])
+  }, [offset])
+
 
   return (
     <div className="intro-y box p-5 mt-5">
