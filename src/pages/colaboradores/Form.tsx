@@ -82,6 +82,7 @@ export function Form(dataForm?: FormProps) {
       ...data,
       role_id: data?.ReactSelect?.value
     }
+    
 
     delete data?.ReactSelect;
     if (user && user.id) {

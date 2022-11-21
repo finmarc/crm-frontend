@@ -97,7 +97,7 @@ const DataTable = ({ columns, rows, component, url }: Props) => {
   columns.push(actions)
   return (
     <>
-      <Header title={component.toUpperCase()} url={url} action="Adicionar" />
+      <Header title={component.toUpperCase()} url={component} action="Adicionar" />
       <Box style={{ height: "auto", overflow: "auto" }} className="table mt-6">
         <DataGrid
           autoHeight
