@@ -8,6 +8,8 @@ import { useHistory } from "react-router-dom";
 import { Partners } from "./interface/partners";
 import { MaskedInput } from "../../components/InputMask";
 import ButtonGoBack from "../../components/Button/backto";
+import { helper } from "../../utils";
+import Datepicker from "../../components/Inputs/Datepicker";
 
 type FormProps = {
   partner?: Partners;
@@ -45,6 +47,11 @@ export function Form(dataForm?: FormProps) {
 
   const onSubmit: SubmitHandler<any> = async (data: Partners) => {
     let response;
+    const dateFormat = helper.dateFormatToISOString(data.birth_date);
+    data = {
+      ...data,
+      birth_date: dateFormat
+    }
     if (parceiro && parceiro.id) {
       response = await api.patch(`partners/${parceiro.id}`, data);
     } else {
@@ -174,22 +181,14 @@ export function Form(dataForm?: FormProps) {
 
                 <div className="grid grid-cols-12 gap-2 mt-3">
                   <div className="input-form col-span-6">
-                    <label
-                      htmlFor="validation-form-2"
-                      className="form-label w-full flex flex-col sm:flex-row"
-                    >
-                      Data de Nascimento
-                    </label>
-                    <input
-                      {...register("birth_date")}
-                      id="birth_date"
-                      type="date"
+                    <Datepicker
                       name="birth_date"
-                      className={classnames({
+                      control={control}
+                      label="Data de Nascimento"
+                      classname={classnames({
                         "form-control": true,
                         "border-danger": errors.birth_date,
                       })}
-                      placeholder="00/00/0000"
                     />
                   </div>
                   <div className="input-form col-span-6">

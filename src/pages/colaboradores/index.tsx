@@ -18,10 +18,6 @@ interface User {
 const Colaborador = () => {
   const [users, setUsers] = useState<User[]>([]);
 
-  const theadTitles = [
-   "id", "Nome", "Email", "Telefone", "CPF", "Perfil"
-  ]
-
   const columns = [
     {
       field: "nome",

@@ -16,6 +16,7 @@ export const MaskedInput = ({ control, name, mask, className, placeholder, typeM
         <Controller
             control={control}
             name={name}
+        
             render={({ field: { onChange, onBlur, ref, value } }) => (
                 <InputMask
                     type="text"
