@@ -20,6 +20,16 @@ const sideMenu = atom({
         title: "Clientes",
       },
       {
+        icon: "Users",
+        pathname: "",
+        title: "BNDES Leads",
+      },
+      {
+        icon: "Archive",
+        pathname: "",
+        title: "BNDES",
+      },
+      {
         icon: "Briefcase",
         pathname: "/parceiros",
         title: "Parceiros",
@@ -29,11 +39,11 @@ const sideMenu = atom({
         pathname: "/orcamentos",
         title: "Orçamentos",
       },
-      {
-        icon: "Layers",
-        pathname: "/contratos",
-        title: "Contratos",
-      },
+      // {
+      //   icon: "Layers",
+      //   pathname: "/contratos",
+      //   title: "Contratos",
+      // },
     ],
   },
 });

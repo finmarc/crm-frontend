@@ -10,7 +10,6 @@ import Form from "./Form";
 import FormObservacao from "./FormObs";
 import FormFuncionario from "./Funcionarios";
 import { Documents } from "./interfaces/budget";
-import { useCallback } from "preact/hooks";
 
 export interface BudgetEdit {
   id?: string;
@@ -24,6 +23,7 @@ export interface BudgetEdit {
   observation?: string;
 }
 
+
 const EditBudget = () => {
   const { id } = useParams<any>();
   const location = useLocation();
@@ -35,6 +35,7 @@ const EditBudget = () => {
   const [filename, setFilename] = useState("")
   const [cardInput, setCardInput] = useState<number>()
   const isDisabled = location.pathname.includes("visualizar");
+  const [tabActive, setTabActive] = useState("geral")
 
   function typesDocuments() {
      api
@@ -42,7 +43,6 @@ const EditBudget = () => {
       .then(reponse => {
         setDocumentTypes(reponse.data)
      });
-    
   }
 
   useEffect(() => {
@@ -83,6 +83,9 @@ const EditBudget = () => {
     }
   };
 
+  function handleTabActive(tab: string){
+    setTabActive(tab)
+  } 
   const handleSubmitFiles = (file: FileList, index: any) => {
     const fileUpload = file[0];
     setFilename(fileUpload.name);
