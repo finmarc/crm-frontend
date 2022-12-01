@@ -31,12 +31,10 @@ const EditBudget = () => {
 
   const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
   const [documents, setDocuments] = useState<Documents[]>([]);
-  const [updatedDocument, setUpdatedDocument] = useState<boolean>(false);
   const [documentTypes, setDocumentTypes] = useState<any[]>([]);
   const [filename, setFilename] = useState("")
   const [cardInput, setCardInput] = useState<number>()
   const isDisabled = location.pathname.includes("visualizar");
-  const [tabActive, setTabActive] = useState("geral")
 
   function typesDocuments() {
      api
@@ -67,7 +65,7 @@ const EditBudget = () => {
   useEffect(() => {
     getBudget();
     typesDocuments()
-  }, [updatedDocument]);
+  }, []);
 
   const handleSubmit: SubmitHandler<BudgetEdit> = async (data) => {
     const response = await api.patch(`budgets/${id}`, data);
@@ -86,29 +84,26 @@ const EditBudget = () => {
     }
   };
 
-  function handleTabActive(tab: string){
-    setTabActive(tab)
-  } 
-  const handleSubmitFiles = (file: FileList, index: any) => {
+ 
+  const handleSubmitFiles = (file: FileList, index: number) => {
     const fileUpload = file[0];
     setFilename(fileUpload.name);
     setCardInput(index);
 
     const formData = new FormData();
-    formData.append("type", index);
+    formData.append("type", String(index));
     formData.append("budget_id", id);
     formData.append("file", fileUpload);
 
     api
       .post("budgets/documents", formData)
       .then((res) => {
-        setUpdatedDocument(true)
         toast.success("Upload realizado com sucesso!", {
           duration: 4000,
           position: "top-right",
         });
         window.location.reload();
-
+        return;
       })
       .catch((err) => {
         toast.error("Ops! Algo deu errado ao fazer upload", {
@@ -126,7 +121,6 @@ const EditBudget = () => {
           duration: 4000,
           position: "top-right",
         });
-        setUpdatedDocument(true);
         window.location.reload();
         return;
       })
@@ -196,11 +190,9 @@ const EditBudget = () => {
                               <CardUpload
                                 key={type.id}
                                 documents={documents}
-                                onChange={(e: any) => handleSubmitFiles(e.currentTarget.files, type.id)}
+                                onChange={handleSubmitFiles}
                                 onRemove={handleRemoveDocument}
-                                cardInput={cardInput}
                                 id={type.id}
-                                filename={filename}
                                 description={type.name}
                                 titleIndex={type.name}
                               />

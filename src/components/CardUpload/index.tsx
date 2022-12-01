@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Lucide } from "../../base-components";
 import {  Documents } from "../../pages/budgets/interfaces/budget";
 import UploadButtonComponent from "../UploadButtonComponent";
@@ -7,24 +6,20 @@ interface Props {
   description: string;
   key: number;
   id: number;
-  cardInput?: number;
-  filename?: string;
   documents?: Documents[]
   titleIndex: number;
   onChange: any;
   onRemove?: any;
 }
 export default function CardUpload(props: Props) {
-  const { description, onChange, onRemove, filename, cardInput, id, documents } = props;
-
- console.log(documents)
-
+  const { description, onChange, onRemove,  id, documents } = props;
   const docs = documents && documents?.length > 0 ? documents.filter(doc => (doc?.document?.type_document.name == description)) : [];
   return (
     <div className="container flex mx-auto p-4 max-w-md">
       <div className="p-6 bg-gray-50 rounded-lg border-blue-700 border-solid cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 overflow-hidden border-2 h-full ">
         <div className="lg:h-10">
-          <p className="text-md text-center font-semibold ">{description}</p>
+          <p className="text-md text-center font-semibold ">{description}</p> 
+          {id}
         </div>
         <ul className="mb-3 ">
             {
@@ -42,7 +37,7 @@ export default function CardUpload(props: Props) {
             ))
             }
         </ul>
-        <UploadButtonComponent onChange={onChange} />
+        <UploadButtonComponent onChange={onChange} id={id} />
       </div>
     </div>
   );
