@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Lucide } from "../../base-components";
 import {  Documents } from "../../pages/budgets/interfaces/budget";
 import UploadButtonComponent from "../UploadButtonComponent";
@@ -15,6 +16,8 @@ interface Props {
 }
 export default function CardUpload(props: Props) {
   const { description, onChange, onRemove, filename, cardInput, id, documents } = props;
+
+ console.log(documents)
 
   const docs = documents && documents?.length > 0 ? documents.filter(doc => (doc?.document?.type_document.name == description)) : [];
   return (

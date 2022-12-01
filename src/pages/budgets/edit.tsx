@@ -31,6 +31,7 @@ const EditBudget = () => {
 
   const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
   const [documents, setDocuments] = useState<Documents[]>([]);
+  const [updatedDocument, setUpdatedDocument] = useState<boolean>(false);
   const [documentTypes, setDocumentTypes] = useState<any[]>([]);
   const [filename, setFilename] = useState("")
   const [cardInput, setCardInput] = useState<number>()
@@ -45,32 +46,34 @@ const EditBudget = () => {
      });
   }
 
-  useEffect(() => {
+  function getBudget(){
     api.get(`/budgets/${id}`)
-    .then((response) => {
-      const { data } = response;
-      setDocuments(data?.documents);
-      setInitialDataBudget({
-        type_id: data?.type?.id,
-        client_id: data?.client?.id,
-        product_id: data?.product?.id,
-        status_id: data?.status?.id,
-        partner_id: data?.partner?.id,
-        observation: data?.observation,
-        description: data?.description,
-        amount_loan: data?.amount_loan
+      .then((response) => {
+        const { data } = response;
+        setDocuments(data?.documents);
+        setInitialDataBudget({
+          type_id: data?.type?.id,
+          client_id: data?.client?.id,
+          product_id: data?.product?.id,
+          status_id: data?.status?.id,
+          partner_id: data?.partner?.id,
+          observation: data?.observation,
+          description: data?.description,
+          amount_loan: data?.amount_loan
+        });
       });
+  }
 
-    });
-
+  useEffect(() => {
+    getBudget();
     typesDocuments()
-  }, []);
+  }, [updatedDocument]);
 
   const handleSubmit: SubmitHandler<BudgetEdit> = async (data) => {
     const response = await api.patch(`budgets/${id}`, data);
     const { status } = response;
     if (status == 200) {
-      toast.success("Atualizado  com sucesso!", {
+      toast.success("Atualizado com sucesso!", {
         duration: 4000,
         position: "top-right",
       });
@@ -99,10 +102,13 @@ const EditBudget = () => {
     api
       .post("budgets/documents", formData)
       .then((res) => {
+        setUpdatedDocument(true)
         toast.success("Upload realizado com sucesso!", {
           duration: 4000,
           position: "top-right",
         });
+        window.location.reload();
+
       })
       .catch((err) => {
         toast.error("Ops! Algo deu errado ao fazer upload", {
@@ -116,10 +122,13 @@ const EditBudget = () => {
     api
       .delete(`budgets/documents/${id}`)
       .then((res) => {
-        toast.success("Documento com sucesso!", {
+        toast.success("Documento deletado com sucesso!", {
           duration: 4000,
           position: "top-right",
         });
+        setUpdatedDocument(true);
+        window.location.reload();
+        return;
       })
       .catch((err) => {
         toast.error("Ops! Algo deu errado ao fazer upload", {
@@ -128,18 +137,6 @@ const EditBudget = () => {
         });
       });
   }
-
-  const cardTitles = [
-    "Contrato Social e última Alteração Contratual consolidada",
-    "CNH ou RG e CPF",
-    "Comprovante de residência",
-    "IRPF e recibo de entrega",
-    "Faturamento dos últimos 12 meses",
-    "Referências (Email, contato e 2 referências)",
-    `Certidão de nascimento ou casamento (Se casado, anexar os documentos do cônjuge) ${`;`} Pacto antenupcial – se aplicável`,
-    "ECF e recibo de entrega (Obs: para empresas de lucro presumido.)",
-    "Cartão CNPJ",
-  ];
 
   return (
     <>
@@ -162,7 +159,7 @@ const EditBudget = () => {
                   <Tab className="w-full py-2" tag="button">
                     Observação
                   </Tab>
-                  <Tab className="w-full py-2" tag="button">
+                  <Tab id="doc" className="w-full py-2" tag="button">
                     Documentos
                   </Tab>
                 </TabList>
