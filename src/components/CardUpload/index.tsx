@@ -19,7 +19,6 @@ export default function CardUpload(props: Props) {
       <div className="p-6 bg-gray-50 rounded-lg border-blue-700 border-solid cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 overflow-hidden border-2 h-full ">
         <div className="lg:h-10">
           <p className="text-md text-center font-semibold ">{description}</p> 
-          {id}
         </div>
         <ul className="mb-3 ">
             {
