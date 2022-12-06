@@ -32,19 +32,19 @@ const EditBudget = () => {
   const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
   const [documents, setDocuments] = useState<Documents[]>([]);
   const [documentTypes, setDocumentTypes] = useState<any[]>([]);
-  const [filename, setFilename] = useState("")
-  const [cardInput, setCardInput] = useState<number>()
+  // const [filename, setFilename] = useState("")
+  // const [cardInput, setCardInput] = useState<number>()
   const isDisabled = location.pathname.includes("visualizar");
 
   function typesDocuments() {
-     api
+    api
       .get("/budgets/documents/types")
       .then(reponse => {
         setDocumentTypes(reponse.data)
-     });
+      });
   }
 
-  function getBudget(){
+  function getBudget() {
     api.get(`/budgets/${id}`)
       .then((response) => {
         const { data } = response;
@@ -84,11 +84,11 @@ const EditBudget = () => {
     }
   };
 
- 
-  const handleSubmitFiles = (file: FileList, index: number) => {
+
+  const handleSubmitFiles = (e: any, file: FileList, index: number) => {
+    e.preventDefault();
+
     const fileUpload = file[0];
-    setFilename(fileUpload.name);
-    setCardInput(index);
 
     const formData = new FormData();
     formData.append("type", String(index));
@@ -98,11 +98,11 @@ const EditBudget = () => {
     api
       .post("budgets/documents", formData)
       .then((res) => {
+        setDocuments(prevItems => [...prevItems, res?.data])
         toast.success("Upload realizado com sucesso!", {
           duration: 4000,
           position: "top-right",
         });
-        window.location.reload();
         return;
       })
       .catch((err) => {
@@ -114,6 +114,8 @@ const EditBudget = () => {
   }
 
   const handleRemoveDocument = (id: string) => {
+    const newArraydocuments = documents.filter(doc => doc.document.id !== id);
+    setDocuments(newArraydocuments)
     api
       .delete(`budgets/documents/${id}`)
       .then((res) => {
@@ -121,8 +123,6 @@ const EditBudget = () => {
           duration: 4000,
           position: "top-right",
         });
-        window.location.reload();
-        return;
       })
       .catch((err) => {
         toast.error("Ops! Algo deu errado ao fazer upload", {
@@ -144,16 +144,16 @@ const EditBudget = () => {
             <div className="p-5">
               <TabGroup>
                 <TabList className="nav-boxed-tabs">
-                  <Tab className="w-full py-2" tag="button">
+                  <Tab className="w-full py-2 geral" tag="button">
                     Dados gerais
                   </Tab>
-                  <Tab className="w-full py-2" tag="button">
+                  <Tab className="w-full py-2 funcionario" tag="button">
                     Funcionários
                   </Tab>
-                  <Tab className="w-full py-2" tag="button">
+                  <Tab className="w-full py-2 obs" tag="button">
                     Observação
                   </Tab>
-                  <Tab id="doc" className="w-full py-2" tag="button">
+                  <Tab id="doc" className="w-full py-2 docs" tag="button">
                     Documentos
                   </Tab>
                 </TabList>
@@ -170,14 +170,14 @@ const EditBudget = () => {
                   <TabPanel className="leading-relaxed">
                     <div className="intro-y box">
                       <div className="p-5">
-                        <FormFuncionario  />
+                        <FormFuncionario />
                       </div>
                     </div>
                   </TabPanel>
                   <TabPanel className="leading-relaxed">
                     <div className="intro-y box">
                       <div className="p-5">
-                        <FormObservacao isDisabled={isDisabled} initialData={initialDataBudget?.observation}  />
+                        <FormObservacao isDisabled={isDisabled} initialData={initialDataBudget?.observation} />
                       </div>
                     </div>
                   </TabPanel>
@@ -202,7 +202,7 @@ const EditBudget = () => {
                       </div>
                     </div>
                   </TabPanel>
-                  
+
                 </TabPanels>
               </TabGroup>
             </div>

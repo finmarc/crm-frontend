@@ -125,7 +125,6 @@ function TabList(props) {
 }
 
 function Tab(props) {
-  console.log(props.className);
   return createElement(
     "li",
     {
