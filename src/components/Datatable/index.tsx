@@ -102,7 +102,7 @@ const DataTable = ({ columns, rows, component, url }: Props) => {
         <DataGrid
           autoHeight
           autoPageSize={true}
-          density="standard"
+          density="compact"
           rows={records}
           columns={columns}
           pageSize={10}
