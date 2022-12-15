@@ -1,14 +1,15 @@
-import React, { useEffect, useRef } from "react";
+import React, { HTMLProps, useEffect, useRef } from "react";
 import { useField } from "@unform/core";
 
-interface Props {
+interface Props extends HTMLProps<HTMLInputElement> {
     name: string;
-    label?:string;
+    label?: string;
     classname: any;
     disabled?: boolean;
-    placeholder?:string;
+    placeholder?: string;
+
 }
-const InputText: React.FC<Props> = ({ name, label, placeholder, classname, disabled,...rest }) => {
+const InputText: React.FC<Props> = ({ name, label, placeholder, classname, disabled, ...rest }) => {
     const inputRef = useRef(null);
 
     const { fieldName, defaultValue = "", registerField, error } = useField(name);

@@ -35,6 +35,11 @@ const sideMenu = atom({
         title: "Parceiros",
       },
       {
+        icon: "Briefcase",
+        pathname: "/produtos",
+        title: "Produtos",
+      },
+      {
         icon: "Archive",
         pathname: "/orcamentos",
         title: "Orçamentos",

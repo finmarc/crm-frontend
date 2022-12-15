@@ -6,8 +6,6 @@ import { Form } from "./Form";
 import { Clients } from "./interface/clients";
 
 
-
-
 const ClientEdit = () => {
   const [client, setClient] = useState<Clients>();
 
@@ -15,9 +13,6 @@ const ClientEdit = () => {
   const fetchData = useCallback(async () => {
     const response = await api.get(`/clients/${id}`);
     const { data } = response;
-    let date = new Date('2019-12-12');
-    const dateFormat = new Intl.DateTimeFormat('pt-BR', {timeZone: 'UTC'}).format(date);
-    // data.birth_date = dateFormat    
     setClient(data);
   }, []);
 
