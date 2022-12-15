@@ -32,23 +32,16 @@ const EditBudget = () => {
   const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
   const [documents, setDocuments] = useState<Documents[]>([]);
   const [documentTypes, setDocumentTypes] = useState<any[]>([]);
-  // const [filename, setFilename] = useState("")
-  // const [cardInput, setCardInput] = useState<number>()
   const isDisabled = location.pathname.includes("visualizar");
-
-  function typesDocuments() {
-    api
-      .get("/budgets/documents/types")
-      .then(reponse => {
-        setDocumentTypes(reponse.data)
-      });
-  }
 
   function getBudget() {
     api.get(`/budgets/${id}`)
       .then((response) => {
         const { data } = response;
         setDocuments(data?.documents);
+        data?.product.types.forEach((data: any) => {
+          setDocumentTypes(prevItems => [...prevItems, data.documentType]);
+        })
         setInitialDataBudget({
           type_id: data?.type?.id,
           client_id: data?.client?.id,
@@ -64,7 +57,6 @@ const EditBudget = () => {
 
   useEffect(() => {
     getBudget();
-    typesDocuments()
   }, []);
 
   const handleSubmit: SubmitHandler<BudgetEdit> = async (data) => {

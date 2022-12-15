@@ -15,9 +15,17 @@ export interface Document {
   type_document: TypeDocument;
 }
 
+export interface Type {
+  documentType: {
+    id: number,
+    name: string,
+  }
+}
 export interface Client extends Generic {}
 export interface Partner extends Generic {}
-export interface Product extends Generic {}
+export interface Product extends Generic {
+  types?: Type[]
+}
 export interface Status extends Generic {}
 export interface Types extends Generic {}
 export interface Documents {
