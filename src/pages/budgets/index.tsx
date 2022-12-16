@@ -62,7 +62,7 @@ export const Budget = () => {
 
   return (
     <>
-      <DataTable rows={budgets} columns={columns} component="orcamento" url="budgets" />
+      <DataTable rows={budgets} columns={columns} component="orcamento" title="ORÇAMENTOS" url="budgets" />
     </>
   );
 };

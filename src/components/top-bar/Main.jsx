@@ -45,7 +45,7 @@ function Main(props) {
               className="logo__image w-10 "
               src={logoUrl}
             />
-            <span className="logo__text text-white text-lg ml-3"> Finmarc </span>
+            <span className="logo__text text-white text-lg ml-3"> Finmarc v1.0 </span>
           </Link>
           {/* END: Logo */}
           {/* BEGIN: Breadcrumb */}

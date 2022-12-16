@@ -10,10 +10,11 @@ import { Header } from "../Header";
 type Props = {
   columns: any[];
   rows: any[];
+  title?: string;
   component: string;
   url: string;
 };
-const DataTable = ({ columns, rows, component, url }: Props) => {
+const DataTable = ({ columns, rows, component, url, title }: Props) => {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const [records, setRecords] = useState<any[]>(rows);
   const [id, setId] = useState("");
@@ -105,7 +106,7 @@ const DataTable = ({ columns, rows, component, url }: Props) => {
   return (
     <>
       <Header
-        title={component.toUpperCase()}
+        title={title ?? component.toUpperCase()}
         url={component}
         action="Adicionar"
       />
