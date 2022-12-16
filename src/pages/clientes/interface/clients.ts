@@ -11,5 +11,7 @@
   address?:string,
   description?:string,
   seller_id?:string,
+  origin?:string,
+  person?:string,
   
 }
