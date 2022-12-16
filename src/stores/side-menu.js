@@ -29,23 +29,27 @@ const sideMenu = atom({
             pathname: "/parceiros",
             title: "Parceiros",
           },
+          {
+            icon: "",
+            pathname: "/produtos",
+            title: "Produtos",
+          },
         ],
       },
 
       {
         icon: "Box",
-        pathname: "/bnds",
-        title: "BNDS",
+        title: "BNDES",
         subMenu: [
           {
             icon: "",
-            pathname: "/bndsLeads",
-            title: "BNDS Leads",
+            pathname: "/bndesLeads",
+            title: "BNDES Leads",
           },
           {
             icon: "",
-            pathname: "/BNDS",
-            title: "BNDS",
+            pathname: "/BNDES",
+            title: "BNDES",
           },
         ],
       },
