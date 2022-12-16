@@ -3,20 +3,16 @@ import { DataGrid, GridToolbar, ptBR } from "@mui/x-data-grid";
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
-import {
-  Lucide,
-  Modal,
-  ModalBody,
-} from "@/base-components"; 
+import { Lucide, Modal, ModalBody } from "@/base-components";
 import api from "../../services/apiClient";
 import { Header } from "../Header";
 
 type Props = {
   columns: any[];
   rows: any[];
-  component: string
-  url: string
-}
+  component: string;
+  url: string;
+};
 const DataTable = ({ columns, rows, component, url }: Props) => {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const [records, setRecords] = useState<any[]>(rows);
@@ -25,21 +21,20 @@ const DataTable = ({ columns, rows, component, url }: Props) => {
 
   useEffect(() => {
     if (rows.length > 0) {
-      setRecords(rows)
+      setRecords(rows);
     }
-  }, [rows])
+  }, [rows]);
   const show = useCallback((id: string) => {
-    history.push(`${component}/${id}/visualizar`)
+    history.push(`${component}/${id}/visualizar`);
   }, []);
 
   const edit = useCallback((id: string) => {
-    history.push(`${component}/${id}`)
+    history.push(`${component}/${id}`);
   }, []);
 
   const remove = async (id: string) => {
-
     try {
-      await api.delete(`${url}/${id}`)
+      await api.delete(`${url}/${id}`);
       setDeleteConfirmationModal(false);
       toast.success("Cadastro excluido com sucesso!", {
         duration: 4000,
@@ -47,8 +42,8 @@ const DataTable = ({ columns, rows, component, url }: Props) => {
       });
       listUpdate(id);
     } catch (error: any) {
-      setDeleteConfirmationModal(false)
-      if (error.hasOwnProperty('response')) {
+      setDeleteConfirmationModal(false);
+      if (error.hasOwnProperty("response")) {
         toast.error(error.response.data.message, {
           duration: 4000,
           position: "top-center",
@@ -56,37 +51,49 @@ const DataTable = ({ columns, rows, component, url }: Props) => {
         return;
       }
 
-      toast.error("Sistema não conseguiu processar esta ação. Procure o administrador do sistema", {
-        duration: 4000,
-        position: "top-center",
-      });
+      toast.error(
+        "Sistema não conseguiu processar esta ação. Procure o administrador do sistema",
+        {
+          duration: 4000,
+          position: "top-center",
+        }
+      );
     }
-
   };
 
   function listUpdate(id: string) {
-    const recordsList = rows?.filter(record => record.id !== id);
+    const recordsList = rows?.filter((record) => record.id !== id);
     setRecords(recordsList);
   }
 
   const actions = {
-    field: 'action',
-    headerName: 'Ações',
+    field: "action",
+    headerName: "Ações",
     width: 200,
     sortable: false,
     disableClickEventBubbling: true,
 
     renderCell: (params: any) => {
-   
       return (
         <>
-          <button className="btn btn-primary mr-1 mb-1" onClick={() => show(params.row.id)}>
+          <button
+            className="btn btn-primary mr-1 mb-1 mt-1"
+            onClick={() => show(params.row.id)}
+          >
             <Lucide icon="Eye" className="w-4 h-4" />
           </button>
-          <button className="btn btn-warning mr-1 mb-1" onClick={() => edit(params.row.id)}>
+          <button
+            className="btn btn-warning mr-1 mb-1 mt-1"
+            onClick={() => edit(params.row.id)}
+          >
             <Lucide icon="Edit" className="w-4 h-4" />
           </button>
-          <button className="btn btn-danger mr-1 mb-1" onClick={() => { setId(params.row.id), setDeleteConfirmationModal(true)}}>
+          <button
+            className="btn btn-danger mr-1 mb-1 mt-1"
+            onClick={() => {
+              setId(params.row.id), setDeleteConfirmationModal(true);
+            }}
+          >
             <Lucide icon="Trash" className="w-4 h-4" />
           </button>
         </>
@@ -94,10 +101,14 @@ const DataTable = ({ columns, rows, component, url }: Props) => {
     },
   };
 
-  columns.push(actions)
+  columns.push(actions);
   return (
     <>
-      <Header title={component.toUpperCase()} url={component} action="Adicionar" />
+      <Header
+        title={component.toUpperCase()}
+        url={component}
+        action="Adicionar"
+      />
       <Box style={{ height: "auto", overflow: "auto" }} className="table mt-6">
         <DataGrid
           autoHeight
@@ -130,7 +141,8 @@ const DataTable = ({ columns, rows, component, url }: Props) => {
             />
             <div className="text-3xl mt-5">Tem certeza ?</div>
             <div className="text-slate-500 mt-2">
-              Você realmente deseja excluir esse registro?<br />
+              Você realmente deseja excluir esse registro?
+              <br />
               Este processo não pode ser desfeito.
             </div>
           </div>
@@ -144,7 +156,11 @@ const DataTable = ({ columns, rows, component, url }: Props) => {
             >
               Cancel
             </button>
-            <button type="button" className="btn btn-danger w-24" onClick={() => remove(id)}>
+            <button
+              type="button"
+              className="btn btn-danger w-24"
+              onClick={() => remove(id)}
+            >
               Delete
             </button>
           </div>
