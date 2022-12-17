@@ -10,19 +10,40 @@ import { MaskedInput } from "../../components/InputMask";
 import ButtonGoBack from "../../components/Button/backto";
 import { helper } from "../../utils";
 import Datepicker from "../../components/Inputs/Datepicker";
+import { useEffect, useState } from "react";
 
 type FormProps = {
   partner?: Partners;
   title?: string;
 };
 
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  document: string;
+  phone: string;
+}
+
 export function Form(dataForm?: FormProps) {
   const history = useHistory();
+  const [tipoPessoa, setTipoPessoa] = useState("PF");
+  const [colaboradores, setColaboradores] = useState<User[]>([])
   let parceiro: any;
   if (dataForm) {
     const { partner } = dataForm;
     parceiro = partner;
   }
+
+  useEffect(() => {
+    if (parceiro?.person) {
+      setTipoPessoa(parceiro?.person);
+    }
+    api.get(`/users`)
+      .then((response) => {
+        setColaboradores(response.data);
+      });
+  }, [])
 
   const schema = yup
     .object({
@@ -136,27 +157,51 @@ export function Form(dataForm?: FormProps) {
                   </div>
                 </div>
 
+               
+
                 <div className="grid grid-cols-12 gap-2 mt-3">
+                  <div className="input-form col-span-6">
+                    <label
+                      htmlFor="validation-form-2"
+                      className="form-label w-full flex flex-col sm:flex-row"
+                    >
+                      Tipo de Pessoa
+                    </label>
+                    <select
+                      id="person"
+                      {...register("person")}
+                      className="form-select  sm:mr-2"
+                      onChange={e => setTipoPessoa(e.target.value)}
+                    >
+                      <option value="PF">Pessoa Fisica</option>
+                      <option value="PJ">Pessoa Jurídica</option>
+                    </select>
+                  </div>
                   <div className="input-form col-span-6">
                     <label
                       htmlFor="validation-form-1"
                       className="form-label w-full flex flex-col sm:flex-row"
                     >
-                      CPF
+                      CPF/CNPJ
                     </label>
 
                     <MaskedInput
                       name="document"
                       id="document"
                       control={control}
-                      mask="999.999.999-99"
-                      placeholder="999.999.999-99"
+                      mask={tipoPessoa === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'}
+                      placeholder={tipoPessoa === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'}
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.document,
                       })}
                     />
                   </div>
+
+                </div>
+
+                <div className="grid grid-cols-12 gap-2 mt-3">
+
                   <div className="input-form col-span-6">
                     <label
                       htmlFor="validation-form-2"
@@ -164,8 +209,8 @@ export function Form(dataForm?: FormProps) {
                     >
                       RG
                     </label>
-                 
-                     <MaskedInput
+
+                    <MaskedInput
                       name="rg"
                       id="rg"
                       control={control}
@@ -177,9 +222,6 @@ export function Form(dataForm?: FormProps) {
                       })}
                     />
                   </div>
-                </div>
-
-                <div className="grid grid-cols-12 gap-2 mt-3">
                   <div className="input-form col-span-6">
                     <Datepicker
                       name="birth_date"
@@ -191,6 +233,10 @@ export function Form(dataForm?: FormProps) {
                       })}
                     />
                   </div>
+                </div>
+
+                <div className="grid grid-cols-12 gap-2 mt-3">
+            
                   <div className="input-form col-span-6">
                     <label
                       htmlFor="validation-form-2"
@@ -211,9 +257,6 @@ export function Form(dataForm?: FormProps) {
                       })}
                     />
                   </div>
-                </div>
-
-                <div className="grid grid-cols-12 gap-2 mt-3">
                   <div className="input-form col-span-6">
                     <label
                       htmlFor="validation-form-2"
@@ -231,6 +274,10 @@ export function Form(dataForm?: FormProps) {
                       <option value="M">Masculino</option>
                     </select>
                   </div>
+                </div>
+
+                <div className="grid grid-cols-12 gap-2 mt-3">
+                  
                   <div className="input-form col-span-6">
                     <label
                       htmlFor="validation-form-2"
@@ -248,6 +295,51 @@ export function Form(dataForm?: FormProps) {
                         "border-danger": errors.address,
                       })}
                       placeholder="Estado/Cidade/Rua"
+                    />
+                  </div>
+                  <div className="input-form col-span-6">
+                    <label
+                      htmlFor="validation-form-2"
+                      className="form-label w-full flex flex-col sm:flex-row"
+                    >
+                      Vendedor(a) responsável
+                    </label>
+                    <select
+                      id="seller_id"
+                      {...register("seller_id")}
+                      className="form-select  sm:mr-2"
+                    >
+                      <option >Selecione</option>
+                      {colaboradores.map(colaborador => (
+                        <option
+                          key={colaborador.id}
+                          value={colaborador.id}
+                          selected={colaborador.id === parceiro?.seller_id}>
+                          {colaborador.name}
+                        </option>)
+                      )}
+
+                    </select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-12 mt-3">
+                  <div className="input-form col-span-12">
+                    <label
+                      htmlFor="validation-form-1"
+                      className="form-label w-full flex flex-col sm:flex-row"
+                    >
+                      Origem do cliente
+                    </label>
+                    <input
+                      {...register("origin")}
+                      id="origin"
+                      type="text"
+                      name="origin"
+                      className={classnames({
+                        "form-control": true,
+                        "border-danger": errors.origin,
+                      })}
+                      placeholder="Site / Parceiros "
                     />
                   </div>
                 </div>

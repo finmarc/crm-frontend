@@ -35,12 +35,9 @@ export function Form(dataForm?: FormProps) {
     cliente = client as Clients;
   }
 
-
-  console.log(cliente)
   useEffect(() => {
     if (cliente?.person) {
       setTipoPessoa(cliente?.person);
-
     }
     api.get(`/users`)
       .then((response) => {
