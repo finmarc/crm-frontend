@@ -11,7 +11,6 @@ const sideMenu = atom({
       },
       {
         icon: "Box",
-        pathname: "/cadastro",
         title: "Cadastro",
         subMenu: [
           {
@@ -28,6 +27,11 @@ const sideMenu = atom({
             icon: "Briefcase",
             pathname: "/parceiros",
             title: "Parceiros",
+          },
+          {
+            icon: "",
+            pathname: "/produtos",
+            title: "Produtos",
           },
         ],
       },
