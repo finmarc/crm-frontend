@@ -5,7 +5,7 @@ import { RecoilRoot } from "recoil";
 import AppProvider from "./contexts";
 import Router from "./router";
 import { Toaster } from "react-hot-toast";
-
+import 'react-tailwindcss-select/dist/index.css'
 function App() {
   return (
     <>

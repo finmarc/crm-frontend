@@ -23,7 +23,7 @@ export default function CardUpload(props: Props) {
         <ul className="mb-3 ">
             {
             docs.map(doc => (
-              <div className="flex justify-around">
+              <div key={doc?.document.id} className="flex justify-around">
                 <li className="text-red-500 text-xs mr-1">
                   <a target="_blank" href={doc?.document.path}>
                     {doc?.document.filename}

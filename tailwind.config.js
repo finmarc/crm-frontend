@@ -9,6 +9,8 @@ module.exports = {
     "./src/**/*.{php,html,js,jsx,ts,tsx,vue}",
     "./resources/**/*.{php,html,js,jsx,ts,tsx,vue}",
     "./node_modules/@left4code/tw-starter/**/*.js",
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/react-tailwindcss-select/dist/index.esm.js",
     // ".//*.html",
   ],
   darkMode: "class",

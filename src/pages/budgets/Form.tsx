@@ -5,17 +5,20 @@ import classnames from "classnames";
 import SelectCustom from "../../components/Inputs/Select";
 import InputText from "../../components/Inputs/InputText";
 import InputMaskMoney from "../../components/Inputs/InputMaskMoney";
-import { Client, Partner, Product, Status, Types } from "./interfaces/budget";
+import { Partner, Product, Status, Types } from "./interfaces/budget";
+import { Dropdown } from "../../components/Inputs/Dropdown";
 import api from "../../services/apiClient";
+
 
 type Props = {
     initialData?: any
     isDisabled?: boolean,
     handleSubmit: any,
 }
-const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit}) => {
+const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit }) => {
     const formRef = useRef<FormHandles>(null);
-    const [clients, setClients] = useState<Client[]>([]);
+    const [clients, setClients] = useState<any[]>([]);
+    const [client, setClient] = useState<any>();
     const [partners, setPartners] = useState<Partner[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [status, setStatus] = useState<Status[]>([]);
@@ -28,16 +31,46 @@ const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit}) => {
         const responseStatus = await api.get("/budget/status");
         const responseTypes = await api.get("/budget/types");
 
-        setClients(responseClients?.data);
         setProducts(responseProducts?.data);
         setPartners(responsePartners?.data);
         setStatus(responseStatus?.data);
         setTypes(responseTypes?.data);
     }, []);
 
+    const mapResponseToValuesAndLabels = (data: any) => ({
+        value: data.id,
+        label: data.name,
+    });
+
+    function clientOptions() {
+        api.get("/clients").then(response => {
+            const clientes = response.data.map(mapResponseToValuesAndLabels)
+            setClients(clientes)
+        })
+    }
+
+
+    function initialClientOption() {
+        const { client } = initialData;
+        const data = {
+            value: client?.id,
+            label: client?.name,
+        }
+        setClient(data);
+    }
+
+
     useEffect(() => {
         initialDataSelect()
+        clientOptions()
+        initialClientOption()
     }, [])
+
+
+
+    function handleChange(value: any) {
+        setClient(value)
+    }
 
     return (
         <>
@@ -46,6 +79,13 @@ const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit}) => {
                 initialData={initialData}
                 onSubmit={handleSubmit}
             >
+
+                <InputText
+                    type="hidden"
+                    name="client_id"
+                    classname="first-line:"
+                    defaultValue={client?.value}
+                />
                 <div className="input-form">
                     <SelectCustom
                         disabled={isDisabled}
@@ -57,15 +97,13 @@ const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit}) => {
                         options={types}
                     />
                 </div>
-                <div className="input-form mt-3">
-                    <SelectCustom
-                        disabled={isDisabled}
-                        className={classnames({
-                            "form-control": true,
-                        })}
-                        label="Cliente"
-                        name="client_id"
+                <div className="mt-3">
+                    <Dropdown
+                        handleChange={handleChange}
                         options={clients}
+                        isDisabled={isDisabled}
+                        label="Cliente"
+                        defaultValue={client}
                     />
                 </div>
 
@@ -77,6 +115,7 @@ const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit}) => {
                         })}
                         label="Produto/Serviço"
                         name="product_id"
+
                         options={products}
                     />
                 </div>
@@ -127,7 +166,7 @@ const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit}) => {
                 >
                     Salvar
                 </button>)}
-            </Unform> 
+            </Unform>
         </>
     );
 }

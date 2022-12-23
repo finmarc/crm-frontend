@@ -29,7 +29,7 @@ const EditBudget = () => {
   const location = useLocation();
   const history = useHistory();
 
-  const [initialDataBudget, setInitialDataBudget] = useState<BudgetEdit>();
+  const [initialDataBudget, setInitialDataBudget] = useState<any>();
   const [documents, setDocuments] = useState<Documents[]>([]);
   const [documentTypes, setDocumentTypes] = useState<any[]>([]);
   const isDisabled = location.pathname.includes("visualizar");
@@ -45,6 +45,7 @@ const EditBudget = () => {
         setInitialDataBudget({
           type_id: data?.type?.id,
           client_id: data?.client?.id,
+          client: data?.client,
           product_id: data?.product?.id,
           status_id: data?.status?.id,
           partner_id: data?.partner?.id,
@@ -59,7 +60,7 @@ const EditBudget = () => {
     getBudget();
   }, []);
 
-  const handleSubmit: SubmitHandler<BudgetEdit> = async (data) => {
+  const handleSubmit: SubmitHandler<any> = async (data) => {
     const response = await api.patch(`budgets/${id}`, data);
     const { status } = response;
     if (status == 200) {
