@@ -61,9 +61,7 @@ export const Budget = () => {
   }, [fetchData]);
 
   return (
-    <>
       <DataTable rows={budgets} columns={columns} component="orcamento" title="ORÇAMENTOS" url="budgets" />
-    </>
   );
 };
 

@@ -269,7 +269,7 @@ export function Form(dataForm?: FormProps) {
                       {...register("sexo")}
                       className="form-select  sm:mr-2"
                     >
-                      <option>Selecione</option>
+                      <option value="">Selecione</option>
                       <option value="F">Feminino</option>
                       <option value="M">Masculino</option>
                     </select>
@@ -309,7 +309,7 @@ export function Form(dataForm?: FormProps) {
                       {...register("seller_id")}
                       className="form-select  sm:mr-2"
                     >
-                      <option >Selecione</option>
+                      <option value="">Selecione</option>
                       {colaboradores.map(colaborador => (
                         <option
                           key={colaborador.id}

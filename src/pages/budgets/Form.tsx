@@ -51,7 +51,7 @@ const Form: React.FC<Props> = ({ initialData, isDisabled, handleSubmit }) => {
 
 
     function initialClientOption() {
-        const { client } = initialData;
+        const client  = initialData?.client;
         const data = {
             value: client?.id,
             label: client?.name,
