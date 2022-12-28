@@ -9,11 +9,14 @@ import ClientEdit from "../pages/clientes/edit";
 import Dashboard from "../pages/dashboard/Main";
 import Login from "../pages/login";
 import Parceiro from "../pages/parceiros";
+import TipoDocumento from "../pages/tipo-documento";
+import TipoDocumentoEdit from "../pages/tipo-documento/edit";
 import PartnerEdit from "../pages/parceiros/edit";
 import PartnersDetails from "../pages/parceiros/show";
 import Route from "./Route";
 import { Form } from "../pages/colaboradores/Form";
 import { Form as ParceiroForm } from "../pages/parceiros/Form";
+import { Form as TipoDocumentoForm } from "../pages/tipo-documento/Form";
 import { Form as ClienteForm } from "../pages/clientes/Form"
 import { CreateBudget } from "../pages/budgets/create"
 import { Budget } from "../pages/budgets";
@@ -44,6 +47,12 @@ const Router = () => (
         <Route path="/parceiro" exact isPrivate component={ParceiroForm} />
         <Route path="/parceiro/:id/visualizar" exact isPrivate component={PartnersDetails} />
         <Route path="/parceiro/:id" exact isPrivate component={PartnerEdit} />
+
+        <Route path="/tipo-documentos" isPrivate component={TipoDocumento} />
+        <Route path="/tipo-documento" exact isPrivate component={TipoDocumentoForm} />
+        {/* <Route path="/tipo-documento/:id/visualizar" exact isPrivate component={PartnersDetails} /> */}
+        <Route path="/tipo-documento/:id" exact isPrivate component={TipoDocumentoEdit} />
+
         <Route path="/produtos" exact isPrivate component={ProductIndex} />
         <Route path="/produto/:id" exact isPrivate component={ProdutoEdit} />
         <Route path="/produto/:id/visualizar" exact isPrivate component={ProdutoEdit} />

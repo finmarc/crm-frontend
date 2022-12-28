@@ -33,6 +33,11 @@ const sideMenu = atom({
             pathname: "/produtos",
             title: "Produtos",
           },
+          {
+            icon: "",
+            pathname: "/tipo-documentos",
+            title: "Tipos de Documento",
+          },
         ],
       },
 
