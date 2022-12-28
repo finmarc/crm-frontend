@@ -3,7 +3,6 @@ import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { createContext, useCallback, useState, useContext, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useHistory, useLocation } from "react-router-dom";
-import { json } from "stream/consumers";
 import api from "../services/apiClient";
 import { helper } from "../utils";
 
@@ -89,18 +88,18 @@ export const AuthProvider = ({ children }: any) => {
       }
 
       setCookie(undefined, "@token", token, {
-        maxAge: 60 * 60 * 24 * 30, 
+        maxAge: 60 * 60 * 24 * 90, 
         path: "/",
       });
 
 
       setCookie(undefined, "@user", user, {
-        maxAge: 60 * 60 * 24 * 30, 
+        maxAge: 60 * 60 * 24 * 90, 
         path: "/",
       });
 
       setCookie(undefined, "@refreshToken", refreshToken, {
-        maxAge: 60 * 60 * 24 * 30, 
+        maxAge: 60 * 60 * 24 * 90, 
         path: "/",
       });
 
