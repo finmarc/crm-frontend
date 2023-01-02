@@ -73,7 +73,8 @@ const Parceiro = () => {
         rows={partners}
         columns={columns}
         component="parceiro"
-        url="parceiros"
+        url="partners"
+        title="PARCEIROS"
       />
     </>
   );
