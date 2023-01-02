@@ -19,9 +19,9 @@ interface Select {
 interface User {
   id?: string;
   name: string;
-  document: string;
+  document?: string;
   password?: string;
-  email: string;
+  email?: string;
   phone: string;
   role_id?: string;
   role?: any
@@ -59,9 +59,7 @@ export function Form(dataForm?: FormProps) {
   const schema = yup
     .object({
       name: yup.string().required().min(2),
-      email: yup.string().required().email(),
-      document: yup.string().required().min(11),
-      password: yup.string().min(6),
+      phone: yup.string()
     })
     .required();
 
