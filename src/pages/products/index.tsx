@@ -9,7 +9,7 @@ export const ProductIndex = () => {
     {
       field: "name",
       headerName: "Nome",
-      width: 150,
+      width: 490,
     },
   ]
 

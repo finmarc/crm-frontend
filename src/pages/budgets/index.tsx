@@ -9,7 +9,7 @@ export const Budget = () => {
     {
       field: "codigo",
       headerName: "Código",
-      width: 150,
+      width: 60,
     },
     {
       field: "cliente",
@@ -19,7 +19,7 @@ export const Budget = () => {
     {
       field: "produto",
       headerName: "Produto/Serviço",
-      width: 150,
+      width: 260,
     },
     {
       field: "parceiro",
@@ -29,13 +29,13 @@ export const Budget = () => {
     {
       field: "situacao",
       headerName: "Situação",
-      width: 150,
+      width: 180,
     },
     {
-      field: "tipo",
-      headerName: "Tipo",
+      field: "responsavel",
+      headerName: "Consultor(a)",
       width: 150,
-    },
+    }
   ]
 
   const fetchData = useCallback(async () => {
@@ -50,7 +50,7 @@ export const Budget = () => {
       produto: budget.product.name,
       parceiro: budget.partner?.name,
       situacao: budget.status.name,
-      tipo: budget.type.name
+      responsavel: budget?.user?.name
     }))
 
     setBudgets(responseData);

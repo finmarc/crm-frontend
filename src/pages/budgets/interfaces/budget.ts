@@ -41,6 +41,7 @@ export default interface Budget {
   partner: Partner;
   product: Product;
   status: Status;
+  user: any
   documents: Documents[];
   observation: string;
 }
