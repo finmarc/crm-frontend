@@ -78,32 +78,63 @@ const EditBudget = () => {
   };
 
 
-  const handleSubmitFiles = (e: any, file: FileList, index: number) => {
+  const handleSubmitFiles = (e: any, files: FileList, index: number) => {
     e.preventDefault();
 
-    const fileUpload = file[0];
+    let count = 0;
+    for(let i = 0 ; i <= files.length;  i++) {
 
-    const formData = new FormData();
-    formData.append("type", String(index));
-    formData.append("budget_id", id);
-    formData.append("file", fileUpload);
+      const fileUpload = files[i];
 
-    api
-      .post("budgets/documents", formData)
-      .then((res) => {
-        setDocuments(prevItems => [...prevItems, res?.data])
-        toast.success("Upload realizado com sucesso!", {
-          duration: 4000,
-          position: "top-right",
+      const formData = new FormData();
+      formData.append("type", String(index));
+      formData.append("budget_id", id);
+      formData.append("file", fileUpload);
+
+      api
+        .post("budgets/documents", formData)
+        .then((res) => {
+          setDocuments(prevItems => [...prevItems, res?.data])
+          count++;
+     
+        })
+        .catch((err) => {
+          toast.error("Ops! Algo deu errado ao fazer upload", {
+            duration: 4000,
+            position: "top-right",
+          });
+        }).finally(() => {
+          if (count === files.length) {
+            toast.success("Upload realizado com sucesso!", {
+              duration: 4000,
+              position: "top-right",
+            });
+          }
         });
-        return;
-      })
-      .catch((err) => {
-        toast.error("Ops! Algo deu errado ao fazer upload", {
-          duration: 4000,
-          position: "top-right",
-        });
-      });
+
+    }
+
+    // const formData = new FormData();
+    // formData.append("type", String(index));
+    // formData.append("budget_id", id);
+    // formData.append("file", fileUpload);
+
+    // api
+    //   .post("budgets/documents", formData)
+    //   .then((res) => {
+    //     setDocuments(prevItems => [...prevItems, res?.data])
+    //     toast.success("Upload realizado com sucesso!", {
+    //       duration: 4000,
+    //       position: "top-right",
+    //     });
+    //     return;
+    //   })
+    //   .catch((err) => {
+    //     toast.error("Ops! Algo deu errado ao fazer upload", {
+    //       duration: 4000,
+    //       position: "top-right",
+    //     });
+    //   });
   }
 
   const handleRemoveDocument = (id: string) => {
