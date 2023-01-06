@@ -68,13 +68,14 @@ export function Form(dataForm?: FormProps) {
   const onSubmit: SubmitHandler<any> = async (data: Clients) => {
 
     let response;
-    if (data?.birth_date){
-      const dateFormat = helper.dateFormatToISOString(data.birth_date);
-      data = {
-        ...data,
-        birth_date: dateFormat
-      }
-    }
+    // if (data?.birth_date){
+    //   const dateFormat = data?.birth_date;
+
+    //   data = {
+    //     ...data,
+    //     birth_date: dateFormat
+    //   }
+    // }
   
     if (cliente && cliente.id) {
       response = await api.patch(`clients/${cliente.id}`, data);
