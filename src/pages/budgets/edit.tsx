@@ -22,8 +22,6 @@ export interface BudgetEdit {
   description?: string;
   observation?: string;
 }
-
-
 const EditBudget = () => {
   const { id } = useParams<any>();
   const location = useLocation();
@@ -33,27 +31,27 @@ const EditBudget = () => {
   const [documents, setDocuments] = useState<Documents[]>([]);
   const [documentTypes, setDocumentTypes] = useState<any[]>([]);
   const isDisabled = location.pathname.includes("visualizar");
+  const [selectedIndex, setSelectedIndex] = useState<any>(0);
 
   function getBudget() {
-    api.get(`/budgets/${id}`)
-      .then((response) => {
-        const { data } = response;
-        setDocuments(data?.documents);
-        data?.product.types.forEach((data: any) => {
-          setDocumentTypes(prevItems => [...prevItems, data.documentType]);
-        })
-        setInitialDataBudget({
-          type_id: data?.type?.id,
-          client_id: data?.client?.id,
-          client: data?.client,
-          product_id: data?.product?.id,
-          status_id: data?.status?.id,
-          partner_id: data?.partner?.id,
-          observation: data?.observation,
-          description: data?.description,
-          amount_loan: data?.amount_loan
-        });
+    api.get(`/budgets/${id}`).then((response) => {
+      const { data } = response;
+      setDocuments(data?.documents);
+      data?.product.types.forEach((data: any) => {
+        setDocumentTypes((prevItems) => [...prevItems, data.documentType]);
       });
+      setInitialDataBudget({
+        type_id: data?.type?.id,
+        client_id: data?.client?.id,
+        client: data?.client,
+        product_id: data?.product?.id,
+        status_id: data?.status?.id,
+        partner_id: data?.partner?.id,
+        observation: data?.observation,
+        description: data?.description,
+        amount_loan: data?.amount_loan,
+      });
+    });
   }
 
   useEffect(() => {
@@ -77,13 +75,11 @@ const EditBudget = () => {
     }
   };
 
-
   const handleSubmitFiles = (e: any, files: FileList, index: number) => {
     e.preventDefault();
 
     let count = 0;
-    for(let i = 0 ; i <= files.length;  i++) {
-
+    for (let i = 0; i <= files.length; i++) {
       const fileUpload = files[i];
 
       const formData = new FormData();
@@ -94,16 +90,17 @@ const EditBudget = () => {
       api
         .post("budgets/documents", formData)
         .then((res) => {
-          setDocuments(prevItems => [...prevItems, res?.data])
+          setSelectedIndex(3);
+          setDocuments((prevItems) => [...prevItems, res?.data]);
           count++;
-     
         })
         .catch((err) => {
           toast.error("Ops! Algo deu errado ao fazer upload", {
             duration: 4000,
             position: "top-right",
           });
-        }).finally(() => {
+        })
+        .finally(() => {
           if (count === files.length) {
             toast.success("Upload realizado com sucesso!", {
               duration: 4000,
@@ -111,7 +108,6 @@ const EditBudget = () => {
             });
           }
         });
-
     }
 
     // const formData = new FormData();
@@ -135,14 +131,15 @@ const EditBudget = () => {
     //       position: "top-right",
     //     });
     //   });
-  }
+  };
 
   const handleRemoveDocument = (id: string) => {
-    const newArraydocuments = documents.filter(doc => doc.document.id !== id);
-    setDocuments(newArraydocuments)
+    const newArraydocuments = documents.filter((doc) => doc.document.id !== id);
+    setDocuments(newArraydocuments);
     api
       .delete(`budgets/documents/${id}`)
       .then((res) => {
+        setSelectedIndex(3);
         toast.success("Documento deletado com sucesso!", {
           duration: 4000,
           position: "top-right",
@@ -154,19 +151,22 @@ const EditBudget = () => {
           position: "top-right",
         });
       });
-  }
+  };
 
   return (
     <>
       <div className="intro-y flex items-center mt-8">
-        <h2 className="text-lg font-medium mr-auto"> {isDisabled ? "Visualizar" : "Editar"} orçamento</h2>
+        <h2 className="text-lg font-medium mr-auto">
+          {" "}
+          {isDisabled ? "Visualizar" : "Editar"} orçamento
+        </h2>
         <ButtonGoBack route={"/orcamentos"} />
       </div>
       <div className="mt-5">
         <div className="intro-y col-span-12 lg:col-span-6">
           <div className="intro-y box">
             <div className="p-5">
-              <TabGroup>
+              <TabGroup selectedIndex={selectedIndex}>
                 <TabList className="nav-boxed-tabs">
                   <Tab className="w-full py-2 geral" tag="button">
                     Dados gerais
@@ -186,7 +186,11 @@ const EditBudget = () => {
                     <div className="intro-y box">
                       <div className="p-5">
                         {initialDataBudget?.type_id && (
-                          <Form isDisabled={isDisabled} initialData={initialDataBudget} handleSubmit={handleSubmit} />
+                          <Form
+                            isDisabled={isDisabled}
+                            initialData={initialDataBudget}
+                            handleSubmit={handleSubmit}
+                          />
                         )}
                       </div>
                     </div>
@@ -201,7 +205,10 @@ const EditBudget = () => {
                   <TabPanel className="leading-relaxed">
                     <div className="intro-y box">
                       <div className="p-5">
-                        <FormObservacao isDisabled={isDisabled} initialData={initialDataBudget?.observation} />
+                        <FormObservacao
+                          isDisabled={isDisabled}
+                          initialData={initialDataBudget?.observation}
+                        />
                       </div>
                     </div>
                   </TabPanel>
@@ -209,24 +216,24 @@ const EditBudget = () => {
                     <div className="intro-y col-span-12 lg:col-span-6">
                       <div className="flex justify-center items-center w-full">
                         <div className="container grid lg:grid-cols-3 gap-2 ">
-                          {documentTypes.length > 0 && documentTypes.map((type) => {
-                            return (
-                              <CardUpload
-                                key={type.id}
-                                documents={documents}
-                                onChange={handleSubmitFiles}
-                                onRemove={handleRemoveDocument}
-                                id={type.id}
-                                description={type.name}
-                                titleIndex={type.name}
-                              />
-                            );
-                          })}
+                          {documentTypes.length > 0 &&
+                            documentTypes.map((type) => {
+                              return (
+                                <CardUpload
+                                  key={type.id}
+                                  documents={documents}
+                                  onChange={handleSubmitFiles}
+                                  onRemove={handleRemoveDocument}
+                                  id={type.id}
+                                  description={type.name}
+                                  titleIndex={type.name}
+                                />
+                              );
+                            })}
                         </div>
                       </div>
                     </div>
                   </TabPanel>
-
                 </TabPanels>
               </TabGroup>
             </div>
