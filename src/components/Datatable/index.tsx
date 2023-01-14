@@ -120,7 +120,7 @@ const DataTable = ({ columns, rows, component, url, title, hideButtonDelete, hid
           density="compact"
           rows={records}
           columns={columns}
-          pageSize={10}
+          pageSize={50}
           checkboxSelection
           disableSelectionOnClick
           showColumnRightBorder={false}
