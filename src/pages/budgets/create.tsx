@@ -30,23 +30,23 @@ export function CreateBudget(dataForm?: FormProps) {
     .required();
 
   const handleSubmit: SubmitHandler<Budget> = async (data) => {
-
-    try{
+    try {
       const response = await api.post("budgets", data);
       const { status } = response;
       if (status == 201) {
+        const { id } = response.data;
         toast.success("Cadastro realizado com sucesso!", {
           duration: 4000,
           position: "top-right",
         });
-        history.push("/orcamentos");
+        history.push(`/orcamento/${id}`);
       }
-    }catch(err) {
+    } catch (err) {
       toast.error("Ops! Algo deu errado", {
         duration: 4000,
         position: "top-right",
       });
-    };
+    }
   };
 
   return (
@@ -61,7 +61,7 @@ export function CreateBudget(dataForm?: FormProps) {
         <div className="intro-y col-span-12 lg:col-span-6">
           <div className="intro-y box">
             <div className="p-5">
-              <Form handleSubmit={handleSubmit}  />
+              <Form handleSubmit={handleSubmit} />
             </div>
           </div>
         </div>
