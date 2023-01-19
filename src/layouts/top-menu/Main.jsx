@@ -25,7 +25,7 @@ function Main() {
 
   return (
     <div className="py-5 md:py-0">
-      <DarkModeSwitcher />
+      {/* <DarkModeSwitcher /> */}
       <MainColorSwitcher />
       <MobileMenu />
       <TopBar className="top-bar-boxed--top-menu" />

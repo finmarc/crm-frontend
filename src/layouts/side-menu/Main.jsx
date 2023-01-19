@@ -13,7 +13,7 @@ import MainColorSwitcher from "@/components/main-color-switcher/Main";
 import DarkModeSwitcher from "@/components/dark-mode-switcher/Main";
 import SideMenuTooltip from "@/components/side-menu-tooltip/Main";
 
-function Main({children}) {
+function Main({ children }) {
   const navigate = useHistory();
   const location = useLocation();
   const [formattedMenu, setFormattedMenu] = useState([]);
@@ -27,7 +27,7 @@ function Main({children}) {
 
   return (
     <div className="py-5 md:py-0">
-      <DarkModeSwitcher />
+      {/* <DarkModeSwitcher /> */}
       <MainColorSwitcher />
       <MobileMenu />
       <TopBar />
@@ -188,7 +188,7 @@ function Main({children}) {
         {/* BEGIN: Content */}
         <div className="content">
           {/* <Outlet /> */}
-          { children}
+          {children}
         </div>
         {/* END: Content */}
       </div>
