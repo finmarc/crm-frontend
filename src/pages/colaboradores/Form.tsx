@@ -11,6 +11,7 @@ import { MaskedInput } from "../../components/InputMask";
 import { Input } from "../../components/Input";
 import { Select } from "../../components/Select";
 import ButtonGoBack from "../../components/Button/backto";
+import { AxiosError } from "axios";
 
 interface Select {
   value: string;
@@ -74,41 +75,58 @@ export function Form(dataForm?: FormProps) {
   });
 
   const onSubmit: SubmitHandler<User> = async (data: User) => {
-    let response;
-    
-    data = {
-      ...data,
-      role_id: data?.ReactSelect?.value
-    }
-    
 
-    delete data?.ReactSelect;
-    if (user && user.id) {
-      response = await api.patch(`users/${user.id}`, data);
-    } else {
-      response = await api.post("users", data);
-    }
+    try {
+      let response;
+      data = {
+        ...data,
+        role_id: data?.ReactSelect?.value
+      }
 
-    const { status } = response;
+      delete data?.ReactSelect;
+      if (user && user.id) {
+        response = await api.patch(`users/${user.id}`, data);
+      } else {
+        response = await api.post("users", data);
+      }
 
-    if (status == 200) {
-      toast.success("Cadastro atualizado com sucesso!", {
-        duration: 4000,
-        position: "top-right",
-      });
-      history.push("/colaboradores")
-    } else if (status == 201) {
-      toast.success("Cadastro realizado com sucesso!", {
-        duration: 4000,
-        position: "top-right",
-      });
-      history.push("/colaboradores")
-    } else {
-      toast.error("Ops! Algo deu errado", {
-        duration: 4000,
-        position: "top-right",
-      });
+      const { status } = response;
+
+      if (status == 200) {
+        toast.success("Cadastro atualizado com sucesso!", {
+          duration: 4000,
+          position: "top-right",
+        });
+        history.push("/colaboradores")
+      } else if (status == 201) {
+        toast.success("Cadastro realizado com sucesso!", {
+          duration: 4000,
+          position: "top-right",
+        });
+        history.push("/colaboradores")
+      } else {
+        toast.error("Ops! Algo deu errado", {
+          duration: 4000,
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const { statusCode, message } = error?.response?.data
+        if (statusCode === 409) {
+          toast.error("(E-mail ou documento) já foi cadastrado", {
+            duration: 4000,
+            position: "top-right",
+          });
+          return;
+        }
+        toast.error("Ops! Algo deu errado", {
+          duration: 4000,
+          position: "top-right",
+        });
+      }
     }
+   
   };
 
   return (

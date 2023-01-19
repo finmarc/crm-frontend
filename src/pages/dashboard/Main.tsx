@@ -21,7 +21,6 @@ function Main() {
     setCountClients(clients.data.length);
 
     const orcamentosAprovados = response.data.filter((item: any) => item?.status?.name === 'Aprovado');
-    console.log(response.data);
     setCountOrcamentosAprovados(orcamentosAprovados.length);
     const orcamentosReprovados = response.data.filter((item: any) => item?.status?.name === 'Reprovado');
     setCountOrcamentosReprovados(orcamentosReprovados.length);

@@ -11,6 +11,7 @@ import ButtonGoBack from "../../components/Button/backto";
 import Datepicker from "../../components/Inputs/Datepicker";
 import { helper } from "../../utils";
 import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
 
 type FormProps = {
   client?: Clients;
@@ -67,33 +68,46 @@ export function Form(dataForm?: FormProps) {
 
   const onSubmit: SubmitHandler<any> = async (data: Clients) => {
 
-    let response;
-  
-    if (cliente && cliente.id) {
-      response = await api.patch(`clients/${cliente.id}`, data);
-    } else {
-      response = await api.post("clients", data);
-    }
+    try{
+      let response;
 
-    const { status } = response;
-    if (status == 200) {
-      toast.success("Cadastro atualizado com sucesso!", {
-        duration: 4000,
-        position: "top-right",
-      });
-      history.push("/clientes");
-    } else if (status == 201) {
-      toast.success("Cadastro realizado com sucesso!", {
-        duration: 4000,
-        position: "top-right",
-      });
-      history.push("/clientes");
-    } else {
-      toast.error("Ops! Algo deu errado", {
-        duration: 4000,
-        position: "top-right",
-      });
+      if (cliente && cliente.id) {
+        response = await api.patch(`clients/${cliente.id}`, data);
+      } else {
+        response = await api.post("clients", data);
+      }
+
+      const { status } = response;
+      if (status == 200) {
+        toast.success("Cadastro atualizado com sucesso!", {
+          duration: 4000,
+          position: "top-right",
+        });
+        history.push("/clientes");
+      } else if (status == 201) {
+        toast.success("Cadastro realizado com sucesso!", {
+          duration: 4000,
+          position: "top-right",
+        });
+        history.push("/clientes");
+      }
+    }catch(error){
+      if(error instanceof AxiosError){
+        const { statusCode, message } = error?.response?.data
+        if(statusCode === 409){
+          toast.error("Documento já esta cadastrado", {
+            duration: 4000,
+            position: "top-right",
+          });
+          return;
+        }
+        toast.error("Ops! Algo deu errado", {
+          duration: 4000,
+          position: "top-right",
+        });      
+      }
     }
+    
   };
 
   return (
