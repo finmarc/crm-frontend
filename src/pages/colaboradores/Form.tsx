@@ -114,7 +114,7 @@ export function Form(dataForm?: FormProps) {
       if (error instanceof AxiosError) {
         const { statusCode, message } = error?.response?.data
         if (statusCode === 409) {
-          toast.error("(E-mail ou documento) já foi cadastrado", {
+          toast.error(message, {
             duration: 4000,
             position: "top-right",
           });
