@@ -49,7 +49,7 @@ export const Budget = () => {
       cliente: budget.client.name,
       produto: budget.product.name,
       parceiro: budget.partner?.name,
-      situacao: budget.status.name,
+      situacao: budget.status?.name,
       responsavel: budget?.user?.name
     }))
 
