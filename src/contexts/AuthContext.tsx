@@ -1,6 +1,12 @@
 import { AxiosError } from "axios";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
-import { createContext, useCallback, useState, useContext, useEffect } from "react";
+import {
+  createContext,
+  useCallback,
+  useState,
+  useContext,
+  useEffect,
+} from "react";
 import toast from "react-hot-toast";
 import { useHistory, useLocation } from "react-router-dom";
 import api from "../services/apiClient";
@@ -58,7 +64,7 @@ export const AuthProvider = ({ children }: any) => {
           const user = response.data;
           setData({
             token,
-            user
+            user,
           });
         })
         .catch((error: AxiosError) => {
@@ -88,18 +94,17 @@ export const AuthProvider = ({ children }: any) => {
       }
 
       setCookie(undefined, "@token", token, {
-        maxAge: 60 * 60 * 24 * 90, 
+        maxAge: 60 * 60 * 24 * 90,
         path: "/",
       });
 
-
       setCookie(undefined, "@user", user, {
-        maxAge: 60 * 60 * 24 * 90, 
+        maxAge: 60 * 60 * 24 * 90,
         path: "/",
       });
 
       setCookie(undefined, "@refreshToken", refreshToken, {
-        maxAge: 60 * 60 * 24 * 90, 
+        maxAge: 60 * 60 * 24 * 90,
         path: "/",
       });
 
@@ -108,6 +113,7 @@ export const AuthProvider = ({ children }: any) => {
       setData({ token, user });
     } catch (err: any) {
       toast.dismiss(toastId);
+      console.log(err);
       toast.error("Ops! Usuário ou senha inválido", {
         duration: 4000,
         position: "top-right",
