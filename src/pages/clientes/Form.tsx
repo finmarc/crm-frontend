@@ -24,15 +24,15 @@ type User = {
   email: string;
   document: string;
   phone: string;
-}
+};
 
 export function Form(dataForm?: FormProps) {
   const history = useHistory();
   const [tipoPessoa, setTipoPessoa] = useState("PF");
-  const [colaboradores, setColaboradores] = useState<User[]>([])
+  const [colaboradores, setColaboradores] = useState<User[]>([]);
   let cliente: any;
   if (dataForm) {
-    const { client } = dataForm
+    const { client } = dataForm;
     cliente = client as Clients;
   }
 
@@ -40,11 +40,10 @@ export function Form(dataForm?: FormProps) {
     if (cliente?.person) {
       setTipoPessoa(cliente?.person);
     }
-    api.get(`/users`)
-      .then((response) => {
-        setColaboradores(response.data);
-      });
-  }, [])
+    api.get(`/users`).then((response) => {
+      setColaboradores(response.data);
+    });
+  }, []);
 
   const schema = yup
     .object({
@@ -65,10 +64,8 @@ export function Form(dataForm?: FormProps) {
     defaultValues: cliente ?? {},
   });
 
-
   const onSubmit: SubmitHandler<any> = async (data: Clients) => {
-
-    try{
+    try {
       let response;
 
       if (cliente && cliente.id) {
@@ -91,10 +88,10 @@ export function Form(dataForm?: FormProps) {
         });
         history.push("/clientes");
       }
-    }catch(error){
-      if(error instanceof AxiosError){
-        const { statusCode, message } = error?.response?.data
-        if(statusCode === 409){
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const { statusCode, message } = error?.response?.data;
+        if (statusCode === 409) {
           toast.error("Documento já esta cadastrado", {
             duration: 4000,
             position: "top-right",
@@ -104,10 +101,9 @@ export function Form(dataForm?: FormProps) {
         toast.error("Ops! Algo deu errado", {
           duration: 4000,
           position: "top-right",
-        });      
+        });
       }
     }
-    
   };
 
   return (
@@ -173,18 +169,19 @@ export function Form(dataForm?: FormProps) {
                       htmlFor="validation-form-2"
                       className="form-label w-full flex flex-col sm:flex-row"
                     >
-                      Tipo de Pessoa
+                      {tipoPessoa === "PJ" ? "Razão Social" : "Tipo de Pessoa"}
                     </label>
                     <select
                       id="person"
                       {...register("person")}
-                      className="form-select  sm:mr-2"
-                      onChange={e => setTipoPessoa(e.target.value)}
+                      className="form-select sm:mr-2"
+                      onChange={(e) => setTipoPessoa(e.target.value)}
                     >
                       <option value="PF">Pessoa Fisica</option>
                       <option value="PJ">Pessoa Jurídica</option>
                     </select>
                   </div>
+
                   <div className="input-form col-span-6">
                     <label
                       htmlFor="validation-form-1"
@@ -197,50 +194,63 @@ export function Form(dataForm?: FormProps) {
                       name="document"
                       id="document"
                       control={control}
-                      mask={tipoPessoa === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'}
-                      placeholder={tipoPessoa === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'}
+                      mask={
+                        tipoPessoa === "PF"
+                          ? "999.999.999-99"
+                          : "99.999.999/9999-99"
+                      }
+                      placeholder={
+                        tipoPessoa === "PF"
+                          ? "999.999.999-99"
+                          : "99.999.999/9999-99"
+                      }
                       className={classnames({
                         "form-control": true,
                         "border-danger": errors.document,
                       })}
                     />
                   </div>
-
                 </div>
 
                 <div className="grid grid-cols-12 gap-2 mt-3">
-                  <div className="input-form col-span-6">
-                    <label
-                      htmlFor="validation-form-2"
-                      className="form-label w-full flex flex-col sm:flex-row"
-                    >
-                      RG
-                    </label>
-
-                    <MaskedInput
-                      name="rg"
-                      id="rg"
-                      control={control}
-                      mask="9.999-999"
-                      placeholder="9.999-999"
-                      className={classnames({
-                        "form-control": true,
-                        "border-danger": errors.rg,
-                      })}
-                    />
-                  </div>
+                  {tipoPessoa === "PF" && (
+                    <div className="input-form col-span-6">
+                      <label
+                        htmlFor="validation-form-2"
+                        className="form-label w-full flex flex-col sm:flex-row"
+                      >
+                        RG
+                      </label>
+                      <MaskedInput
+                        name="rg"
+                        id="rg"
+                        control={control}
+                        mask="9.999-999"
+                        placeholder="9.999-999"
+                        className={classnames({
+                          "form-control": true,
+                          "border-danger": errors.rg,
+                        })}
+                      />
+                    </div>
+                  )}
                   <div className="input-form col-span-6">
                     <Datepicker
-                      name="birth_date"
+                      name={
+                        tipoPessoa === "PJ" ? "creation_date" : "birth_date"
+                      }
                       control={control}
-                      label="Data de Nascimento"
+                      label={
+                        tipoPessoa === "PJ"
+                          ? "Data de Criação"
+                          : "Data de Nascimento"
+                      }
                       classname={classnames({
                         "form-control": true,
                         "border-danger": errors.birth_date,
                       })}
                     />
                   </div>
-
                 </div>
 
                 <div className="grid grid-cols-12 gap-2 mt-3">
@@ -281,7 +291,6 @@ export function Form(dataForm?: FormProps) {
                       <option value="M">Masculino</option>
                     </select>
                   </div>
-
                 </div>
                 <div className="grid grid-cols-12 gap-2 mt-3">
                   <div className="input-form col-span-6">
@@ -302,7 +311,6 @@ export function Form(dataForm?: FormProps) {
                       })}
                       placeholder="Estado/Cidade/Rua"
                     />
-
                   </div>
                   <div className="input-form col-span-6">
                     <label
@@ -317,15 +325,15 @@ export function Form(dataForm?: FormProps) {
                       className="form-select  sm:mr-2"
                     >
                       <option value="">Selecione</option>
-                      {colaboradores.map(colaborador => (
-                        <option 
-                          key={colaborador.id} 
-                          value={colaborador.id} 
-                          selected={colaborador.id === cliente?.seller_id}>
+                      {colaboradores.map((colaborador) => (
+                        <option
+                          key={colaborador.id}
+                          value={colaborador.id}
+                          selected={colaborador.id === cliente?.seller_id}
+                        >
                           {colaborador.name}
-                        </option>)
-                      )}
-
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -351,13 +359,10 @@ export function Form(dataForm?: FormProps) {
                   </div>
                 </div>
 
-
                 <div className="flex space-x-4">
-
                   <button type="submit" className="btn btn-primary mt-5">
                     Salvar
                   </button>
-
                 </div>
               </form>
             </div>

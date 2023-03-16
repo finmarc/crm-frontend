@@ -17,7 +17,16 @@ type Props = {
   component: string;
   url: string;
 };
-const DataTable = ({ columns, rows, component, url, title, hideButtonDelete, hideButtonView, hideButtonEdit }: Props) => {
+const DataTable = ({
+  columns,
+  rows,
+  component,
+  url,
+  title,
+  hideButtonDelete,
+  hideButtonView,
+  hideButtonEdit,
+}: Props) => {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   const [records, setRecords] = useState<any[]>(rows);
   const [id, setId] = useState("");
@@ -80,12 +89,14 @@ const DataTable = ({ columns, rows, component, url, title, hideButtonDelete, hid
     renderCell: (params: any) => {
       return (
         <>
-         { !hideButtonView && ( <button
-            className="btn btn-primary mr-1 mb-1 mt-1"
-            onClick={() => show(params.row.id)}
-          >
-            <Lucide icon="Eye" className="w-4 h-4" />
-          </button>)}
+          {!hideButtonView && (
+            <button
+              className="btn btn-primary mr-1 mb-1 mt-1"
+              onClick={() => show(params.row.id)}
+            >
+              <Lucide icon="Eye" className="w-4 h-4" />
+            </button>
+          )}
           <button
             className="btn btn-warning mr-1 mb-1 mt-1"
             onClick={() => edit(params.row.id)}
