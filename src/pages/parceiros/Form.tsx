@@ -65,14 +65,7 @@ export function Form(dataForm?: FormProps) {
 
   const onSubmit: SubmitHandler<any> = async (data: Partners) => {
     let response;
-    // if (data?.birth_date){
-    //   const dateFormat = helper.dateFormatToISOString(data.birth_date);
-    //   data = {
-    //     ...data,
-    //     birth_date: dateFormat
-    //   }
-    // }
- 
+  
     if (parceiro && parceiro.id) {
       response = await api.patch(`partners/${parceiro.id}`, data);
     } else {
@@ -122,7 +115,7 @@ export function Form(dataForm?: FormProps) {
                       htmlFor="validation-form-1"
                       className="form-label w-full flex flex-col sm:flex-row"
                     >
-                      Nome
+                      {tipoPessoa === "PJ" ? "Razão Social" : "Nome"}
                     </label>
                     <input
                       {...register("name")}
@@ -182,7 +175,7 @@ export function Form(dataForm?: FormProps) {
                       htmlFor="validation-form-1"
                       className="form-label w-full flex flex-col sm:flex-row"
                     >
-                      CPF/CNPJ
+                      {tipoPessoa === "PJ" ? "CNPJ" : "CPF"}
                     </label>
 
                     <MaskedInput
@@ -201,42 +194,17 @@ export function Form(dataForm?: FormProps) {
                 </div>
 
                 <div className="grid grid-cols-12 gap-2 mt-3">
-
-                  <div className="input-form col-span-6">
-                    <label
-                      htmlFor="validation-form-2"
-                      className="form-label w-full flex flex-col sm:flex-row"
-                    >
-                      RG
-                    </label>
-
-                    <MaskedInput
-                      name="rg"
-                      id="rg"
-                      control={control}
-                      mask="9.999-999"
-                      placeholder="9.999-999"
-                      className={classnames({
-                        "form-control": true,
-                        "border-danger": errors.rg,
-                      })}
-                    />
-                  </div>
                   <div className="input-form col-span-6">
                     <Datepicker
                       name="birth_date"
                       control={control}
-                      label="Data de Nascimento"
+                      label={tipoPessoa === 'PF' ? "Data de Nascimento": "Data de criação"}
                       classname={classnames({
                         "form-control": true,
                         "border-danger": errors.birth_date,
                       })}
                     />
                   </div>
-                </div>
-
-                <div className="grid grid-cols-12 gap-2 mt-3">
-            
                   <div className="input-form col-span-6">
                     <label
                       htmlFor="validation-form-2"
@@ -244,7 +212,7 @@ export function Form(dataForm?: FormProps) {
                     >
                       Celular
                     </label>
-                
+
                     <MaskedInput
                       name="fone"
                       id="fone"
@@ -257,24 +225,52 @@ export function Form(dataForm?: FormProps) {
                       })}
                     />
                   </div>
-                  <div className="input-form col-span-6">
-                    <label
-                      htmlFor="validation-form-2"
-                      className="form-label w-full flex flex-col sm:flex-row"
-                    >
-                      Sexo
-                    </label>
-                    <select
-                      id="sexo"
-                      {...register("sexo")}
-                      className="form-select  sm:mr-2"
-                    >
-                      <option value="">Selecione</option>
-                      <option value="F">Feminino</option>
-                      <option value="M">Masculino</option>
-                    </select>
-                  </div>
-                </div>
+                </div>    
+
+               {
+                tipoPessoa === 'PF' && (
+                    <div className="grid grid-cols-12 gap-2 mt-3">
+                      <div className="input-form col-span-6">
+                        <label
+                          htmlFor="validation-form-2"
+                          className="form-label w-full flex flex-col sm:flex-row"
+                        >
+                          RG
+                        </label>
+
+                        <MaskedInput
+                          name="rg"
+                          id="rg"
+                          control={control}
+                          mask="9.999-999"
+                          placeholder="9.999-999"
+                          className={classnames({
+                            "form-control": true,
+                            "border-danger": errors.rg,
+                          })}
+                        />
+                      </div>
+                      <div className="input-form col-span-6">
+                        <label
+                          htmlFor="validation-form-2"
+                          className="form-label w-full flex flex-col sm:flex-row"
+                        >
+                          Sexo
+                        </label>
+                        <select
+                          id="sexo"
+                          {...register("sexo")}
+                          className="form-select  sm:mr-2"
+                        >
+                          <option value="">Selecione</option>
+                          <option value="F">Feminino</option>
+                          <option value="M">Masculino</option>
+                        </select>
+                      </div>
+                    </div>
+                )
+               } 
+               
 
                 <div className="grid grid-cols-12 gap-2 mt-3">
                   
