@@ -44,6 +44,7 @@ export default interface Budget {
   user: any
   documents: Documents[];
   observation: string;
+  created_at: Date;
 }
 
 export interface BudgetEdit {

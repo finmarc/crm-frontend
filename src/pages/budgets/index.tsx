@@ -41,13 +41,16 @@ export const Budget = () => {
       headerName: "Consultor(a)",
       width: 150,
     },
+    {
+      field: "data",
+      headerName: "Data cadastro",
+      width: 150,
+    },
   ];
 
   const fetchData = useCallback(async () => {
     const response = await api.get("/budgets");
-
     const { data } = response;
-
     let responseData = data.map((budget: Budgets) => ({
       id: budget.id,
       codigo: budget.code,
@@ -56,8 +59,8 @@ export const Budget = () => {
       parceiro: budget.partner?.name,
       situacao: budget.status?.name,
       responsavel: budget?.user?.name,
+      data:Intl.DateTimeFormat("pt-BR").format( new Date(budget.created_at)),
     }));
-    console.log(responseData[0].parceiro);
     if (invitation === "finmarc") {
       responseData = responseData.filter((d: any) => d.parceiro == "Finmarc Direto");
     }
