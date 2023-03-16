@@ -8,7 +8,6 @@ export const Budget = () => {
   const params = new URLSearchParams(search);
 
   const invitation = params.get("tipo") || "";
-  console.log(invitation);
   const [budgets, setBudgets] = useState<Budgets[]>([]);
   const columns = [
     {
@@ -58,12 +57,15 @@ export const Budget = () => {
       situacao: budget.status?.name,
       responsavel: budget?.user?.name,
     }));
+    console.log(responseData[0].parceiro);
+    if (invitation === "finmarc") {
+      responseData = responseData.filter((d: any) => d.parceiro == "Finmarc Direto");
+    }
 
     if (invitation === "") {
-    } else {
+    } else if (invitation !== "finmarc") {
       responseData = responseData.filter((d: any) => d.situacao === invitation);
     }
-    console.log(responseData);
     setBudgets(responseData);
   }, [invitation]);
 

@@ -27,6 +27,12 @@ function Main() {
     setCountPartners(partners.data.length);
     setCountClients(clients.data.length);
 
+    const finmarcCounts = response.data.filter(
+      (item: any) => item?.partner?.name == 'Finmarc Direto'
+    );
+
+    setCountFinmarc(finmarcCounts.length);
+
     const orcamentosAprovados = response.data.filter(
       (item: any) => item?.status?.name === "Aprovado"
     );
@@ -78,7 +84,7 @@ function Main() {
     { id: 6, name: "Clientes", stat: countClients, route: "/clientes" },
     { id: 7, name: "Paceiros", stat: countPartners, route: "/parceiros" },
     { id: 8, name: "BNDES Leads", stat: countBndes, route: "/" },
-    { id: 9, name: "FINMARC Leads", stat: countFinmarc, route: "/" },
+    { id: 9, name: "Finmarc Direto", stat: countFinmarc, route: "/orcamentos?tipo=finmarc"},
   ];
 
   function classNames(...classes: any[]) {
