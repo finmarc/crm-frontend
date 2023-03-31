@@ -67,6 +67,7 @@ export const BndsLeads = () => {
         url="leads"
         title="Fluxo de Negociação"
       />
+
       <ModalBndes />
     </>
   );
