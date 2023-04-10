@@ -9,3 +9,9 @@ api.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "@token"
 )}`;
 export default api;
+
+export const apiFinmarcBndes = axios.create({
+  baseURL: 'https://bndes.finmarc.com.br',
+});
+
+

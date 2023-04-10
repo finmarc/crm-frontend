@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { Lucide, Modal, ModalBody } from "@/base-components";
 import api from "../../services/apiClient";
 import { Header } from "../Header";
+import ModalBndes from "../modalBndes";
 
 type Props = {
   columns: any[];
@@ -13,6 +14,7 @@ type Props = {
   hideButtonView?: boolean;
   hideButtonEdit?: boolean;
   hideButtonDelete?: boolean;
+  hideOrShowButtonSendProposal?: boolean;
   title?: string;
   component: string;
   url: string;
@@ -26,12 +28,15 @@ const DataTable = ({
   hideButtonDelete,
   hideButtonView,
   hideButtonEdit,
+  hideOrShowButtonSendProposal = false,
 }: Props) => {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
+  const [showModalSendProposal, setShowModalSendProposal] = useState(false);
   const [records, setRecords] = useState<any[]>(rows);
   const [id, setId] = useState("");
   const history = useHistory();
 
+  console.log("rows", rows);
   useEffect(() => {
     if (rows.length > 0) {
       setRecords(rows);
@@ -44,6 +49,7 @@ const DataTable = ({
   const edit = useCallback((id: string) => {
     history.push(`${component}/${id}`);
   }, []);
+
 
   const remove = async (id: string) => {
     try {
@@ -74,6 +80,11 @@ const DataTable = ({
     }
   };
 
+  function showModal(show: boolean, id: string) {
+    setId(id);
+    setShowModalSendProposal(show);
+  }
+
   function listUpdate(id: string) {
     const recordsList = rows?.filter((record) => record.id !== id);
     setRecords(recordsList);
@@ -97,20 +108,32 @@ const DataTable = ({
               <Lucide icon="Eye" className="w-4 h-4" />
             </button>
           )}
-          <button
-            className="btn btn-warning mr-1 mb-1 mt-1"
-            onClick={() => edit(params.row.id)}
-          >
-            <Lucide icon="Edit" className="w-4 h-4" />
-          </button>
-          <button
-            className="btn btn-danger mr-1 mb-1 mt-1"
-            onClick={() => {
-              setId(params.row.id), setDeleteConfirmationModal(true);
-            }}
-          >
-            <Lucide icon="Trash" className="w-4 h-4" />
-          </button>
+          {!hideButtonEdit && (
+            <button
+              className="btn btn-warning mr-1 mb-1 mt-1"
+              onClick={() => edit(params.row.id)}
+            >
+              <Lucide icon="Edit" className="w-4 h-4" />
+            </button>
+          )}
+          {hideOrShowButtonSendProposal && (
+            <button
+              className="btn btn-warning mr-1 mb-1 mt-1"
+              onClick={() => showModal(true, params.row.id)}
+            >
+              <Lucide icon="Send" className="w-4 h-4" />
+            </button>
+          )}
+          {!hideButtonDelete && (
+            <button
+              className="btn btn-danger mr-1 mb-1 mt-1"
+              onClick={() => {
+                setId(params.row.id), setDeleteConfirmationModal(true);
+              }}
+            >
+              <Lucide icon="Trash" className="w-4 h-4" />
+            </button>
+          )}
         </>
       );
     },
@@ -141,13 +164,21 @@ const DataTable = ({
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
         />
       </Box>
-
+      {showModalSendProposal && (
+        <ModalBndes showModalSendProposal={showModalSendProposal} 
+          setShowModalSendProposal={() => setShowModalSendProposal(!showModalSendProposal)}
+            proposals={rows}
+            id={id}
+          />
+        )
+      }
       <Modal
         show={deleteConfirmationModal}
         onHidden={() => {
           setDeleteConfirmationModal(false);
         }}
       >
+
         <ModalBody className="p-0">
           <div className="p-5 text-center">
             <Lucide

@@ -47,13 +47,8 @@ const sideMenu = atom({
         subMenu: [
           {
             icon: "",
-            pathname: "/bndsLeads",
+            pathname: "/bndes",
             title: "BNDES Leads",
-          },
-          {
-            icon: "",
-            pathname: "/propostas",
-            title: "Propostas",
           },
         ],
       },

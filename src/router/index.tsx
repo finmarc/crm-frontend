@@ -101,7 +101,7 @@ const Router = () => (
           component={EditBudget}
         />
         <Route path="/orcamento" exact isPrivate component={CreateBudget} />
-        <Route path="/bndsLeads" exact isPrivate component={BndsLeads} />
+        <Route path="/bndes" exact isPrivate component={BndsLeads} />
       </SideMenu>
     </Switch>
   </>

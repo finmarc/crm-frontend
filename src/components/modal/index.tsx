@@ -9,6 +9,7 @@ type PropsData = {
     deleteConfirmationModal: boolean
 }
 export default function ModalDelete({ setDeleteConfirmationModal, deleteConfirmationModal }: PropsData): void {
+    
     <Modal
         show={deleteConfirmationModal}
         onHidden={() => {
