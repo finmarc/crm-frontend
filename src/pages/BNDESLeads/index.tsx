@@ -25,14 +25,9 @@ export const BndsLeads = () => {
       width: 150,
     },
     {
-      field: "valorFaturamento",
-      headerName: "Faturamento",
-      width: 90,
-    },
-    {
-      field: "valorFinanciamento",
-      headerName: "Valor solicitado",
-      width: 90,
+      field: "situacaoProposta",
+      headerName: "Situação",
+      width: 150,
     },
     {
       field: "contatoNome",
@@ -40,14 +35,9 @@ export const BndsLeads = () => {
       width: 150,
     },
     {
-      field: "contatoEmail",
-      headerName: "Email do Contato",
-      width: 120,
-    },
-    {
       field: "contatoTelefone",
-      headerName: "Telefone do Contato",
-      width: 70,
+      headerName: "Telefone",
+      width: 120,
     },
   ];
   const fetchData = useCallback(async () => {
@@ -66,6 +56,7 @@ export const BndsLeads = () => {
       contatoEmail: lead.contatoEmail,
       contatoTelefone: lead.contatoTelefone,
       dataCadastro: lead.created_at,
+      situacaoProposta: lead!.bndes_reports ? lead.bndes_reports[0].situacaoProposta : "PROPOSTA NÃO ENVIADA",
     }));
 
     setLeads(responseData);
@@ -83,8 +74,10 @@ export const BndsLeads = () => {
         component="leads"
         url="leads"
         title="Fluxo de Negociação"
+        hideButtonView={true}
         hideButtonDelete={true}
         hideButtonEdit={true}
+        hideButtonModalViewProposal={false}
         hideOrShowButtonSendProposal={true}
       />
 

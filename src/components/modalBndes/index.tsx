@@ -122,6 +122,8 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
         onHidden={() => {
           setShowModalSendProposal(false);
         }}
+        size="modal-xl"
+
       >
         <a
           onClick={() => {
@@ -135,7 +137,7 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
             <input type="hidden" {...register("idProposal")} value={id} />
             {proposta && (<input type="hidden" {...register("idProposta")} value={proposta?.idProposta} />)}
 
-            <div className="p-5 text-center">
+            <div className="p-5">
               <div className="text-xl mt-5">Relatório BNDES</div>
               <div className="text-slate-500 mt-2">
                 <div className="grid grid-cols-3 gap-4 pb-2">
