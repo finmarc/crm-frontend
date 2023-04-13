@@ -2,6 +2,7 @@ import {Modal, ModalBody } from "@/base-components";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { apiFinmarcBndes } from "../../services/apiClient";
+import { toast } from "react-hot-toast";
 
 type Props = {
   setShowModalSendProposal: Function,
@@ -75,6 +76,8 @@ const GARANTIAS = [
 
 export default function ModalBndes({ showModalSendProposal, setShowModalSendProposal, proposals , id}: Props) {
   const [proposta, setProposta] = useState<any>();
+  const [sending, setSending] = useState(false);
+
   useEffect(() => {
     if (proposals) {
       const p = proposals.find((proposal: any) => {
@@ -85,7 +88,6 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
     }
   }, [proposals]);
 
-  console.log(proposta);
   const {
     register,
     handleSubmit,
@@ -98,20 +100,31 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
   });
 
   const onSubmit: SubmitHandler<BNDESProposal> = async (data: BNDESProposal) => { 
-    const dataSend = {
-      ...data,
-      taxaJuros: data.taxaJuros ? +data.taxaJuros : 0,
-      taxaDesconto: data.taxaDesconto ? +data.taxaDesconto : 0,
-      valorContratado: data.valorContratado ? +data.valorContratado : 0,
-      prazoOperacao: data.prazoOperacao ? +data.prazoOperacao : 0,
-      prazoAntecipacao: data.prazoAntecipacao ? +data.prazoAntecipacao : 0,
-      dataContratacao: data.dataContratacao ? new Date(data.dataContratacao).toISOString() : new Date().toISOString(),
-      dataSituacaoProposta: data.dataSituacaoProposta ? new Date(data.dataSituacaoProposta).toISOString() : new Date().toISOString(),
-      idProposal: +data.idProposal,
-      idProposta: +data.idProposta,
-      opcaoGarantia: [data.opcaoGarantia],
+    try {
+      setSending(true);
+      const dataSend = {
+        ...data,
+        taxaJuros: data.taxaJuros ? +data.taxaJuros : 0,
+        taxaDesconto: data.taxaDesconto ? +data.taxaDesconto : 0,
+        valorContratado: data.valorContratado ? +data.valorContratado : 0,
+        prazoOperacao: data.prazoOperacao ? +data.prazoOperacao : 0,
+        prazoAntecipacao: data.prazoAntecipacao ? +data.prazoAntecipacao : 0,
+        dataContratacao: data.dataContratacao ? new Date(data.dataContratacao).toISOString() : new Date().toISOString(),
+        dataSituacaoProposta: data.dataSituacaoProposta ? new Date(data.dataSituacaoProposta).toISOString() : new Date().toISOString(),
+        idProposal: +data.idProposal,
+        idProposta: +data.idProposta,
+        opcaoGarantia: [data.opcaoGarantia],
+      }
+      await apiFinmarcBndes.post("/proposal/send", dataSend);
+      toast.success("Proposta enviada com sucesso!");
+      setShowModalSendProposal(false);
+      setSending(false);
+    }catch (error: any) {
+      toast.error("Erro ao enviar proposta!");
+      setSending(false);
+      console.log(error.message);
     }
-    await apiFinmarcBndes.post("/proposal/send", dataSend);
+    
   };
 
 
@@ -294,7 +307,7 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
               >
                 Cancelar
               </button>
-              <button type="submit" className="btn btn-primary mt-5">Enviar</button>
+              <button type="submit" className="btn btn-primary mt-5">{ sending ? 'Enviando ...': 'Enviar' }</button>
             </div>
           </form>
         </ModalBody>
