@@ -1,15 +1,15 @@
-import {Modal, ModalBody } from "@/base-components";
+import { Modal, ModalBody } from "@/base-components";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { apiFinmarcBndes } from "../../services/apiClient";
 import { toast } from "react-hot-toast";
 
 type Props = {
-  setShowModalSendProposal: Function,
-  showModalSendProposal: boolean,
-  id: string,
-  proposals?: any,
-}
+  setShowModalSendProposal: Function;
+  showModalSendProposal: boolean;
+  id: string;
+  proposals?: any;
+};
 
 export interface BNDESProposal {
   idProposta: number;
@@ -38,15 +38,22 @@ const RECUSADA = "Recusada";
 const CANCELADA = "Cancelada";
 const EXPIRADA = "Expirada";
 
-
-
 const BNDES_STATUS = [
   { value: "EM_ANALISE", label: EM_ANALISE },
-  { value: "INICIO_RELACIONAMENTO_FORMAL", label: INICIO_RELACIONAMENTO_FORMAL },
-  { value: "CONTRATADA_COM_LINHAS_PROPRIAS", label: CONTRATADA_COM_LINHAS_PROPRIAS },
+  {
+    value: "INICIO_RELACIONAMENTO_FORMAL",
+    label: INICIO_RELACIONAMENTO_FORMAL,
+  },
+  {
+    value: "CONTRATADA_COM_LINHAS_PROPRIAS",
+    label: CONTRATADA_COM_LINHAS_PROPRIAS,
+  },
   { value: "CONTRATADA_COM_LINHA_BNDES", label: CONTRATADA_COM_LINHA_BNDES },
   { value: "CONTRATADA_COM_FIDC_BNDES", label: CONTRATADA_COM_FIDC_BNDES },
-  { value: "CONTRATADA_BNDES_MICROCREDITO", label: CONTRATADA_BNDES_MICROCREDITO },
+  {
+    value: "CONTRATADA_BNDES_MICROCREDITO",
+    label: CONTRATADA_BNDES_MICROCREDITO,
+  },
   { value: "RECUSADA", label: RECUSADA },
   { value: "CANCELADA", label: CANCELADA },
   { value: "EXPIRADA", label: EXPIRADA },
@@ -54,16 +61,19 @@ const BNDES_STATUS = [
 
 const MOTIVOS = [
   { value: "NEGATIVA_CREDITO", label: "Negativa Crédito" },
-  { value: "FALTA_DOCUMENTACAO_CADASTRO", label: "Falta documnetação ou cadastro" },
+  {
+    value: "FALTA_DOCUMENTACAO_CADASTRO",
+    label: "Falta documnetação ou cadastro",
+  },
   { value: "GARANTIAS_INSUFICIENTE", label: "Garantias Insuficientes" },
   { value: "OUTROS", label: "Outros" },
-]
+];
 
 const TIPO_APOIO = [
   { value: "C", label: "Com Garantia Real" },
   { value: "S", label: "Sem Garantia Real" },
   { value: "R", label: " Antecipação de Recebíveis " },
-]
+];
 
 const GARANTIAS = [
   { value: "A", label: "AVAL/FIANÇA" },
@@ -72,9 +82,14 @@ const GARANTIAS = [
   { value: "R", label: "RECEBÍVEIS" },
   { value: "S", label: "SEM GARANTIA" },
   { value: "O", label: "OUTROS" },
-]
+];
 
-export default function ModalBndes({ showModalSendProposal, setShowModalSendProposal, proposals , id}: Props) {
+export default function ModalBndes({
+  showModalSendProposal,
+  setShowModalSendProposal,
+  proposals,
+  id,
+}: Props) {
   const [proposta, setProposta] = useState<any>();
   const [sending, setSending] = useState(false);
 
@@ -99,7 +114,9 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
     defaultValues: {} as BNDESProposal,
   });
 
-  const onSubmit: SubmitHandler<BNDESProposal> = async (data: BNDESProposal) => { 
+  const onSubmit: SubmitHandler<BNDESProposal> = async (
+    data: BNDESProposal
+  ) => {
     try {
       setSending(true);
       const dataSend = {
@@ -109,24 +126,26 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
         valorContratado: data.valorContratado ? +data.valorContratado : 0,
         prazoOperacao: data.prazoOperacao ? +data.prazoOperacao : 0,
         prazoAntecipacao: data.prazoAntecipacao ? +data.prazoAntecipacao : 0,
-        dataContratacao: data.dataContratacao ? new Date(data.dataContratacao).toISOString() : new Date().toISOString(),
-        dataSituacaoProposta: data.dataSituacaoProposta ? new Date(data.dataSituacaoProposta).toISOString() : new Date().toISOString(),
+        dataContratacao: data.dataContratacao
+          ? new Date(data.dataContratacao).toISOString()
+          : new Date().toISOString(),
+        dataSituacaoProposta: data.dataSituacaoProposta
+          ? new Date(data.dataSituacaoProposta).toISOString()
+          : new Date().toISOString(),
         idProposal: +data.idProposal,
         idProposta: +data.idProposta,
         opcaoGarantia: [data.opcaoGarantia],
-      }
+      };
       await apiFinmarcBndes.post("/proposal/send", dataSend);
       toast.success("Proposta enviada com sucesso!");
       setShowModalSendProposal(false);
       setSending(false);
-    }catch (error: any) {
+    } catch (error: any) {
       toast.error("Erro ao enviar proposta!");
       setSending(false);
       console.log(error.message);
     }
-    
   };
-
 
   return (
     <div>
@@ -136,7 +155,6 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
           setShowModalSendProposal(false);
         }}
         size="modal-xl"
-
       >
         <a
           onClick={() => {
@@ -148,7 +166,13 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
         <ModalBody className="p-0">
           <form className="validate-form" onSubmit={handleSubmit(onSubmit)}>
             <input type="hidden" {...register("idProposal")} value={id} />
-            {proposta && (<input type="hidden" {...register("idProposta")} value={proposta?.idProposta} />)}
+            {proposta && (
+              <input
+                type="hidden"
+                {...register("idProposta")}
+                value={proposta?.idProposta}
+              />
+            )}
 
             <div className="p-5">
               <div className="text-xl mt-5">Relatório BNDES</div>
@@ -162,12 +186,14 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                       {...register("situacaoProposta")}
                       id="situacaoProposta"
                       className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      required
                     >
-                      <option>Selecionar...</option>
+                      <option value="">Selecionar...</option>
                       {BNDES_STATUS.map((situacao) => (
-                        <option key={situacao.value} value={situacao.value} >{situacao.label}</option>
+                        <option key={situacao.value} value={situacao.value}>
+                          {situacao.label}
+                        </option>
                       ))}
-
                     </select>
                   </div>
                   <div>
@@ -178,10 +204,13 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                       {...register("motivoSituacaoProposta")}
                       id="motivoSituacaoProposta"
                       className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      required
                     >
-                      <option>Selecionar...</option>
+                      <option value="">Selecionar...</option>
                       {MOTIVOS.map((motivo) => (
-                        <option key={motivo.value} value={motivo.value} >{motivo.label}</option>
+                        <option key={motivo.value} value={motivo.value}>
+                          {motivo.label}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -193,10 +222,13 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                       {...register("tipoApoio")}
                       id="tipoApoio"
                       className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      required
                     >
-                      <option>Selecionar...</option>
+                      <option value="">Selecionar...</option>
                       {TIPO_APOIO.map((tipo) => (
-                        <option key={tipo.value} value={tipo.value} >{tipo.label}</option>
+                        <option key={tipo.value} value={tipo.value}>
+                          {tipo.label}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -211,6 +243,7 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                       {...register("taxaJuros")}
                       type="number"
                       id="taxaJuros"
+                      defaultValue={0}
                       className="form-input rounded-md shadow-sm w-full"
                     />
                   </div>
@@ -222,6 +255,7 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                       {...register("taxaDesconto")}
                       type="number"
                       id="taxaDesconto"
+                      defaultValue={0}
                       className="form-input rounded-md shadow-sm w-full"
                     />
                   </div>
@@ -233,6 +267,7 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                       {...register("valorContratado")}
                       type="number"
                       id="valorContratado"
+                      defaultValue={0}
                       className="form-input rounded-md shadow-sm w-full"
                     />
                   </div>
@@ -280,7 +315,9 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                   >
                     <option>Selecionar...</option>
                     {GARANTIAS.map((garantia) => (
-                      <option key={garantia.value} value={garantia.value} >{garantia.label}</option>
+                      <option key={garantia.value} value={garantia.value}>
+                        {garantia.label}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -307,7 +344,9 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
               >
                 Cancelar
               </button>
-              <button type="submit" className="btn btn-primary mt-5">{ sending ? 'Enviando ...': 'Enviar' }</button>
+              <button type="submit" className="btn btn-primary mt-5">
+                {sending ? "Enviando ..." : "Enviar"}
+              </button>
             </div>
           </form>
         </ModalBody>
