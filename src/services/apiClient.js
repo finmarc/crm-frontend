@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://ms.finmarc.com.br",
-  // baseURL: "http://localhost:3001",
+  //baseURL: "https://ms.finmarc.com.br",
+  baseURL: "http://localhost:3001",
 });
 
 api.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
@@ -11,7 +11,8 @@ api.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
 export default api;
 
 export const apiFinmarcBndes = axios.create({
-  baseURL: 'https://bndes.finmarc.com.br',
+  //baseURL: 'https://bndes.finmarc.com.br',
+  baseURL: 'http://localhost:8988',
 });
 
 

@@ -115,7 +115,8 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
         idProposta: +data.idProposta,
         opcaoGarantia: [data.opcaoGarantia],
       }
-      await apiFinmarcBndes.post("/proposal/send", dataSend);
+      await apiFinmarcBndes.post("/proposals/send", dataSend);
+      
       toast.success("Proposta enviada com sucesso!");
       setShowModalSendProposal(false);
       setSending(false);
@@ -163,7 +164,7 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                       id="situacaoProposta"
                       className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     >
-                      <option>Selecionar...</option>
+                      <option value="">Selecionar...</option>
                       {BNDES_STATUS.map((situacao) => (
                         <option key={situacao.value} value={situacao.value} >{situacao.label}</option>
                       ))}
@@ -179,7 +180,7 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                       id="motivoSituacaoProposta"
                       className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     >
-                      <option>Selecionar...</option>
+                      <option value="">Selecionar...</option>
                       {MOTIVOS.map((motivo) => (
                         <option key={motivo.value} value={motivo.value} >{motivo.label}</option>
                       ))}
@@ -194,7 +195,7 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                       id="tipoApoio"
                       className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     >
-                      <option>Selecionar...</option>
+                      <option value="">Selecionar...</option>
                       {TIPO_APOIO.map((tipo) => (
                         <option key={tipo.value} value={tipo.value} >{tipo.label}</option>
                       ))}
@@ -278,7 +279,7 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
                     className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="opcaoGarantia"
                   >
-                    <option>Selecionar...</option>
+                    <option value="" >Selecionar...</option>
                     {GARANTIAS.map((garantia) => (
                       <option key={garantia.value} value={garantia.value} >{garantia.label}</option>
                     ))}
