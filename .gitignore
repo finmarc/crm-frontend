@@ -6,3 +6,6 @@ dist-ssr
 .history
 .idea
 .env
+.yarn
+.yarnrc.yml
+yarn.*
