@@ -149,7 +149,7 @@ const BndesLeadsDetails = () => {
                   proposal?.bndes_reports.map(item => (
                     <tr>
                       <td className='flex justify-center p-4'>{item.situacaoProposta}</td>
-                      <td>{item.dataSituacaoProposta}</td>
+                      <td>{new Intl.DateTimeFormat('pt-BR', {timeZone: 'UTC'}).format(new Date(item.dataSituacaoProposta))}</td>
                     </tr>
                   ))
                 }
