@@ -25,6 +25,7 @@ import { ProductIndex } from "../pages/products";
 import { CreateProduct } from "../pages/products/create";
 import ProdutoEdit from "../pages/products/edit";
 import { BndsLeads } from "../pages/BNDESLeads";
+import BndesLeadsDetails from '../pages/BNDESLeads/show'
 
 const Router = () => (
   <>
@@ -102,6 +103,12 @@ const Router = () => (
         />
         <Route path="/orcamento" exact isPrivate component={CreateBudget} />
         <Route path="/bndes" exact isPrivate component={BndsLeads} />
+        <Route
+          path="/leads/:id/visualizar"
+          exact
+          isPrivate
+          component={BndesLeadsDetails}
+        />
       </SideMenu>
     </Switch>
   </>

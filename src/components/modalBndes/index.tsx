@@ -79,12 +79,14 @@ export default function ModalBndes({ showModalSendProposal, setShowModalSendProp
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
-    if (proposals) {
+    if (Array.isArray(proposals)) {
       const p = proposals.find((proposal: any) => {
         return proposal.id === id;
       });
 
       setProposta(p);
+    }else{
+      setProposta(proposals)
     }
   }, [proposals]);
 

@@ -74,10 +74,10 @@ export const BndsLeads = () => {
         component="leads"
         url="leads"
         title="Fluxo de Negociação"
-        hideButtonView={true}
+        hideButtonView={false}
         hideButtonDelete={true}
         hideButtonEdit={true}
-        hideButtonModalViewProposal={false}
+        hideButtonModalViewProposal={true}
         hideOrShowButtonSendProposal={true}
       />
 

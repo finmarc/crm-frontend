@@ -252,10 +252,7 @@ const DataTable = ({
                   );
                 })
              }
-           
-
-                
-              
+          
             </div>
             <div className="px-5 pb-8 text-center">
               <button
