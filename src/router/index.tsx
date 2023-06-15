@@ -26,6 +26,9 @@ import { CreateProduct } from "../pages/products/create";
 import ProdutoEdit from "../pages/products/edit";
 import { BndsLeads } from "../pages/BNDESLeads";
 import BndesLeadsDetails from '../pages/BNDESLeads/show'
+import {Leadsboard} from '../pages/leadsboard'
+import { BndsLeadsOld } from '../pages/BNDESLeads/index-old'
+import BndesLeadsDetailsOld from '../pages/BNDESLeads/show-old'
 
 const Router = () => (
   <>
@@ -103,12 +106,20 @@ const Router = () => (
         />
         <Route path="/orcamento" exact isPrivate component={CreateBudget} />
         <Route path="/bndes" exact isPrivate component={BndsLeads} />
+        <Route path="/bndes-old" exact isPrivate component={BndsLeadsOld} />
         <Route
           path="/leads/:id/visualizar"
           exact
           isPrivate
           component={BndesLeadsDetails}
         />
+        <Route
+          path="/leads-old/:id/visualizar"
+          exact
+          isPrivate
+          component={BndesLeadsDetailsOld}
+        />
+        <Route path="/leadsboard" exact isPrivate component={Leadsboard} />
       </SideMenu>
     </Switch>
   </>

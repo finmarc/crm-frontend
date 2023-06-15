@@ -15,4 +15,7 @@ export const apiFinmarcBndes = axios.create({
   //baseURL: 'http://localhost:8988',
 });
 
+export const apiFinmarcBndesOld = axios.create({
+  baseURL: 'https://bndes-v1.finmarc.com.br',
+});
 

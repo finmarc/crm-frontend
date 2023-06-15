@@ -9,6 +9,11 @@ const sideMenu = atom({
         pathname: "/",
         title: "Dashboard",
       },
+      // {
+      //   icon: "Box",
+      //   pathname: "/leadsboard",
+      //   title: "Leads Board",
+      // },
       {
         icon: "Box",
         title: "Cadastro",
@@ -49,6 +54,11 @@ const sideMenu = atom({
             icon: "",
             pathname: "/bndes",
             title: "BNDES Leads",
+          },
+          {
+            icon: "",
+            pathname: "/bndes-old",
+            title: "BNDES Leads 2.0",
           },
         ],
       },
