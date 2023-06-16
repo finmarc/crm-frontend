@@ -88,7 +88,10 @@ const EditBudget = () => {
       formData.append("file", fileUpload);
 
       api
-        .post("budgets/documents", formData)
+        .post("budgets/documents", formData,{
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }})
         .then((res) => {
           setSelectedIndex(3);
           setDocuments((prevItems) => [...prevItems, res?.data]);
