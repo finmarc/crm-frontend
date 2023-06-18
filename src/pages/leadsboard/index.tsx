@@ -7,6 +7,7 @@ import {
 import { Card } from './card'
 import List from './list'
 import { useState } from 'react'
+import { Card as CardTest } from '../../components/Board/card';
 
 export function Leadsboard() {
 
@@ -88,7 +89,7 @@ export function Leadsboard() {
     );
     setItems(listCopy);
   };
-
+  
   return (
     <div className="App">
       <div className={"h-screen flex"}>
@@ -151,7 +152,7 @@ export function Leadsboard() {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <Card  />
+                        <Card data={item} />
                       </div>
                     )}
                   </Draggable>
@@ -167,7 +168,7 @@ export function Leadsboard() {
                          {...provided.draggableProps}
                          {...provided.dragHandleProps}
                        >
-                         <Card />
+                        <Card data={item} />
                        </div>
                      )}
                    </Draggable>

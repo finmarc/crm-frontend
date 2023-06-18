@@ -9,13 +9,13 @@ type Props = {
   };
 };
 
-export const Card = () => {
+export const Card = ({children, data}: Props) => {
   return (
     <li className={"mt-3"}>
       <a href="#" className={"block p-5 bg-white rounded shadow"}>
         <div className={"flex justify-between"}>
           <p className={"text-sm font-medium leading-snug text-gray-900 text-left"}>
-            Lorem ipsum dolor sit amet 2
+            {data.title}
           </p>
           <span>
             <img
