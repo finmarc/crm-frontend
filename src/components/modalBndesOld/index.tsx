@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { apiFinmarcBndesOld } from "../../services/apiClient";
 import { toast } from "react-hot-toast";
+import { schema } from './schemaValidator';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type Props = {
   setShowModalSendProposal: Function,
@@ -97,6 +99,7 @@ export default function ModalBndesOld({ showModalSendProposal, setShowModalSendP
     setValue,
     control,
   } = useForm({
+    resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {} as BNDESProposal,
   });
@@ -172,6 +175,7 @@ export default function ModalBndesOld({ showModalSendProposal, setShowModalSendP
                       ))}
 
                     </select>
+                    {errors.situacaoProposta?.message && <p>{errors.situacaoProposta?.message}</p>}
                   </div>
                   <div>
                     <label className="block font-medium text-gray-700 mb-2">
@@ -187,6 +191,7 @@ export default function ModalBndesOld({ showModalSendProposal, setShowModalSendP
                         <option key={motivo.value} value={motivo.value} >{motivo.label}</option>
                       ))}
                     </select>
+                    {errors.motivoSituacaoProposta?.message && <p>{errors.motivoSituacaoProposta?.message}</p>}
                   </div>
                   <div>
                     <label className="block font-medium text-gray-700 mb-2">
@@ -202,6 +207,7 @@ export default function ModalBndesOld({ showModalSendProposal, setShowModalSendP
                         <option key={tipo.value} value={tipo.value} >{tipo.label}</option>
                       ))}
                     </select>
+                    {errors.tipoApoio?.message && <p>{errors.tipoApoio?.message}</p>}
                   </div>
                 </div>
                 {/* coluna 2 */}
@@ -214,8 +220,10 @@ export default function ModalBndesOld({ showModalSendProposal, setShowModalSendP
                       {...register("taxaJuros")}
                       type="number"
                       id="taxaJuros"
+                      defaultValue={0.0001}
                       className="form-input rounded-md shadow-sm w-full"
                     />
+                     {errors.taxaJuros?.message && <p>{errors.taxaJuros?.message}</p>}
                   </div>
                   <div>
                     <label className="block font-medium text-gray-700 mb-2">
@@ -225,6 +233,7 @@ export default function ModalBndesOld({ showModalSendProposal, setShowModalSendP
                       {...register("taxaDesconto")}
                       type="number"
                       id="taxaDesconto"
+                      defaultValue={0.0001}
                       className="form-input rounded-md shadow-sm w-full"
                     />
                   </div>
@@ -236,8 +245,10 @@ export default function ModalBndesOld({ showModalSendProposal, setShowModalSendP
                       {...register("valorContratado")}
                       type="number"
                       id="valorContratado"
+                      defaultValue={0}
                       className="form-input rounded-md shadow-sm w-full"
                     />
+                    {errors.valorContratado?.message && <p>{errors.valorContratado?.message}</p>}
                   </div>
                 </div>
                 {/* Coluna 3  */}
@@ -253,8 +264,10 @@ export default function ModalBndesOld({ showModalSendProposal, setShowModalSendP
                       {...register("prazoOperacao")}
                       id="prazoOperacao"
                       type="text"
+                      defaultValue={0}
                       className="form-input rounded-md shadow-sm w-full"
                     />
+                    {errors.prazoOperacao?.message && <p>{errors.prazoOperacao?.message}</p>}
                   </div>
                   <div>
                     <label
