@@ -61,7 +61,7 @@ export const BndsLeads = () => {
       contatoEmail: lead?.contatoEmail,
       contatoTelefone: lead?.contatoTelefone,
       dataCadastro: lead?.created_at,
-      situacaoProposta: lead?.bndes_reports?.length ? lead.bndes_reports[0]?.situacaoProposta : "PENDENTE",
+      situacaoProposta: lead?.bndes_reports?.length ? lead.bndes_reports[lead.bndes_reports.length - 1]?.situacaoProposta : "PENDENTE",
     }));
 
     setLeads(responseData);

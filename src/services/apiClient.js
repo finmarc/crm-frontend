@@ -11,11 +11,12 @@ api.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
 export default api;
 
 export const apiFinmarcBndes = axios.create({
-  baseURL: 'https://bndes.finmarc.com.br',
-  //baseURL: 'http://localhost:8988',
+  //baseURL: 'https://bndes.finmarc.com.br',
+  baseURL: 'http://localhost:8988',
 });
 
 export const apiFinmarcBndesOld = axios.create({
-  baseURL: 'https://bndes-v1.finmarc.com.br',
+  //baseURL: 'https://bndes-v1.finmarc.com.br',
+  baseURL: 'http://localhost:8989',
 });
 
