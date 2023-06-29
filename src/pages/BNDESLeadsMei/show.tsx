@@ -50,6 +50,7 @@ interface Proposal {
   contatoTelefone: string,
   descricao: string,
   bndes_reports: Report[],
+  created_at: string,
 }
 
 const BndesLeadsDetailsMei = () => {
@@ -125,6 +126,10 @@ const BndesLeadsDetailsMei = () => {
               <div className="text mt-2">Descrição</div>
               <div className="text-slate-500 mt-1">
                 {proposal?.descricao}
+              </div>
+              <div className="text mt-2">Data solicitação</div>
+              <div className="text-slate-500 mt-1">
+                {proposal?.created_at}
               </div>
             </div>
           </div>

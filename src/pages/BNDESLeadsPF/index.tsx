@@ -39,6 +39,11 @@ export const BndsLeadsPF = () => {
       headerName: "Telefone",
       width: 120,
     },
+    {
+      field: "dataCadastro",
+      headerName: "Data cadastro",
+      width: 130,
+    },
   ];
   const fetchData = useCallback(async () => {
     const response = await apiFinmarcBndes.get("/proposals?personType=pf");
