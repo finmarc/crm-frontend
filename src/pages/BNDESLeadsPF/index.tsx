@@ -83,7 +83,7 @@ export const BndsLeadsPF = () => {
         hideButtonDelete={true}
         hideButtonEdit={true}
         hideButtonModalViewProposal={true}
-        hideOrShowButtonSendProposal={true}
+        hideOrShowButtonSendProposal={false}
       />
 
     </>
