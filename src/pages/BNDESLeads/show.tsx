@@ -50,6 +50,7 @@ interface Proposal {
   contatoTelefone: string,
   descricao: string,
   bndes_reports: Report[],
+  created_at: string,
 }
 
 const BndesLeadsDetails = () => {
@@ -122,6 +123,10 @@ const BndesLeadsDetails = () => {
               <div className="text-slate-500 mt-1">
                 {proposal?.descricao}
               </div>
+              <div className="text mt-2">Data criação</div>
+              <div className="text-slate-500 mt-1">
+                {proposal?.created_at}
+              </div>
             </div>
           </div>
           <div className="mt-6 lg:mt-0 flex-1 px-5 border-l border-r border-slate-200/60 dark:border-darkmode-400 border-t lg:border-t-0 pt-5 lg:pt-0">
@@ -149,7 +154,7 @@ const BndesLeadsDetails = () => {
                   proposal?.bndes_reports.map(item => (
                     <tr>
                       <td className='flex justify-center p-4'>{item.situacaoProposta}</td>
-                      <td>{new Intl.DateTimeFormat('pt-BR', {timeZone: 'UTC'}).format(new Date(item.dataSituacaoProposta))}</td>
+                      <td>{item.dataSituacaoProposta}</td>
                     </tr>
                   ))
                 }

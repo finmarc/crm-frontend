@@ -61,7 +61,7 @@ export const BndsLeadsOld = () => {
       contatoEmail: lead?.contatoEmail,
       contatoTelefone: lead?.contatoTelefone,
       dataCadastro: lead?.created_at,
-      situacaoProposta: lead?.bndes_reports?.length ? lead.bndes_reports[0]?.situacaoProposta : "PENDENTE",
+      situacaoProposta: lead?.bndes_reports?.length ? lead.bndes_reports[lead.bndes_reports.length - 1]?.situacaoProposta : "PENDENTE",
     }));
 
     setLeads(responseData);
@@ -83,7 +83,7 @@ export const BndsLeadsOld = () => {
         hideButtonDelete={true}
         hideButtonEdit={true}
         hideButtonModalViewProposal={true}
-        hideOrShowButtonSendProposal={true}
+        hideOrShowButtonSendProposal={false}
       />
 
     </>
