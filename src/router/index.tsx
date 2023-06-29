@@ -29,6 +29,10 @@ import BndesLeadsDetails from '../pages/BNDESLeads/show'
 import {Leadsboard} from '../pages/leadsboard'
 import { BndsLeadsOld } from '../pages/BNDESLeads/index-old'
 import BndesLeadsDetailsOld from '../pages/BNDESLeads/show-old'
+import BndesLeadsDetailsPF from '../pages/BNDESLeadsPF/show'
+import { BndsLeadsPF } from '../pages/BNDESLeadsPF'
+import { BndsLeadsMei } from '../pages/BNDESLeadsMei'
+import BndesLeadsDetailsMei from '../pages/BNDESLeadsMei/show'
 
 const Router = () => (
   <>
@@ -107,6 +111,8 @@ const Router = () => (
         <Route path="/orcamento" exact isPrivate component={CreateBudget} />
         <Route path="/bndes" exact isPrivate component={BndsLeads} />
         <Route path="/bndes-old" exact isPrivate component={BndsLeadsOld} />
+        <Route path="/bndes-pf" exact isPrivate component={BndsLeadsPF} />
+        <Route path="/bndes-mei" exact isPrivate component={BndsLeadsMei} />
         <Route
           path="/leads/:id/visualizar"
           exact
@@ -118,6 +124,18 @@ const Router = () => (
           exact
           isPrivate
           component={BndesLeadsDetailsOld}
+        />
+        <Route
+          path="/leads-pf/:id/visualizar"
+          exact
+          isPrivate
+          component={BndesLeadsDetailsPF}
+        />
+        <Route
+          path="/leads-mei/:id/visualizar"
+          exact
+          isPrivate
+          component={BndesLeadsDetailsMei}
         />
         <Route path="/leadsboard" exact isPrivate component={Leadsboard} />
       </SideMenu>
