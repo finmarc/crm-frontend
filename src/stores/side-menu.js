@@ -53,7 +53,7 @@ const sideMenu = atom({
           {
             icon: "",
             pathname: "/bndes",
-            title: "BNDES Leads",
+            title: "BNDES PJ",
           },
           {
             icon: "",
